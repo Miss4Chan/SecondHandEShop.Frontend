@@ -7,7 +7,7 @@ import * as React from "react"
 //hook -- vlecheme logika od serviceot 
 export default () => {
     const dispatch = useDispatch();
-    const products = useSelector(state => state.productsReducer.products)
+    const products = useSelector(state => state.productsSlice.products);
     useEffect(()=>{
         GetProducts(dispatch);
     }, []);
