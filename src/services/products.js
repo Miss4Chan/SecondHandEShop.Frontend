@@ -1,17 +1,23 @@
-import { setProducts, deleteProduct, editProduct, newProduct } from '../app/productsSlice';
+import { setProducts, deleteProduct, editProduct, newProduct, newProductError, setProductsError, editProductError, deleteProductError,  } from '../app/productsSlice';
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: "https://localhost:44314/Products",
+    baseURL: `${process.env.REACT_APP_BASE_URL}/Products`,
 })
+
+axiosInstance.interceptors.request.use((config) => {
+    config.headers = { authorization: 'Bearer ' + sessionStorage.getItem('token') };
+    return config;
+});
+
 //dispatch - action that triggers state change
 export const GetProducts = async (dispatch) => {
     try {
         //api call
         const {data} = await axiosInstance.get();
-        dispatch(setProducts(data))
+        dispatch(setProducts(data));
     } catch {
-        console.log("Error")
+        dispatch(setProductsError());
     }
 }
 
@@ -20,7 +26,7 @@ export const NewProduct = async (dispatch, product) => {
         const {data} = await axiosInstance.post('',product);
         dispatch(newProduct(data));
     } catch {
-        console.log('Error')
+        dispatch(newProductError());
     }
 }
 
@@ -30,7 +36,7 @@ export const EditProduct = async (dispatch, product) => {
         await axiosInstance.put('',product);
         dispatch(editProduct(product));
     } catch {
-        console.log("ERROROROROOROR")
+        dispatch(editProductError());
     }
 }
 
@@ -40,6 +46,6 @@ export const DeleteProduct = async (dispatch, product) => {
         await axiosInstance.delete('',{data:{...product}})
         dispatch(deleteProduct(product));
     } catch {
-        console.log("ERROROROROOROR")
+        dispatch(deleteProductError());
     }
 }

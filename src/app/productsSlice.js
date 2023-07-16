@@ -1,5 +1,4 @@
 import { createSlice, createAction } from '@reduxjs/toolkit';
-import { toast } from 'react-toastify';
 
 export const setProductsError = createAction('setProductsError');
 export const newProductError = createAction('newProductError');
@@ -13,7 +12,6 @@ export const productsSlice = createSlice({
     },
     reducers: {
         setProducts: (state, action) => {
-            toast.success("YEYYY")
             return {...state, products: [...action.payload]};
         },
         newProduct: (state, action) => {
