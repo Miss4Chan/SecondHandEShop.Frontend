@@ -15,7 +15,6 @@ export default ({product, setIsEditing}) =>
     useEffect(() => {
         if(product !== undefined) {
             setIsNewProduct(false);
-            //console.log(product.productName);
             setName(product.productName);
         }
         else {
@@ -29,12 +28,10 @@ export default ({product, setIsEditing}) =>
         event.preventDefault();
         if(isNewProduct) {
             //add
-            console.log("vlaga li")
             NewProduct(dispatch, {productName:name,description: description});
         }
         else {
             //edit
-            console.log("dali vlaga")
             EditProduct(dispatch, {id: product.id, description: description, productName:name});
             setIsEditing(false);
 

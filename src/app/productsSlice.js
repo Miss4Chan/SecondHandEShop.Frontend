@@ -4,11 +4,15 @@ export const setProductsError = createAction('setProductsError');
 export const newProductError = createAction('newProductError');
 export const editProductError = createAction('editProductError');
 export const deleteProductError = createAction('deleteProductError');
+export const addToCartError = createAction('addToCartError');
+export const setShoppingCartError = createAction('setShoppingCartError');
+export const deleteFromShoppingCartError = createAction('deleteFromShoppingCartError');
 
 export const productsSlice = createSlice({
     name: 'products',
     initialState: {
         products: [],
+        cart : [],
     },
     reducers: {
         setProducts: (state, action) => {
@@ -22,11 +26,22 @@ export const productsSlice = createSlice({
             return {...state, products :[...products]};
         },
         deleteProduct: (state, action) => {
-            const products = state.products.filter(p => p.id!== action.payload.id); return {...state, products :[...products]};
-        }
+            const products = state.products.filter(p => p.id!== action.payload.id); 
+            return {...state, products :[...products]};
+        },
+        addToCart: (state, action) => {
+            return {...state, cart: [action.payload,...state.cart]};
+        },
+        setShoppingCart: (state, action) => {
+            return {...state, cart: [...action.payload]};
+        },
+        deleteFromShoppingCart : (state, action) => {
+            const cart = state.cart.filter(c => c.id!== action.payload.id); 
+            return {...state, cart :[...cart]};
+        },
     }
 });
 
-export const { setProducts, newProduct, editProduct, deleteProduct } = productsSlice.actions;
+export const { setProducts, newProduct, editProduct, deleteProduct, addToCart, setShoppingCart, deleteFromShoppingCart } = productsSlice.actions;
 
 export default productsSlice.reducer;

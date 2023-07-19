@@ -1,4 +1,4 @@
-import { userAuthenticated } from '../app/authenticationSlice';
+import { userAuthenticated, userAuthenticatedError } from '../app/authenticationSlice';
 import axios from 'axios';
 
 const axiosInstance = axios.create({
@@ -12,7 +12,7 @@ export const SignUp = async (dispatch, credentials) => {
         const { data } = await axiosInstance.post('/signup', credentials);
         dispatch(userAuthenticated(data));
     } catch {
-        console.log('Error!');
+        dispatch(userAuthenticatedError());
     }
 }
 
@@ -21,6 +21,6 @@ export const SignIn = async (dispatch, credentials) => {
         const { data } = await axiosInstance.post('/signin', credentials);
         dispatch(userAuthenticated(data));
     } catch {
-        console.log('Error!');
+        dispatch(userAuthenticatedError());
     }
 }

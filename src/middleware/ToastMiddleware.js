@@ -1,4 +1,5 @@
-import { newProduct, editProduct, setProductsError, deleteProduct, newProductError, deleteProductError, editProductError} from '../app/productsSlice';
+import { logout, userAuthenticated, userAuthenticatedError} from '../app/authenticationSlice';
+import { newProduct, editProduct, setProductsError, deleteProduct, newProductError, deleteProductError, editProductError, addToCart, deleteFromShoppingCart, deleteFromShoppingCartError, addToCartError,  setShoppingCartError} from '../app/productsSlice';
 import { toast } from 'react-toastify';
 
 // function in function
@@ -14,6 +15,12 @@ const ToastMiddleware = () => next => action => {
         case deleteProduct.type:
             toast.success('Product deleted successfully');
             break;
+        case addToCart.type:
+            toast.success('Product added to cart successfully');
+            break;
+        case deleteFromShoppingCart.type:
+            toast.success('Product deleted from cart successfully');   
+            break;        
         case setProductsError.type:
             toast.error('Error loading products');
             break;
@@ -26,6 +33,24 @@ const ToastMiddleware = () => next => action => {
         case deleteProductError.type:
             toast.error('Error deleting product');
             break; 
+        case setShoppingCartError.type:
+            toast.error('Error loading cart');
+            break;
+        case deleteFromShoppingCartError.type:
+            toast.error('Error deleting from shopping cart');
+            break;
+        case addToCartError.type:
+            toast.error('Error adding to cart')
+            break;
+        case userAuthenticated.type:
+            toast.success("User successfully authenticated");
+            break;
+        case logout.type:
+            toast.success("Logged out");
+            break;
+        case userAuthenticatedError.type:
+            toast.error("User authentication failed");
+            break;        
         default:
             break;
     }

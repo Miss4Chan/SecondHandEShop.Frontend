@@ -6,6 +6,8 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { useSelector, useDispatch} from 'react-redux';
 import { userAuthenticated } from './app/authenticationSlice';
 import Navbar from './components/NavBar';
+import ShoppingCart from './components/ShoppingCart';
+import { ToastContainer } from 'react-toastify';
 
 const App = () => {
   const isLoggedIn = useSelector(state =>  state.authenticationSlice.isLoggedIn);
@@ -18,9 +20,11 @@ const App = () => {
     }
   }, []);
 
+
   return (
     <Router>
       <Navbar/>
+      <ToastContainer />
       <Routes>
         <Route path="/" element={isLoggedIn ? <HomePage /> : <SignInPage />} />
         <Route
@@ -31,6 +35,7 @@ const App = () => {
           path="/signin"
           element={!isLoggedIn ? <SignInPage /> : <Navigate to="/" />} 
         />
+         <Route path="/cart" element={<ShoppingCart />} />
         <Route path="*" element={<h2>Page not found!</h2>} />
       </Routes>
     </Router>

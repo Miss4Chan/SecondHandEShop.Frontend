@@ -1,9 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAction } from '@reduxjs/toolkit';
+export const userAuthenticatedError = createAction('userAuthenticatedError');
 
 export const authenticationSlice = createSlice({
     name: 'authentication',
     initialState: {
         token: '',
+        email: '',
         isLoggedIn: false,
     },
     reducers: {
@@ -13,6 +15,7 @@ export const authenticationSlice = createSlice({
             return {
                 ...state, ...{
                     token: action.payload.token,
+                    email: action.payload.email,
                     isLoggedIn: true,
                 }
             }

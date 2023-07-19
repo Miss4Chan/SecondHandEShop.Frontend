@@ -1,4 +1,4 @@
-import { setProducts, deleteProduct, editProduct, newProduct, newProductError, setProductsError, editProductError, deleteProductError,  } from '../app/productsSlice';
+import { setProducts, deleteProduct, editProduct, newProduct, newProductError, setProductsError, editProductError, deleteProductError, addToCart, addToCartError,  } from '../app/productsSlice';
 import axios from 'axios';
 
 const axiosInstance = axios.create({
@@ -47,5 +47,15 @@ export const DeleteProduct = async (dispatch, product) => {
         dispatch(deleteProduct(product));
     } catch {
         dispatch(deleteProductError());
+    }
+}
+
+export const AddToCart = async (dispatch, product, email) => {
+    try {
+        // api call
+        await axiosInstance.post('/AddToCart', {product, email});
+        dispatch(addToCart(product));
+    } catch {
+        dispatch(addToCartError());
     }
 }
