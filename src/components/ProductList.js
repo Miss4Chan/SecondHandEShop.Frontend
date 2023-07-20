@@ -27,8 +27,8 @@ const ListRow = ({ product }) =>
     return isEditing ? <ProductForm product={product} setIsEditing={setIsEditing}/> : <div>
         <Row>
             <Col>{product.id}</Col>
-            <Col>{product.productDescription}</Col>
             <Col>{product.productName}</Col>
+            <Col>{product.productType}</Col>
             <Col><Button onClick={()=>setIsEditing(!isEditing)}>Edit</Button></Col>
             <Col><Button onClick={() => AddToCart(dispatch, product, email)}>Add to Cart</Button></Col>
         </Row>

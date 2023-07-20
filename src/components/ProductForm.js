@@ -1,68 +1,117 @@
 import { useState, useEffect } from 'react';
-import {Form, Row, Col, Button, FormControl, FormLabel } from "react-bootstrap";
-import { DeleteProduct, NewProduct, EditProduct } from '../services/products';
-import { useDispatch } from 'react-redux';
+import { Form, Row, Col, Button, FormControl, FormLabel } from 'react-bootstrap';
+import { useDispatch ,useSelector} from 'react-redux';
+import { DeleteProduct, NewProduct, EditProduct, GetProductTypes } from '../services/products';
 import * as React from "react"
 
-export default ({product, setIsEditing}) =>
-{
-    const descriptions = ['Groceries', 'Credit Card', 'Student Loans', 'Eating out', 'Gas'];
-    const [description, setDescription] = useState(descriptions[0]);
-    const [name,  setName] = useState("");
-    const [isNewProduct, setIsNewProduct] = useState(true);
-    const dispatch = useDispatch();
+export default ({ product, setIsEditing }) => {
+  const [name, setName] = useState('');
+  const [color, setColor] = useState('');
+  const [sizeNumber, setSizeNumber] = useState(0);
+  const [isNewProduct, setIsNewProduct] = useState(true);
+  const [selectedProductType, setSelectedProductType] = useState('');
 
-    useEffect(() => {
-        if(product !== undefined) {
-            setIsNewProduct(false);
-            setName(product.productName);
-        }
-        else {
-            setIsNewProduct(true);
-        }
-    }, [product]); //arrayot tuka e koga ke se smeni ova praj go ovoj effect
+  const dispatch = useDispatch();
 
+  const types = useSelector(state => state.productsSlice.productTypes);
 
-    return <Form
-    onSubmit={event => {
+  useEffect(() => {
+    const fetchProductTypes = async () => {
+      try {
+        GetProductTypes(dispatch);
+      } catch (error) {
+        console.error('Error fetching product types:', error);
+      }
+    };
+
+    fetchProductTypes();
+
+    if (product !== undefined) {
+      setIsNewProduct(false);
+      setName(product.productName);
+      setSelectedProductType(product.productType);
+    } else {
+      setIsNewProduct(true);
+    }
+  }, [product, dispatch]);
+
+  return (
+    <Form
+      onSubmit={(event) => {
         event.preventDefault();
-        if(isNewProduct) {
-            //add
-            NewProduct(dispatch, {productName:name,description: description});
+        if (isNewProduct) {
+          NewProduct(dispatch, { productType: selectedProductType, productColor: color, productSizeNumber: sizeNumber, productName: name });
+        } else {
+          EditProduct(dispatch, { id: product.id, productType: selectedProductType, productColor: color, productSizeNumber: sizeNumber, productName: name });
+          setIsEditing(false);
         }
-        else {
-            //edit
-            EditProduct(dispatch, {id: product.id, description: description, productName:name});
-            setIsEditing(false);
-
-        }
-        }}
-        >
-        <Row>
-            <Col>
-            <Form.Label>Description</Form.Label>
-                <Form.Control as='select'
-                    onChange={event => setDescription(event.target.value)}>
-                    {descriptions.map((d) => <option>{d}</option>)}
-                </Form.Control>
-            </Col>
-            <Col>
-                <FormLabel>Name</FormLabel>
-                <FormControl type='text'
-                placeholder = {name}
-                onChange={event=>setName(event.target.value)}></FormControl>
-            </Col>
-            <Col>
-            <div>
-                {isNewProduct ? <Button variant={'primary'} type='submit'>Add</Button>:
-                <div>
-                    <Button variant={'warning'} onClick={()=>DeleteProduct(dispatch,product)}>Delete</Button>
-                    <Button variant={'success'} type='submit'>Save</Button>
-                    <Button variant={'default'} onClick={()=>setIsEditing(false)}>Cancel</Button>
-                </div>
-            }
-            </div>
-            </Col>
-        </Row>
+      }}
+    >
+      <Row>
+        <Col>
+          <FormLabel>Type</FormLabel>
+          {types ? (
+            <select
+              name="productType"
+              value={selectedProductType}
+              onChange={(event) => setSelectedProductType(event.target.value)}
+            >
+              {types.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <p>Loading product types...</p>
+          )}
+        </Col>
+        <Col>
+          <FormLabel>Color</FormLabel>
+          <FormControl
+            type="text"
+            placeholder={color}
+            onChange={(event) => setColor(event.target.value)}
+          />
+        </Col>
+        <Col>
+          <FormLabel>Size number</FormLabel>
+          <FormControl
+            type="number"
+            placeholder={sizeNumber}
+            onChange={(event) => setSizeNumber(event.target.value)}
+          />
+        </Col>
+        <Col>
+          <FormLabel>Name</FormLabel>
+          <FormControl
+            type="text"
+            placeholder={name}
+            onChange={(event) => setName(event.target.value)}
+          />
+        </Col>
+        <Col>
+          <div>
+            {isNewProduct ? (
+              <Button variant="primary" type="submit">
+                Add
+              </Button>
+            ) : (
+              <div>
+                <Button variant="warning" onClick={() => DeleteProduct(dispatch, product)}>
+                  Delete
+                </Button>
+                <Button variant="success" type="submit">
+                  Save
+                </Button>
+                <Button variant="default" onClick={() => setIsEditing(false)}>
+                  Cancel
+                </Button>
+              </div>
+            )}
+          </div>
+        </Col>
+      </Row>
     </Form>
-}
+  );
+};

@@ -1,5 +1,5 @@
 import { logout, userAuthenticated, userAuthenticatedError} from '../app/authenticationSlice';
-import { newProduct, editProduct, setProductsError, deleteProduct, newProductError, deleteProductError, editProductError, addToCart, deleteFromShoppingCart, deleteFromShoppingCartError, addToCartError,  setShoppingCartError} from '../app/productsSlice';
+import { newProduct, editProduct, setProductsError, deleteProduct, setProductTypesError,newProductError, deleteProductError, editProductError, addToCart, deleteFromShoppingCart, deleteFromShoppingCartError, addToCartError,  setShoppingCartError, setProductTypes} from '../app/productsSlice';
 import { toast } from 'react-toastify';
 
 // function in function
@@ -50,7 +50,13 @@ const ToastMiddleware = () => next => action => {
             break;
         case userAuthenticatedError.type:
             toast.error("User authentication failed");
-            break;        
+            break;     
+        case setProductTypesError.type:
+            toast.error("Tiibam typesot");
+            break;  
+        case setProductTypes.type:
+            toast.success("Raboti plz");
+            break;
         default:
             break;
     }
