@@ -29,6 +29,7 @@ const ListRow = ({ product }) =>
             <Col>{product.id}</Col>
             <Col>{product.productName}</Col>
             <Col>{product.productType}</Col>
+            <Col>{product.productSubcategory}</Col>
             <Col><Button onClick={()=>setIsEditing(!isEditing)}>Edit</Button></Col>
             <Col><Button onClick={() => AddToCart(dispatch, product, email)}>Add to Cart</Button></Col>
         </Row>

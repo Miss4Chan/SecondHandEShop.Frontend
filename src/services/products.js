@@ -1,4 +1,7 @@
-import { setProducts, deleteProduct, editProduct, newProduct, newProductError, setProductsError, editProductError,setProductTypesError, deleteProductError, addToCart, addToCartError, setProductTypes  } from '../app/productsSlice';
+import { setProducts,setProductSubcategories, deleteProduct, 
+    editProduct,setProductSizes, newProduct, newProductError, 
+    setProductsError, editProductError,setProductTypesError, 
+    deleteProductError, addToCart, addToCartError, setProductTypes  } from '../app/productsSlice';
 import axios from 'axios';
 
 const axiosInstance = axios.create({
@@ -15,6 +18,7 @@ export const GetProducts = async (dispatch) => {
     try {
         //api call
         const {data} = await axiosInstance.get();
+        console.log(data);
         dispatch(setProducts(data));
     } catch {
         dispatch(setProductsError());
@@ -32,9 +36,32 @@ export const GetProductTypes = async (dispatch) => {
     }
 }
 
+export const GetProductSizes = async (dispatch) => {
+    try {
+        //api call
+        const {data} = await axiosInstance.get("/productSizes");
+        console.log(data);
+        dispatch(setProductSizes(data));
+    } catch {
+        console.log("Majka ti")
+    }
+}
+export const GetProductSubcategories = async (dispatch) => {
+    try {
+        //api call
+        const {data} = await axiosInstance.get("/productSubcategory");
+        console.log(data);
+        dispatch(setProductSubcategories(data));
+    } catch {
+        console.log("Majka ti")
+    }
+}
+
 export const NewProduct = async (dispatch, product) => {
     try {
+        console.log(product);
         const {data} = await axiosInstance.post('',product);
+        console.log(data);
         dispatch(newProduct(data));
     } catch {
         dispatch(newProductError());
@@ -64,6 +91,9 @@ export const DeleteProduct = async (dispatch, product) => {
 export const AddToCart = async (dispatch, product, email) => {
     try {
         // api call
+        console.log("cart");
+        console.log(email);
+        console.log(product);
         await axiosInstance.post('/AddToCart', {product, email});
         dispatch(addToCart(product));
     } catch {

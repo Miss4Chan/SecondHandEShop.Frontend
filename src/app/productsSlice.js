@@ -8,13 +8,16 @@ export const addToCartError = createAction('addToCartError');
 export const setShoppingCartError = createAction('setShoppingCartError');
 export const deleteFromShoppingCartError = createAction('deleteFromShoppingCartError');
 export const setProductTypesError = createAction('setProductTypesError');
+export const setProductSizesError = createAction('setProductSizesError');
 
 export const productsSlice = createSlice({
     name: 'products',
     initialState: {
         products: [],
         cart : [],
-        productTypes:[]
+        productTypes:[],
+        productSizes:[],
+        productSubcategories:[]
     },
     reducers: {
         setProductTypes:(state,action) => 
@@ -22,10 +25,19 @@ export const productsSlice = createSlice({
             console.log("dali vlaga")
             return {...state, productTypes: [...action.payload]};
         },
+        setProductSizes:(state,action)=>
+        {
+            return {...state, productSizes: [...action.payload]};
+        },
+        setProductSubcategories:(state,action)=>
+        {
+            return {...state, productSubcategories: [...action.payload]};
+        },
         setProducts: (state, action) => {
             return {...state, products: [...action.payload]};
         },
         newProduct: (state, action) => {
+            console.log("new")
             return {...state, products: [action.payload,...state.products]};
         },
         editProduct: (state, action) => {
@@ -49,6 +61,8 @@ export const productsSlice = createSlice({
     }
 });
 
-export const { setProducts, newProduct, editProduct, deleteProduct, addToCart, setShoppingCart, deleteFromShoppingCart, setProductTypes } = productsSlice.actions;
+export const { setProducts, newProduct, editProduct,
+     deleteProduct, addToCart, setShoppingCart,setProductSizes,
+      deleteFromShoppingCart, setProductTypes,setProductSubcategories } = productsSlice.actions;
 
 export default productsSlice.reducer;

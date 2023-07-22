@@ -8,6 +8,7 @@ import { userAuthenticated } from './app/authenticationSlice';
 import Navbar from './components/NavBar';
 import ShoppingCart from './components/ShoppingCart';
 import { ToastContainer } from 'react-toastify';
+import ProductAdd from './components/ProductAdd';
 
 const App = () => {
   const isLoggedIn = useSelector(state =>  state.authenticationSlice.isLoggedIn);
@@ -16,6 +17,7 @@ const App = () => {
   useEffect(() => {
     const token = sessionStorage.getItem('token');
     if (token !== undefined && token !== null) {
+      console.log("tuka??????")
       dispatch(userAuthenticated({ token: token }))
     }
   }, []);
@@ -35,7 +37,8 @@ const App = () => {
           path="/signin"
           element={!isLoggedIn ? <SignInPage /> : <Navigate to="/" />} 
         />
-         <Route path="/cart" element={<ShoppingCart />} />
+         <Route path="/cart" element={isLoggedIn ? <ShoppingCart /> : <SignInPage />} />
+         <Route path="/add" element={isLoggedIn ? <ProductAdd /> : <SignInPage />}/>
         <Route path="*" element={<h2>Page not found!</h2>} />
       </Routes>
     </Router>

@@ -16,6 +16,7 @@ const Navbar = () => {
                 <NavLink style={{ marginLeft: '1rem' }} variant='link' to='/'>Home</NavLink>
                 <Button variant='link' href='/signin' onClick={() => { dispatch(logout()) }}>Log out</Button>
                 <NavLink to="/cart" style={{ marginLeft: '1rem' }}>Shopping Cart</NavLink>
+                <NavLink to="/add" style={{ marginLeft: '1rem' }}>Add</NavLink>
             </div>
             : <div style={{ display: 'flex' }}>
                 <NavLink to="/signup">Sign up</NavLink>
