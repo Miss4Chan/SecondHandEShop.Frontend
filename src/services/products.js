@@ -1,6 +1,6 @@
 import { setProducts,setProductSubcategories, deleteProduct, 
     editProduct,setProductSizes, newProduct, newProductError, 
-    setProductsError, editProductError,setProductTypesError, 
+    setProductsError, editProductError,setMyProducts,
     deleteProductError, addToCart, addToCartError, setProductTypes  } from '../app/productsSlice';
 import axios from 'axios';
 
@@ -20,6 +20,17 @@ export const GetProducts = async (dispatch) => {
         const {data} = await axiosInstance.get();
         console.log(data);
         dispatch(setProducts(data));
+    } catch {
+        dispatch(setProductsError());
+    }
+}
+
+export const GetMyProducts = async (dispatch) => {
+    try {
+        //api call
+        const {data} = await axiosInstance.get("/myProducts");
+        console.log(data);
+        dispatch(setMyProducts(data));
     } catch {
         dispatch(setProductsError());
     }

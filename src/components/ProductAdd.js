@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Form, Row, Col, Button, FormControl, FormLabel } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { NewProduct, GetProductTypes ,GetProductSizes, GetProductSubcategories} from '../services/products';
+import { NewProduct} from '../services/products';
 import * as React from 'react';
 
 // ... (Previous code remains unchanged)
@@ -20,33 +20,6 @@ const ProductAdd = () => {
     const types = useSelector((state) => state.productsSlice.productTypes);
     const sizes = useSelector((state) => state.productsSlice.productSizes);
     const subcategories = useSelector((state) => state.productsSlice.productSubcategories);
-  
-    useEffect(() => {
-      const fetchProductTypes = async () => {
-        try {
-          GetProductTypes(dispatch);
-        } catch (error) {
-          console.error('Error fetching product types:', error);
-        }
-      };
-      const fetchProductSizes = async () => {
-        try {
-          GetProductSizes(dispatch);
-        } catch (error) {
-          console.error('Error fetching product types:', error);
-        }
-      };
-      const fetchProductSubcategores = async () => {
-        try {
-          GetProductSubcategories(dispatch);
-        } catch (error) {
-          console.error('Error fetching product types:', error);
-        }
-      };
-      fetchProductTypes();
-      fetchProductSizes();
-      fetchProductSubcategores();
-    }, [dispatch]);
   
     return (
       <Form

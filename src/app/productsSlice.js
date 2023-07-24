@@ -14,6 +14,7 @@ export const productsSlice = createSlice({
     name: 'products',
     initialState: {
         products: [],
+        myProducts: [],
         cart : [],
         productTypes:[],
         productSizes:[],
@@ -36,17 +37,22 @@ export const productsSlice = createSlice({
         setProducts: (state, action) => {
             return {...state, products: [...action.payload]};
         },
+        setMyProducts: (state, action) => {
+            return {...state, myProducts: [...action.payload]};
+        },
         newProduct: (state, action) => {
             console.log("new")
             return {...state, products: [action.payload,...state.products]};
         },
         editProduct: (state, action) => {
-            const products=state.products.map( p => {if(p.id === action.payload.id) {p = action.payload;} return p;}); 
-            return {...state, products :[...products]};
+            const products=state.products.map( p => {if(p.id === action.payload.id) {p = action.payload;} return p;});
+            const myProducts=state.myProducts.map( p => {if(p.id === action.payload.id) {p = action.payload;} return p;});  
+            return {...state, products :[...products], myProducts :[...myProducts],};
         },
         deleteProduct: (state, action) => {
             const products = state.products.filter(p => p.id!== action.payload.id); 
-            return {...state, products :[...products]};
+            const myProducts = state.myProducts.filter(p => p.id!== action.payload.id); 
+            return {...state, products :[...products], myProducts :[...myProducts]};
         },
         addToCart: (state, action) => {
             return {...state, cart: [action.payload,...state.cart]};
@@ -63,6 +69,6 @@ export const productsSlice = createSlice({
 
 export const { setProducts, newProduct, editProduct,
      deleteProduct, addToCart, setShoppingCart,setProductSizes,
-      deleteFromShoppingCart, setProductTypes,setProductSubcategories } = productsSlice.actions;
+      deleteFromShoppingCart, setProductTypes,setProductSubcategories, setMyProducts } = productsSlice.actions;
 
 export default productsSlice.reducer;

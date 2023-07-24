@@ -1,148 +1,92 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Row, Col, Button, FormControl, FormLabel } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { GetProductTypes, GetProductSizes, GetProductSubcategories, UpdateProduct, EditProduct } from '../services/products';
+import React, { useState } from 'react';
+import { Button, Modal, Form } from 'react-bootstrap';
+import { useSelector} from 'react-redux';
 
-const ProductEdit = ({ product }) => {
-  const [name, setName] = useState('');
-  const [color, setColor] = useState('');
-  const [sizeNumber, setSizeNumber] = useState(0);
-  const [selectedProductType, setSelectedProductType] = useState('');
-  const [selectedSize, setSelectedSize] = useState('');
-  const [selectedSubcategory, setSelectedSubcategory] = useState('');
-  const [price, setPrice] = useState(0);
-
-  const dispatch = useDispatch();
-
+const ProductEdit = ({ product, onSave, onCancel }) => {
+  const [editedProduct, setEditedProduct] = useState(product);
   const types = useSelector((state) => state.productsSlice.productTypes);
   const sizes = useSelector((state) => state.productsSlice.productSizes);
   const subcategories = useSelector((state) => state.productsSlice.productSubcategories);
 
-  useEffect(() => {
-    // Fetch product data and populate the form with it
-    // You can make an API call here to get the product data by its ID and set the state variables accordingly.
-    // For example, you can use the product ID to fetch the product details from the server.
-    // Set the fetched product data to the corresponding state variables using the setters (e.g., setName, setColor, etc.).
-  }, [product]);
-
-  // The rest of the code remains the same as in the ProductAdd component.
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedProduct({ ...editedProduct, [name]: value });
+  };
 
   return (
-    <Form
-      onSubmit={(event) => {
-        event.preventDefault();
-        EditProduct(dispatch, product, {
-          productType: selectedProductType,
-          productColor: color,
-          productSizeNumber: sizeNumber,
-          productName: name,
-          productSize: selectedSize,
-          productSubcategory: selectedSubcategory,
-          productPrice: price
-        });
-      }}
-    >
-        return (
-      <Form
-        onSubmit={(event) => {
-          event.preventDefault();
-          NewProduct(dispatch, {
-            productType: selectedProductType,
-            productColor: color,
-            productSizeNumber: sizeNumber,
-            productName: name,
-            productSize: selectedSize,
-            productSubcategory: selectedSubcategory,
-            productPrice: price
-          });
-        }}
-      >
-        <Row>
-          {selectedProductType && ( // Show other fields only when type is selected
-            <>
-              <Col>
-                <FormLabel>Color</FormLabel>
-                <FormControl
-                  type="text"
-                  placeholder="Enter color"
-                  value={color}
-                  onChange={(event) => setColor(event.target.value)}
-                />
-              </Col>
-              {selectedProductType === "Clothes" && ( // Use curly braces instead of parentheses here
-                <Col>
-                  <select
-                    name="productSize"
-                    value={selectedSize}
-                    onChange={(event) => setSelectedSize(event.target.value)}
-                  >
-                    <option value="">Select Size</option>
-                    {sizes.map((size) => (
-                      <option key={size} value={size}>
-                        {size}
-                      </option>
-                    ))}
-                  </select>
-                </Col>
-              )}
-            {selectedProductType === "Clothes" && ( // Use curly braces instead of parentheses here
-                <Col>
-                  <select
-                    name="productSubcategories"
-                    value={selectedSubcategory}
-                    onChange={(event) => setSelectedSubcategory(event.target.value)}
-                  >
-                    <option value="">Select Subcategory</option>
-                    {subcategories.map((size) => (
-                      <option key={size} value={size}>
-                        {size}
-                      </option>
-                    ))}
-                  </select>
-                </Col>
-              )}
-              {selectedProductType === "Shoes" && (
-                <Col>
-                <FormLabel>Size number</FormLabel>
-                <FormControl
-                  type="number"
-                  placeholder="Enter size number"
-                  value={sizeNumber}
-                  onChange={(event) => setSizeNumber(event.target.value)}
-                />
-              </Col>
-              )}    
-                <Col>
-                <FormLabel>Name</FormLabel>
-                <FormControl
-                  type="text"
-                  placeholder="Enter name"
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
-                />
-              </Col>
-              <Col>
-                <FormLabel>Price</FormLabel>
-                <FormControl
-                  type="number"
-                  placeholder="Enter price"
-                  value={price}
-                  onChange={(event) => setPrice(event.target.value)}
-                />
-              </Col>
-              <Col>
-                <div>
-                  <Button variant="primary" type="submit">
-                    Add
-                  </Button>
-                </div>
-              </Col>
-            </>
-          )}
-        </Row>
-      </Form>
-    );
+    <Modal show={true} onHide={onCancel}>
+  <Modal.Header closeButton>
+    <Modal.Title>Edit Product</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <Form>
+      <Form.Group>
+        <Form.Label>ID</Form.Label>
+        <Form.Control type="text" name="id" value={editedProduct.id} disabled />
+      </Form.Group>
+      <Form.Group>
+        <Form.Label>Product Name</Form.Label>
+        <Form.Control type="text" name="productName" value={editedProduct.productName} onChange={handleInputChange} />
+      </Form.Group>
+      <Form.Group>
+        <Form.Label>Product Type</Form.Label>
+        <Form.Select name="productType" value={editedProduct.productType} onChange={handleInputChange}>
+          <option value="">Select Type</option>
+          {types.map((type) => (
+            <option key={type} value={type}>
+              {type}
+            </option>
+          ))}
+        </Form.Select>
+      </Form.Group>
+      <Form.Group>
+            <Form.Label>Color</Form.Label>
+            <Form.Control type="text" name="productColor" value={editedProduct.productColor} onChange={handleInputChange} />
+          </Form.Group>
+      {editedProduct.productType === "Clothes" && (
+        <>
+          <Form.Group>
+            <Form.Label>Product Size</Form.Label>
+            <Form.Select name="productSize" value={editedProduct.productSize} onChange={handleInputChange}>
+              <option value="">Select Size</option>
+              {sizes.map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Product Subcategory</Form.Label>
+            <Form.Select name="productSubcategory" value={editedProduct.productSubcategory} onChange={handleInputChange}>
+              <option value="">Select Subcategory</option>
+              {subcategories.map((subcategory) => (
+                <option key={subcategory} value={subcategory}>
+                  {subcategory}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+        </>
+      )}
+      {editedProduct.productType === "Shoes" && (
+        <Form.Group>
+          <Form.Label>Size number</Form.Label>
+          <Form.Control type="number" name="productSizeNumber" value={editedProduct.productSizeNumber} onChange={handleInputChange} />
+        </Form.Group>
+      )}
+      <Form.Group>
+        <Form.Label>Product Price</Form.Label>
+        <Form.Control type="number" name="productPrice" value={editedProduct.productPrice} onChange={handleInputChange} />
+      </Form.Group>
     </Form>
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={onCancel}>Cancel</Button>
+    <Button variant="primary" onClick={() => onSave(editedProduct)}>Save</Button>
+  </Modal.Footer>
+</Modal>
+
   );
 };
 
