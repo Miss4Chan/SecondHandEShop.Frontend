@@ -9,8 +9,9 @@ import ShoppingCart from './components/ShoppingCart';
 import { ToastContainer } from 'react-toastify';
 import ProductAdd from './components/ProductAdd';
 import ProductList from './components/ProductList';
-import { GetProductTypes ,GetProductSizes, GetProductSubcategories} from './services/products';
 import MyProductsPage from './components/MyProductsPage';
+import MyProfile from './components/MyProfile';
+import Profile from './components/Profile';
 
 const App = () => {
   const isLoggedIn = useSelector(state =>  state.authenticationSlice.isLoggedIn);
@@ -19,34 +20,8 @@ const App = () => {
   useEffect(() => {
     const token = sessionStorage.getItem('token');
     if (token !== undefined && token !== null) {
-      console.log("tuka??????")
       dispatch(userAuthenticated({ token: token }))
     }
-
-    const fetchProductTypes = async () => {
-      try {
-        GetProductTypes(dispatch);
-      } catch (error) {
-        console.error('Error fetching product types:', error);
-      }
-    };
-    const fetchProductSizes = async () => {
-      try {
-        GetProductSizes(dispatch);
-      } catch (error) {
-        console.error('Error fetching product types:', error);
-      }
-    };
-    const fetchProductSubcategores = async () => {
-      try {
-        GetProductSubcategories(dispatch);
-      } catch (error) {
-        console.error('Error fetching product types:', error);
-      }
-    };
-    fetchProductTypes();
-    fetchProductSizes();
-    fetchProductSubcategores();
   }, []);
 
 
@@ -67,6 +42,8 @@ const App = () => {
          <Route path="/cart" element={isLoggedIn ? <ShoppingCart /> : <SignInPage />} />
          <Route path="/add" element={isLoggedIn ? <ProductAdd /> : <SignInPage />}/>
          <Route path="/myProducts" element={isLoggedIn ? <MyProductsPage /> : <SignInPage />}/>
+         <Route path="/myProfile" element={isLoggedIn ? <MyProfile /> : <SignInPage />}/>
+         <Route path="/profile/:username" element={<Profile />} />
         <Route path="*" element={<h2>Page not found!</h2>} />
       </Routes>
     </Router>

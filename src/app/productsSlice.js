@@ -23,7 +23,6 @@ export const productsSlice = createSlice({
     reducers: {
         setProductTypes:(state,action) => 
         {
-            console.log("dali vlaga")
             return {...state, productTypes: [...action.payload]};
         },
         setProductSizes:(state,action)=>
@@ -41,7 +40,6 @@ export const productsSlice = createSlice({
             return {...state, myProducts: [...action.payload]};
         },
         newProduct: (state, action) => {
-            console.log("new")
             return {...state, products: [action.payload,...state.products]};
         },
         editProduct: (state, action) => {

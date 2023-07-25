@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Form, Row, Col, Button, FormControl, FormLabel } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { NewProduct} from '../services/products';
 import * as React from 'react';
+import { GetProductTypes } from '../services/products';
 
-// ... (Previous code remains unchanged)
+
 
 const ProductAdd = () => {
     const [name, setName] = useState('');
@@ -20,6 +21,19 @@ const ProductAdd = () => {
     const types = useSelector((state) => state.productsSlice.productTypes);
     const sizes = useSelector((state) => state.productsSlice.productSizes);
     const subcategories = useSelector((state) => state.productsSlice.productSubcategories);
+
+    useEffect(() => {
+      const fetchProductTypes = async () => {
+        try {
+          GetProductTypes(dispatch);
+        } catch (error) {
+          console.error('Error fetching product types:', error);
+        }
+      };
+  
+    
+      fetchProductTypes();
+    }, [dispatch]);
   
     return (
       <Form
@@ -56,7 +70,7 @@ const ProductAdd = () => {
               <p>Loading product types...</p>
             )}
           </Col>
-          {selectedProductType && ( // Show other fields only when type is selected
+          {selectedProductType && ( 
             <>
               <Col>
                 <FormLabel>Color</FormLabel>
@@ -67,7 +81,7 @@ const ProductAdd = () => {
                   onChange={(event) => setColor(event.target.value)}
                 />
               </Col>
-              {selectedProductType === "Clothes" && ( // Use curly braces instead of parentheses here
+              {selectedProductType === "Clothes" && ( 
                 <Col>
                   <select
                     name="productSize"
@@ -83,7 +97,7 @@ const ProductAdd = () => {
                   </select>
                 </Col>
               )}
-            {selectedProductType === "Clothes" && ( // Use curly braces instead of parentheses here
+            {selectedProductType === "Clothes" && ( 
                 <Col>
                   <select
                     name="productSubcategories"

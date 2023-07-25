@@ -40,6 +40,7 @@ const ListRow = ({ product }) =>
           <Col>{product.productType}</Col>
           <Col>{product.productSubcategory}</Col>
           <Col>{product.productPrice}</Col>
+          <Col>{product.username}</Col>
           <Col>
             <Button onClick={() => setIsEditing(true)}>Edit</Button>
           </Col>

@@ -13,9 +13,7 @@ axiosInstance.interceptors.request.use((config) => {
 export const GetShoppingCart = async (dispatch, email) => {
     try {
         //api call
-        console.log(email);
         const {data} = await axiosInstance.get('',{ params: { email } });
-        console.log(data);
         const products = data.productsInShoppingCart.map(p => p.product);
         dispatch(setShoppingCart(products));
 

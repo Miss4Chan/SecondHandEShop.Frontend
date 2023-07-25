@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 const SignUpPage = () => {
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
+    const [username, setUsername] = useState('');
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
     const [email, setEmail] = useState('');
@@ -18,10 +19,14 @@ const SignUpPage = () => {
             onSubmit={event => {
                 event.preventDefault();
                 if (password === confirmPassword) {
-                    SignUp(dispatch, { name, surname, phone, address, email, password });
+                    SignUp(dispatch, { username, name, surname, phone, address, email, password });
                 }
             }}>
             <h4 style={{ textAlign: 'center' }}>Create an account</h4>
+            <InputGroup className='mb-3'>
+                <FormControl placeholder='Username'
+                    onChange={event => setUsername(event.target.value)} />
+            </InputGroup>
             <InputGroup className='mb-3'>
                 <FormControl placeholder='Name'
                     onChange={event => setName(event.target.value)} />
