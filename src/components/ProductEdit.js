@@ -1,17 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
-import { useSelector} from 'react-redux';
+import { useSelector, useDispatch} from 'react-redux';
+import { GetProductSubcategories, GetProductSizes, GetProductTypes} from '../services/products';
 
 const ProductEdit = ({ product, onSave, onCancel }) => {
   const [editedProduct, setEditedProduct] = useState(product);
   const types = useSelector((state) => state.productsSlice.productTypes);
   const sizes = useSelector((state) => state.productsSlice.productSizes);
   const subcategories = useSelector((state) => state.productsSlice.productSubcategories);
-
+  const dispatch = useDispatch();
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedProduct({ ...editedProduct, [name]: value });
   };
+
+  useEffect(() => {
+    const fetchProductTypes = async () => {
+      try {
+        GetProductTypes(dispatch);
+      } catch (error) {
+        console.error('Error fetching product types:', error);
+      }
+    };
+
+    const fetchProductSizes = async () => {
+      try {
+        GetProductSizes(dispatch);
+      } catch (error) {
+        console.error('Error fetching product sizes:', error);
+      }
+    };
+
+    const fetchProductSubcategories = async () => {
+      try {
+        GetProductSubcategories(dispatch);
+      } catch (error) {
+        console.error('Error fetching product subcategories:', error);
+      }
+    };
+
+    fetchProductTypes();
+    fetchProductSubcategories();
+    fetchProductSizes();
+  }, [dispatch]);
 
   return (
     <Modal show={true} onHide={onCancel}>

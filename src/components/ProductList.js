@@ -1,6 +1,6 @@
 import { useEffect} from 'react';
 import { useDispatch , useSelector} from 'react-redux';
-import { GetProducts, AddToCart } from '../services/products';
+import { GetProducts, AddToCart, AddToFavourites } from '../services/products';
 import { Row,Col, Button } from 'react-bootstrap';
 import * as React from "react"
 import { NavLink } from 'react-router-dom';
@@ -8,8 +8,6 @@ import { NavLink } from 'react-router-dom';
 export default () => {
     const dispatch = useDispatch();
     const products = useSelector(state => state.productsSlice.products);
-    const email = useSelector((state) => state.authenticationSlice.email);
-    console.log("Email   up " + email);
 
     useEffect(()=>{
         GetProducts(dispatch);
@@ -25,10 +23,7 @@ const ListRow = ({ product }) =>
 {
     const dispatch = useDispatch();
     const email = useSelector((state) => state.authenticationSlice.email);
-    console.log("Email    " + email);
-    console.log("Email product    " + product.email);
-    const profileLink = 
-    email === product.email ? `/myProfile` : `/profile/${product.username}`;
+    const profileLink = email === product.email ? `/myProfile` : `/profile/${product.username}`;
 
     return <div>
         <Row>
@@ -37,6 +32,7 @@ const ListRow = ({ product }) =>
             <Col>{product.productType}</Col>
             <Col>{product.productSubcategory}</Col>
             <Col><Button onClick={() => AddToCart(dispatch, product, email)}>Add to Cart</Button></Col>
+            <Col><Button onClick={() => AddToFavourites(dispatch, product, email)}>Add to Favourites</Button></Col>
             <NavLink to={profileLink}>{product.username}</NavLink>
             <Col>{product.email}</Col>
         </Row>

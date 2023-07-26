@@ -12,6 +12,7 @@ import ProductList from './components/ProductList';
 import MyProductsPage from './components/MyProductsPage';
 import MyProfile from './components/MyProfile';
 import Profile from './components/Profile';
+import Favourites from './components/Favourites';
 
 const App = () => {
   const isLoggedIn = useSelector(state =>  state.authenticationSlice.isLoggedIn);
@@ -40,6 +41,7 @@ const App = () => {
           element={!isLoggedIn ? <SignInPage /> : <Navigate to="/" />} 
         />
          <Route path="/cart" element={isLoggedIn ? <ShoppingCart /> : <SignInPage />} />
+         <Route path="/faves" element={isLoggedIn ? <Favourites /> : <SignInPage />}/>
          <Route path="/add" element={isLoggedIn ? <ProductAdd /> : <SignInPage />}/>
          <Route path="/myProducts" element={isLoggedIn ? <MyProductsPage /> : <SignInPage />}/>
          <Route path="/myProfile" element={isLoggedIn ? <MyProfile /> : <SignInPage />}/>

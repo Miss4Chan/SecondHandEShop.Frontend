@@ -1,5 +1,5 @@
 import { logout, userAuthenticated, userAuthenticatedError} from '../app/authenticationSlice';
-import { newProduct, editProduct, setProductsError, deleteProduct, setProductTypesError,newProductError, deleteProductError, editProductError, addToCart, deleteFromShoppingCart, deleteFromShoppingCartError, addToCartError,  setShoppingCartError, setProductTypes} from '../app/productsSlice';
+import { newProduct, editProduct, clearCart, setProductsError, deleteProduct, setProductTypesError,newProductError, deleteProductError, editProductError, addToCart, deleteFromShoppingCart, deleteFromShoppingCartError, addToCartError,  setShoppingCartError, setProductTypes, addToFavourites, addToFavouritesError, deleteFromFavourites, deleteFromFavouritesError} from '../app/productsSlice';
 import { toast } from 'react-toastify';
 
 // function in function
@@ -52,11 +52,26 @@ const ToastMiddleware = () => next => action => {
             toast.error("User authentication failed");
             break;     
         case setProductTypesError.type:
-            toast.error("Tiibam typesot");
+            toast.error("Set product types error");
             break;  
         case setProductTypes.type:
-            toast.success("Raboti plz");
+            toast.success("Set product types successfully");
             break;
+        case addToFavourites.type:
+            toast.success("Added to favourites successfully");
+            break;
+        case addToFavouritesError.type:
+            toast.error("Added to favourites error");
+            break;
+       case deleteFromFavourites.type:
+            toast.success("Deleted from favourites successfully");
+            break;
+        case deleteFromFavouritesError.type:
+            toast.error("Deleted from favourites error");
+            break;             
+        case clearCart.type:
+            toast.success("Ordered successfully");
+            break;    
         default:
             break;
     }

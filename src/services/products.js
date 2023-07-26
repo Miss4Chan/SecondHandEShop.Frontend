@@ -1,7 +1,7 @@
 import { setProducts,setProductSubcategories, deleteProduct, 
     editProduct,setProductSizes, newProduct, newProductError, 
     setProductsError, editProductError,setMyProducts,
-    deleteProductError, addToCart, addToCartError, setProductTypes  } from '../app/productsSlice';
+    deleteProductError, addToCart, addToCartError, setProductTypes, addToFavourites  } from '../app/productsSlice';
 import axios from 'axios';
 
 const axiosInstance = axios.create({
@@ -101,3 +101,14 @@ export const AddToCart = async (dispatch, product, email) => {
         dispatch(addToCartError());
     }
 }
+
+export const AddToFavourites = async (dispatch, product, email) => {
+    try {
+        // api call
+        await axiosInstance.post('/AddToFavourites', {product, email});
+        dispatch(addToFavourites(product));
+    } catch {
+        console.log("error adding to faves");
+    }
+}
+

@@ -16,6 +16,7 @@ const Navbar = () => {
                 <NavLink style={{ marginLeft: '1rem' }} variant='link' to='/'>Home</NavLink>
                 <Button variant='link' href='/signin' onClick={() => { dispatch(logout()) }}>Log out</Button>
                 <NavLink to="/cart" style={{ marginLeft: '1rem' }}>Shopping Cart</NavLink>
+                <NavLink to="/faves" style={{ marginLeft: '1rem' }}>Favourites</NavLink>
                 <NavLink to="/myProducts" style={{ marginLeft: '1rem' }}>My products</NavLink>
                 <NavLink to="/myProfile" style={{ marginLeft: '1rem' }}>My profile</NavLink>
             </div>

@@ -1,11 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Form, Row, Col, Button, FormControl, FormLabel } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { NewProduct} from '../services/products';
+import { GetProductSubcategories, GetProductSizes, GetProductTypes, NewProduct} from '../services/products';
 import * as React from 'react';
-import { GetProductTypes } from '../services/products';
-
-
 
 const ProductAdd = () => {
     const [name, setName] = useState('');
@@ -30,9 +27,26 @@ const ProductAdd = () => {
           console.error('Error fetching product types:', error);
         }
       };
+
+      const fetchProductSizes = async () => {
+        try {
+          GetProductSizes(dispatch);
+        } catch (error) {
+          console.error('Error fetching product sizes:', error);
+        }
+      };
   
-    
+      const fetchProductSubcategories = async () => {
+        try {
+          GetProductSubcategories(dispatch);
+        } catch (error) {
+          console.error('Error fetching product subcategories:', error);
+        }
+      };
+
       fetchProductTypes();
+      fetchProductSubcategories();
+      fetchProductSizes();
     }, [dispatch]);
   
     return (

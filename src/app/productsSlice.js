@@ -5,8 +5,10 @@ export const newProductError = createAction('newProductError');
 export const editProductError = createAction('editProductError');
 export const deleteProductError = createAction('deleteProductError');
 export const addToCartError = createAction('addToCartError');
+export const addToFavouritesError = createAction('addToFavouritesError');
 export const setShoppingCartError = createAction('setShoppingCartError');
 export const deleteFromShoppingCartError = createAction('deleteFromShoppingCartError');
+export const deleteFromFavouritesError = createAction('deleteFromFavouritesCartError');
 export const setProductTypesError = createAction('setProductTypesError');
 export const setProductSizesError = createAction('setProductSizesError');
 
@@ -16,9 +18,11 @@ export const productsSlice = createSlice({
         products: [],
         myProducts: [],
         cart : [],
+        favourites: [],
         productTypes:[],
         productSizes:[],
-        productSubcategories:[]
+        productSubcategories:[],
+        totalPrice: 0
     },
     reducers: {
         setProductTypes:(state,action) => 
@@ -53,20 +57,41 @@ export const productsSlice = createSlice({
             return {...state, products :[...products], myProducts :[...myProducts]};
         },
         addToCart: (state, action) => {
-            return {...state, cart: [action.payload,...state.cart]};
+            const updatedTotalPrice = state.totalPrice + action.payload.productPrice;
+            console.log("action.payload.productPrice")
+            console.log(action.payload.productPrice)
+            return {...state, cart: [action.payload,...state.cart], totalPrice: updatedTotalPrice};
+        },
+        addToFavourites: (state, action) => {
+            return {...state, favourites: [action.payload,...state.favourites]};
         },
         setShoppingCart: (state, action) => {
-            return {...state, cart: [...action.payload]};
+            const products = action.payload.productsInShoppingCart.map(p => p.product);
+            console.log("Action payload")
+            console.log (action.payload)
+            return {...state, cart: [...products], totalPrice: action.payload.totalPrice};
         },
         deleteFromShoppingCart : (state, action) => {
             const cart = state.cart.filter(c => c.id!== action.payload.id); 
-            return {...state, cart :[...cart]};
+            const updatedTotalPrice = state.totalPrice - action.payload.productPrice;
+            return {...state, cart :[...cart], totalPrice: updatedTotalPrice};
+        },
+        setFavourites: (state, action) => {
+            return {...state, favourites: [...action.payload]};
+        },
+        deleteFromFavourites : (state, action) => {
+            const favourites = state.favourites.filter(f => f.id!== action.payload.id); 
+            return {...state, favourites :[...favourites]};
+        },
+        clearCart: (state) => {
+            state.cart = [];
+            state.totalPrice = 0;
         },
     }
 });
 
 export const { setProducts, newProduct, editProduct,
      deleteProduct, addToCart, setShoppingCart,setProductSizes,
-      deleteFromShoppingCart, setProductTypes,setProductSubcategories, setMyProducts } = productsSlice.actions;
+      deleteFromShoppingCart, setProductTypes,setProductSubcategories, setMyProducts, setFavourites, deleteFromFavourites, addToFavourites, clearCart } = productsSlice.actions;
 
 export default productsSlice.reducer;
