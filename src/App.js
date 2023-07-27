@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import SignInPage from './components/SignInPage';
 import SignUpPage from './components/SignUpPage';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { userAuthenticated } from './app/authenticationSlice';
 import Navbar from './components/NavBar';
 import ShoppingCart from './components/ShoppingCart';
@@ -16,17 +16,16 @@ import Favourites from './components/Favourites';
 import MyOrders from './components/MyOrders';
 
 const App = () => {
-  const isLoggedIn = useSelector(state =>  state.authenticationSlice.isLoggedIn);
-
+  const isLoggedIn = useSelector((state) => state.authenticationSlice.isLoggedIn);
   const dispatch = useDispatch();
+
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    if (token !== undefined && token !== null) {
-      dispatch(userAuthenticated({ token: token }))
+    const token = localStorage.getItem('token');
+    const email = localStorage.getItem('email');
+    if (token && email) {
+      dispatch(userAuthenticated({ token: token, email: email }));
     }
-  }, []);
-
-
+  }, [dispatch]);
   return (
     <Router>
       <Navbar/>
@@ -47,7 +46,7 @@ const App = () => {
          <Route path="/myProducts" element={isLoggedIn ? <MyProductsPage /> : <SignInPage />}/>
          <Route path="/myProfile" element={isLoggedIn ? <MyProfile /> : <SignInPage />}/>
          <Route path="/profile/:username" element={<Profile />} />
-         <Route path="/myOrders" element={<MyOrders />} />
+         <Route path="/narachki" element={<MyOrders />} />
         <Route path="*" element={<h2>Page not found!</h2>} />
       </Routes>
     </Router>

@@ -19,7 +19,7 @@ const Navbar = () => {
                 <NavLink to="/faves" style={{ marginLeft: '1rem' }}>Favourites</NavLink>
                 <NavLink to="/myProducts" style={{ marginLeft: '1rem' }}>My products</NavLink>
                 <NavLink to="/myProfile" style={{ marginLeft: '1rem' }}>My profile</NavLink>
-                <NavLink to="/myOrders" style={{ marginLeft: '1rem' }}>My orders</NavLink>
+                <NavLink to="/narachki" style={{ marginLeft: '1rem' }}>My orders</NavLink>
             </div>
             : <div style={{ display: 'flex' }}>
                 <NavLink to="/signup">Sign up</NavLink>
