@@ -3,16 +3,18 @@ import { Form, Row, Col, Button, FormControl, FormLabel, Modal } from 'react-boo
 import { useDispatch, useSelector } from 'react-redux';
 import { GetProductSubcategories, GetProductSizes, GetProductTypes, NewProduct } from '../services/products';
 import * as React from 'react';
+import { CompactPicker } from 'react-color'; // Import the CompactPicker from react-color
 
 const ProductAdd = () => {
   const [name, setName] = useState('');
-  const [color, setColor] = useState('');
+  const [color, setColor] = useState('#ffffff'); // Default color
   const [sizeNumber, setSizeNumber] = useState(0);
   const [selectedProductType, setSelectedProductType] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedSubcategory, setSelectedSubcategory] = useState('');
   const [price, setPrice] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
+  const [showColorPicker, setShowColorPicker] = useState(false); // State to control the color picker visibility
 
   const dispatch = useDispatch();
 
@@ -65,7 +67,7 @@ const ProductAdd = () => {
     // Close the popup and reset form fields and dropdown menus
     setShowPopup(false);
     setName('');
-    setColor('');
+    setColor('#ffffff'); // Reset color to default
     setSizeNumber(0);
     setSelectedProductType('');
     setSelectedSize('');
@@ -81,6 +83,16 @@ const ProductAdd = () => {
 
     // Hide the popup
     setShowPopup(false);
+  };
+
+  // Function to handle color selection from the color picker
+  const handleColorChange = (selectedColor) => {
+    setColor(selectedColor.hex);
+  };
+
+  // Function to close the color picker when clicking the "X" button
+  const handleCloseColorPicker = () => {
+    setShowColorPicker(false);
   };
 
   return (
@@ -115,12 +127,29 @@ const ProductAdd = () => {
           {selectedProductType === 'Clothes' && (
             <>
               <FormLabel>Color</FormLabel>
-              <FormControl
-                type="text"
-                placeholder="Enter color"
-                value={color}
-                onChange={(event) => setColor(event.target.value)}
-              />
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    borderRadius: '50%',
+                    backgroundColor: color,
+                    marginRight: '10px',
+                  }}
+                />
+                <Button onClick={() => setShowColorPicker(true)}>Choose Color</Button>
+              </div>
+              {/* Display the color picker if showColorPicker is true */}
+              {showColorPicker && (
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button variant="danger" onClick={handleCloseColorPicker}>
+                      X
+                    </Button>
+                  </div>
+                  <CompactPicker color={color} onChange={handleColorChange} />
+                </div>
+              )}
               <select
                 name="productSize"
                 value={selectedSize}
