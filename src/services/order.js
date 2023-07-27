@@ -10,10 +10,10 @@ axiosInstance.interceptors.request.use((config) => {
     return config;
 });
 
-export const GetMyOrders = async (dispatch, username) => {
+export const GetMyOrders = async (dispatch, email) => {
     try {
-        const {data} = await axiosInstance.get('/myOrders',{ params: { username } });
-        console.log("data")
+        const {data} = await axiosInstance.get('/myOrders',{ params: { email } });
+        console.log("data in service from backend")
         console.log(data)
         dispatch(setMyOrders(data));
 

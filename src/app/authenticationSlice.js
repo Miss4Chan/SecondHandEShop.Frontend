@@ -1,5 +1,3 @@
-// app/authenticationSlice.js
-
 import { createSlice, createAction } from '@reduxjs/toolkit';
 
 export const userAuthenticatedError = createAction('userAuthenticatedError');

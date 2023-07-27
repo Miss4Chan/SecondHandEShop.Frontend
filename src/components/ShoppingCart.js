@@ -23,7 +23,10 @@ const ShoppingCart = () => {
   };
 
   const confirmOrder = () => {
+    console.log("confirm order");
     OrderNow(dispatch, email);
+    console.log(email);
+    console.log("confirm order 2");
     setShowModal(false);
     navigate('/narachki');
   };

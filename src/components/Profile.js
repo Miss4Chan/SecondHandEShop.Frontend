@@ -9,24 +9,22 @@ const Profile = () => {
   const { username } = useParams();
   const dispatch = useDispatch();
   const myProfile = useSelector((state) => state.userSlice.profile); 
-  console.log(myProfile);
-  console.log("myProf");
+  console.log(myProfile)
 
   useEffect(() => {
     const fetchProfile = async () => {
-        try {
-          const profileData = await GetProfile(dispatch, username); 
-          dispatch(setProfile(profileData));
-        } catch (error) {
-          console.log("Error fetching profile", error);
-        }
-      };
-  
-      fetchProfile();
+      try {
+        const profileData = await GetProfile(dispatch, username); 
+        dispatch(setProfile(profileData));
+      } catch (error) {
+        console.log("Error fetching profile", error);
+      }
+    };
+
+    fetchProfile();
   }, [dispatch, username]);
 
   return (
-
     <div>
       {myProfile && (
         <div>
@@ -36,12 +34,32 @@ const Profile = () => {
           <p>Email: {myProfile.email}</p>
           <p>Phone: {myProfile.phone}</p>
           <p>Address: {myProfile.address}</p>
+
+          {/* Display rating and rating count */}
+          <p>Rating: {myProfile.rating}</p>
+          <p>Rating Count: {myProfile.ratingCount}</p>
+
+          {/* Display comments */}
+          <h5>Comments:</h5>
+          {myProfile.comments && myProfile.comments.length > 0 ? (
+            myProfile.comments.map((comment) => (
+              <div key={comment.id}>
+                <p>Content: {comment.content}</p>
+                <p>Date: {comment.commentDate}</p>
+                <p>Commenter: {comment.commenterUsername}</p>
+                {/* Add receiver username if needed */}
+              </div>
+            ))
+          ) : (
+            <p>No comments found.</p>
+          )}
         </div>
       )}
+
       <h5>{myProfile.username}`s products</h5>
       {myProfile && myProfile.products && myProfile.products.length > 0 ? (
         myProfile.products.map((item) => (
-          <Row style={{ marginBottom: '2rem' }}>
+          <Row key={item.id} style={{ marginBottom: '2rem' }}>
             <Col>{item.productName}</Col>
             <Col>{item.productPrice}</Col>
           </Row>

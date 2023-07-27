@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { setShoppingCart, deleteFromShoppingCart, setShoppingCartError, deleteFromShoppingCartError, clearCart } from '../app/productsSlice';
+import { newOrder } from '../app/userSlice';
 
 const axiosInstance = axios.create({
     baseURL: `${process.env.REACT_APP_BASE_URL}/ShoppingCart`,
@@ -37,8 +38,13 @@ export const DeleteFromShoppingCart = async (dispatch, email, product) => {
 
 export const OrderNow = async (dispatch, email) => {
     try {
-        await axiosInstance.get(`\Order?email=${email}`)
+        console.log("ORDER NOW")
+        const order = await axiosInstance.get(`\Order?email=${email}`);
+        console.log("order from backend")
+        console.log(order);
         dispatch(clearCart());
+        dispatch(newOrder(order));
+
     } catch {
         console.log("Error ordering")
     }
