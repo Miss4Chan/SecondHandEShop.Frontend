@@ -7,15 +7,14 @@ export const userAuthenticatedError = createAction('userAuthenticatedError');
 export const authenticationSlice = createSlice({
   name: 'authentication',
   initialState: {
-    token: localStorage.getItem('token') || '',
-    email: localStorage.getItem('email') || '',
-    isLoggedIn: Boolean(localStorage.getItem('token')),
+    token: sessionStorage.getItem('token') || '',
+    email: sessionStorage.getItem('email') || '',
+    isLoggedIn: Boolean(sessionStorage.getItem('token')),
   },
   reducers: {
     userAuthenticated: (state, action) => {
-      // Update the token and email in localStorage
-      localStorage.setItem('token', action.payload.token);
-      localStorage.setItem('email', action.payload.email);
+      sessionStorage.setItem('token', action.payload.token);
+      sessionStorage.setItem('email', action.payload.email);
       return {
         ...state,
         token: action.payload.token,
@@ -24,8 +23,8 @@ export const authenticationSlice = createSlice({
       };
     },
     logout: () => {
-      localStorage.removeItem('token');
-      localStorage.removeItem('email');
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('email');
       return {
         token: '',
         email: '',
@@ -34,6 +33,7 @@ export const authenticationSlice = createSlice({
     },
   },
 });
+
 
 export const { userAuthenticated, logout } = authenticationSlice.actions;
 
