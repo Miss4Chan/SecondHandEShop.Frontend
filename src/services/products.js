@@ -1,7 +1,7 @@
 import { setProducts,setProductSubcategories, deleteProduct, 
     editProduct,setProductSizes, newProduct, newProductError, 
     setProductsError, editProductError,setMyProducts,
-    deleteProductError, addToCart, addToCartError, setProductTypes, addToFavourites  } from '../app/productsSlice';
+    deleteProductError, addToCart, addToCartError, setProductTypes, addToFavourites ,setProductConditions } from '../app/productsSlice';
 import axios from 'axios';
 
 const axiosInstance = axios.create({
@@ -53,6 +53,16 @@ export const GetProductSizes = async (dispatch) => {
         console.log("Error product sizes")
     }
 }
+export const GetProductConditions = async (dispatch) => {
+    try {
+        //api call
+        const {data} = await axiosInstance.get("/productConditions");
+        dispatch(setProductConditions(data));
+    } catch {
+        console.log("Error product Conditions")
+    }
+}
+
 export const GetProductSubcategories = async (dispatch) => {
     try {
         //api call

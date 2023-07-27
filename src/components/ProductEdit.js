@@ -1,25 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Modal, Form } from 'react-bootstrap';
-import { useSelector, useDispatch} from 'react-redux';
-import { GetProductSubcategories, GetProductSizes, GetProductTypes} from '../services/products';
+import { Button, Modal, Form, Row, Col, FormControl, FormLabel } from 'react-bootstrap';
+import { useSelector, useDispatch } from 'react-redux';
+import { GetProductSubcategories, GetProductSizes, GetProductConditions } from '../services/products';
+import { CompactPicker } from 'react-color';
 
 const ProductEdit = ({ product, onSave, onCancel }) => {
   const [editedProduct, setEditedProduct] = useState(product);
-  const types = useSelector((state) => state.productsSlice.productTypes);
   const sizes = useSelector((state) => state.productsSlice.productSizes);
   const subcategories = useSelector((state) => state.productsSlice.productSubcategories);
+  const conditions = useSelector((state) => state.productsSlice.productConditions);
+  const [showColorPicker, setShowColorPicker] = useState(false);
   const dispatch = useDispatch();
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedProduct({ ...editedProduct, [name]: value });
   };
 
   useEffect(() => {
-    const fetchProductTypes = async () => {
+    const fetchProductConditions = async () => {
       try {
-        GetProductTypes(dispatch);
+        GetProductConditions(dispatch);
       } catch (error) {
-        console.error('Error fetching product types:', error);
+        console.error('Error fetching product Conditions:', error);
       }
     };
 
@@ -39,85 +42,150 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
       }
     };
 
-    fetchProductTypes();
     fetchProductSubcategories();
     fetchProductSizes();
+    fetchProductConditions();
   }, [dispatch]);
+
+  const handleColorChange = (selectedColor) => {
+    setEditedProduct({ ...editedProduct, productColor: selectedColor.hex });
+  };
+
+  const handleCloseColorPicker = () => {
+    setShowColorPicker(false);
+  };
 
   return (
     <Modal show={true} onHide={onCancel}>
-  <Modal.Header closeButton>
-    <Modal.Title>Edit Product</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
-    <Form>
-      <Form.Group>
-        <Form.Label>ID</Form.Label>
-        <Form.Control type="text" name="id" value={editedProduct.id} disabled />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Product Name</Form.Label>
-        <Form.Control type="text" name="productName" value={editedProduct.productName} onChange={handleInputChange} />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Product Type</Form.Label>
-        <Form.Select name="productType" value={editedProduct.productType} onChange={handleInputChange}>
-          <option value="">Select Type</option>
-          {types.map((type) => (
-            <option key={type} value={type}>
-              {type}
-            </option>
-          ))}
-        </Form.Select>
-      </Form.Group>
-      <Form.Group>
-            <Form.Label>Color</Form.Label>
-            <Form.Control type="text" name="productColor" value={editedProduct.productColor} onChange={handleInputChange} />
-          </Form.Group>
-      {editedProduct.productType === "Clothes" && (
-        <>
-          <Form.Group>
-            <Form.Label>Product Size</Form.Label>
-            <Form.Select name="productSize" value={editedProduct.productSize} onChange={handleInputChange}>
-              <option value="">Select Size</option>
-              {sizes.map((size) => (
-                <option key={size} value={size}>
-                  {size}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Product Subcategory</Form.Label>
-            <Form.Select name="productSubcategory" value={editedProduct.productSubcategory} onChange={handleInputChange}>
-              <option value="">Select Subcategory</option>
-              {subcategories.map((subcategory) => (
-                <option key={subcategory} value={subcategory}>
-                  {subcategory}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
-        </>
-      )}
-      {editedProduct.productType === "Shoes" && (
-        <Form.Group>
-          <Form.Label>Size number</Form.Label>
-          <Form.Control type="number" name="productSizeNumber" value={editedProduct.productSizeNumber} onChange={handleInputChange} />
-        </Form.Group>
-      )}
-      <Form.Group>
-        <Form.Label>Product Price</Form.Label>
-        <Form.Control type="number" name="productPrice" value={editedProduct.productPrice} onChange={handleInputChange} />
-      </Form.Group>
-    </Form>
-  </Modal.Body>
-  <Modal.Footer>
-    <Button variant="secondary" onClick={onCancel}>Cancel</Button>
-    <Button variant="primary" onClick={() => onSave(editedProduct)}>Save</Button>
-  </Modal.Footer>
-</Modal>
+      <Modal.Header closeButton>
+        <Modal.Title>Edit Product</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form>
+          <Row>
+            <Col>
+              <FormLabel>Product Name</FormLabel>
+              <FormControl
+                type="text"
+                name="productName"
+                value={editedProduct.productName}
+                onChange={handleInputChange}
+              />
+            </Col>
+          </Row>
 
+          <Row>
+            <Col>
+              <FormLabel>Product Type</FormLabel>
+              <Form.Control type="text" name="productType" value={editedProduct.productType} disabled />
+            </Col>
+          </Row>
+
+          <Row>
+            <Col>
+              <FormLabel>Color</FormLabel>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    borderRadius: '50%',
+                    backgroundColor: editedProduct.productColor,
+                    marginRight: '10px',
+                  }}
+                />
+                <Button onClick={() => setShowColorPicker(true)}>Choose Color</Button>
+              </div>
+              {showColorPicker && (
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button variant="danger" onClick={handleCloseColorPicker}>
+                      X
+                    </Button>
+                  </div>
+                  <CompactPicker color={editedProduct.productColor} onChange={handleColorChange} />
+                </div>
+              )}
+            </Col>
+          </Row>
+
+          {editedProduct.productType === 'Clothes' && (
+            <>
+              <Row>
+                <Col>
+                  <FormLabel>Product Size</FormLabel>
+                  <Form.Select
+                    name="productSize"
+                    value={editedProduct.productSize}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select Size</option>
+                    {sizes.map((size) => (
+                      <option key={size} value={size}>
+                        {size}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+                  <FormLabel>Product Subcategory</FormLabel>
+                  <Form.Select
+                    name="productSubcategory"
+                    value={editedProduct.productSubcategory}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select Subcategory</option>
+                    {subcategories.map((subcategory) => (
+                      <option key={subcategory} value={subcategory}>
+                        {subcategory}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Col>
+              </Row>
+            </>
+          )}
+
+          {editedProduct.productType === 'Shoes' && (
+            <Row>
+              <Col>
+                <FormLabel>Size number</FormLabel>
+                <FormControl
+                  type="number"
+                  name="productSizeNumber"
+                  value={editedProduct.productSizeNumber}
+                  onChange={handleInputChange}
+                />
+              </Col>
+            </Row>
+          )}
+
+          <Row>
+            <Col>
+              <FormLabel>Product Price</FormLabel>
+              <FormControl
+                type="number"
+                name="productPrice"
+                value={editedProduct.productPrice}
+                onChange={handleInputChange}
+              />
+            </Col>
+          </Row>
+        </Form>
+      </Modal.Body>
+
+      <Modal.Footer>
+        <Button variant="secondary" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button variant="primary" onClick={() => onSave(editedProduct)}>
+          Save
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 

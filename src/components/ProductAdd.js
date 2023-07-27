@@ -1,26 +1,30 @@
 import { useState, useEffect } from 'react';
-import { Form, Row, Col, Button, FormControl, FormLabel, Modal } from 'react-bootstrap';
+import { Form, Row, Col, Button, FormControl, FormLabel, Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { GetProductSubcategories, GetProductSizes, GetProductTypes, NewProduct } from '../services/products';
+import { GetProductSubcategories, GetProductSizes, GetProductTypes, GetProductConditions, NewProduct } from '../services/products';
 import * as React from 'react';
-import { CompactPicker } from 'react-color'; // Import the CompactPicker from react-color
+import { CompactPicker } from 'react-color';
 
 const ProductAdd = () => {
   const [name, setName] = useState('');
-  const [color, setColor] = useState('#ffffff'); // Default color
+  const [color, setColor] = useState('#ffffff');
   const [sizeNumber, setSizeNumber] = useState(0);
   const [selectedProductType, setSelectedProductType] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedSubcategory, setSelectedSubcategory] = useState('');
   const [price, setPrice] = useState(0);
+  const [brand, setBrand] = useState('');
+  const [material, setMaterial] = useState('');
+  const [selectedCondition, setSelectedCondition] = useState('');
   const [showPopup, setShowPopup] = useState(false);
-  const [showColorPicker, setShowColorPicker] = useState(false); // State to control the color picker visibility
+  const [showColorPicker, setShowColorPicker] = useState(false);
 
   const dispatch = useDispatch();
 
   const types = useSelector((state) => state.productsSlice.productTypes);
   const sizes = useSelector((state) => state.productsSlice.productSizes);
   const subcategories = useSelector((state) => state.productsSlice.productSubcategories);
+  const conditions = useSelector((state) => state.productsSlice.productConditions);
 
   useEffect(() => {
     const fetchProductTypes = async () => {
@@ -47,9 +51,18 @@ const ProductAdd = () => {
       }
     };
 
+    const fetchProductConditions = async () => {
+      try {
+        GetProductConditions(dispatch);
+      } catch (error) {
+        console.error('Error fetching product Conditions:', error);
+      }
+    };
+
     fetchProductTypes();
     fetchProductSubcategories();
     fetchProductSizes();
+    fetchProductConditions();
   }, [dispatch]);
 
   const handleFormSubmit = (event) => {
@@ -61,36 +74,37 @@ const ProductAdd = () => {
       productName: name,
       productSize: selectedSize,
       productSubcategory: selectedSubcategory,
-      productPrice: price
+      productPrice: price,
+      brand: brand,
+      material: material,
+      condition: selectedCondition,
     });
 
-    // Close the popup and reset form fields and dropdown menus
     setShowPopup(false);
     setName('');
-    setColor('#ffffff'); // Reset color to default
+    setColor('#ffffff');
     setSizeNumber(0);
     setSelectedProductType('');
     setSelectedSize('');
     setSelectedSubcategory('');
     setPrice(0);
+    setBrand('');
+    setMaterial('');
+    setSelectedCondition('');
   };
 
   const handleCancelClick = () => {
-    // Reset the selected values for the dropdown menus to an empty string
     setSelectedProductType('');
     setSelectedSize('');
     setSelectedSubcategory('');
-
-    // Hide the popup
+    setSelectedCondition('');
     setShowPopup(false);
   };
 
-  // Function to handle color selection from the color picker
   const handleColorChange = (selectedColor) => {
     setColor(selectedColor.hex);
   };
 
-  // Function to close the color picker when clicking the "X" button
   const handleCloseColorPicker = () => {
     setShowColorPicker(false);
   };
@@ -126,82 +140,163 @@ const ProductAdd = () => {
         <Modal.Body>
           {selectedProductType === 'Clothes' && (
             <>
-              <FormLabel>Color</FormLabel>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <div
-                  style={{
-                    width: '30px',
-                    height: '30px',
-                    borderRadius: '50%',
-                    backgroundColor: color,
-                    marginRight: '10px',
-                  }}
-                />
-                <Button onClick={() => setShowColorPicker(true)}>Choose Color</Button>
-              </div>
-              {/* Display the color picker if showColorPicker is true */}
-              {showColorPicker && (
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button variant="danger" onClick={handleCloseColorPicker}>
-                      X
-                    </Button>
+              <Row>
+                <Col>
+                  <FormLabel>
+                    Color{' '}
+                    <OverlayTrigger
+                      placement="right"
+                      overlay={<Tooltip id="color-tooltip">Choose the most dominant color of your product</Tooltip>}
+                    >
+                      <span style={{ fontSize: '18px', cursor: 'pointer' }}>?</span>
+                    </OverlayTrigger>
+                  </FormLabel>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div
+                      style={{
+                        width: '30px',
+                        height: '30px',
+                        borderRadius: '50%',
+                        backgroundColor: color,
+                        marginRight: '10px',
+                      }}
+                    />
+                    <Button onClick={() => setShowColorPicker(true)}>Choose Color</Button>
                   </div>
-                  <CompactPicker color={color} onChange={handleColorChange} />
-                </div>
-              )}
-              <select
-                name="productSize"
-                value={selectedSize}
-                onChange={(event) => setSelectedSize(event.target.value)}
-              >
-                <option value="">Select Size</option>
-                {sizes.map((size) => (
-                  <option key={size} value={size}>
-                    {size}
-                  </option>
-                ))}
-              </select>
-              <select
-                name="productSubcategories"
-                value={selectedSubcategory}
-                onChange={(event) => setSelectedSubcategory(event.target.value)}
-              >
-                <option value="">Select Subcategory</option>
-                {subcategories.map((size) => (
-                  <option key={size} value={size}>
-                    {size}
-                  </option>
-                ))}
-              </select>
+                  {showColorPicker && (
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button variant="danger" onClick={handleCloseColorPicker}>
+                          X
+                        </Button>
+                      </div>
+                      <CompactPicker color={color} onChange={handleColorChange} />
+                    </div>
+                  )}
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+                  <FormLabel>Brand</FormLabel>
+                  <FormControl
+                    type="text"
+                    placeholder="Enter brand"
+                    value={brand}
+                    onChange={(event) => setBrand(event.target.value)}
+                  />
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+                  <FormLabel>Material</FormLabel>
+                  <FormControl
+                    type="text"
+                    placeholder="Enter material"
+                    value={material}
+                    onChange={(event) => setMaterial(event.target.value)}
+                  />
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+                  <FormLabel>Condition</FormLabel>
+                  <select
+                    name="productCondition"
+                    value={selectedCondition}
+                    onChange={(event) => setSelectedCondition(event.target.value)}
+                  >
+                    <option value="">Select Condition</option>
+                    {conditions.map((condition) => (
+                      <option key={condition} value={condition}>
+                        {condition}
+                      </option>
+                    ))}
+                  </select>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+                  <FormLabel>Size</FormLabel>
+                  <select
+                    name="productSize"
+                    value={selectedSize}
+                    onChange={(event) => setSelectedSize(event.target.value)}
+                  >
+                    <option value="">Select Size</option>
+                    {sizes.map((size) => (
+                      <option key={size} value={size}>
+                        {size}
+                      </option>
+                    ))}
+                  </select>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+                  <FormLabel>Subcategory</FormLabel>
+                  <select
+                    name="productSubcategories"
+                    value={selectedSubcategory}
+                    onChange={(event) => setSelectedSubcategory(event.target.value)}
+                  >
+                    <option value="">Select Subcategory</option>
+                    {subcategories.map((subcategory) => (
+                      <option key={subcategory} value={subcategory}>
+                        {subcategory}
+                      </option>
+                    ))}
+                  </select>
+                </Col>
+              </Row>
             </>
           )}
+
           {selectedProductType === 'Shoes' && (
             <>
-              <FormLabel>Size number</FormLabel>
-              <FormControl
-                type="number"
-                placeholder="Enter size number"
-                value={sizeNumber}
-                onChange={(event) => setSizeNumber(event.target.value)}
-              />
+              <Row>
+                <Col>
+                  <FormLabel>Size Number</FormLabel>
+                  <FormControl
+                    type="number"
+                    placeholder="Enter size number"
+                    value={sizeNumber}
+                    onChange={(event) => setSizeNumber(event.target.value)}
+                  />
+                </Col>
+              </Row>
             </>
           )}
-          <FormLabel>Name</FormLabel>
-          <FormControl
-            type="text"
-            placeholder="Enter name"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-          />
-          <FormLabel>Price</FormLabel>
-          <FormControl
-            type="number"
-            placeholder="Enter price"
-            value={price}
-            onChange={(event) => setPrice(event.target.value)}
-          />
+
+          <Row>
+            <Col>
+              <FormLabel>Name</FormLabel>
+              <FormControl
+                type="text"
+                placeholder="Enter name"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+              />
+            </Col>
+          </Row>
+
+          <Row>
+            <Col>
+              <FormLabel>Price</FormLabel>
+              <FormControl
+                type="number"
+                placeholder="Enter price"
+                value={price}
+                onChange={(event) => setPrice(event.target.value)}
+              />
+            </Col>
+          </Row>
         </Modal.Body>
+
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCancelClick}>
             Cancel
@@ -218,7 +313,6 @@ const ProductAdd = () => {
             <Button
               variant="primary"
               onClick={() => {
-                // Open the popup when a type is selected
                 if (selectedProductType) {
                   setShowPopup(true);
                 }

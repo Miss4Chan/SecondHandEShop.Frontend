@@ -22,6 +22,7 @@ export const productsSlice = createSlice({
         productTypes:[],
         productSizes:[],
         productSubcategories:[],
+        productConditions :[],
         totalPrice: 0
     },
     reducers: {
@@ -36,6 +37,10 @@ export const productsSlice = createSlice({
         setProductSubcategories:(state,action)=>
         {
             return {...state, productSubcategories: [...action.payload]};
+        },
+        setProductConditions:(state,action)=>
+        {
+            return {...state, productConditions: [...action.payload]};
         },
         setProducts: (state, action) => {
             return {...state, products: [...action.payload]};
@@ -87,11 +92,12 @@ export const productsSlice = createSlice({
             state.cart = [];
             state.totalPrice = 0;
         },
+
     }
 });
 
 export const { setProducts, newProduct, editProduct,
      deleteProduct, addToCart, setShoppingCart,setProductSizes,
-      deleteFromShoppingCart, setProductTypes,setProductSubcategories, setMyProducts, setFavourites, deleteFromFavourites, addToFavourites, clearCart } = productsSlice.actions;
+      deleteFromShoppingCart, setProductTypes,setProductSubcategories, setMyProducts, setFavourites, deleteFromFavourites, addToFavourites, clearCart, setProductConditions } = productsSlice.actions;
 
 export default productsSlice.reducer;
