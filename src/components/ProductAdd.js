@@ -75,9 +75,9 @@ const ProductAdd = () => {
       productSize: selectedSize,
       productSubcategory: selectedSubcategory,
       productPrice: price,
-      brand: brand,
-      material: material,
-      condition: selectedCondition,
+      productBrand: brand,
+      productMaterial: material,
+      productCondition: selectedCondition,
     });
 
     setShowPopup(false);
@@ -138,86 +138,86 @@ const ProductAdd = () => {
           <Modal.Title>{selectedProductType}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <Row>
+            <Col>
+              <FormLabel>
+                Color{' '}
+                <OverlayTrigger
+                  placement="right"
+                  overlay={<Tooltip id="color-tooltip">Choose the most dominant color of your product</Tooltip>}
+                >
+                  <span style={{ fontSize: '18px', cursor: 'pointer' }}>?</span>
+                </OverlayTrigger>
+              </FormLabel>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    borderRadius: '50%',
+                    backgroundColor: color,
+                    marginRight: '10px',
+                  }}
+                />
+                <Button onClick={() => setShowColorPicker(true)}>Choose Color</Button>
+              </div>
+              {showColorPicker && (
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button variant="danger" onClick={handleCloseColorPicker}>
+                      X
+                    </Button>
+                  </div>
+                  <CompactPicker color={color} onChange={handleColorChange} />
+                </div>
+              )}
+            </Col>
+          </Row>
+
+          <Row>
+            <Col>
+              <FormLabel>Brand</FormLabel>
+              <FormControl
+                type="text"
+                placeholder="Enter brand"
+                value={brand}
+                onChange={(event) => setBrand(event.target.value)}
+              />
+            </Col>
+          </Row>
+
+          <Row>
+            <Col>
+              <FormLabel>Material</FormLabel>
+              <FormControl
+                type="text"
+                placeholder="Enter material"
+                value={material}
+                onChange={(event) => setMaterial(event.target.value)}
+              />
+            </Col>
+          </Row>
+
+          <Row>
+            <Col>
+              <FormLabel>Condition</FormLabel>
+              <select
+                name="productCondition"
+                value={selectedCondition}
+                onChange={(event) => setSelectedCondition(event.target.value)}
+              >
+                <option value="">Select Condition</option>
+                {conditions.map((condition) => (
+                  <option key={condition} value={condition}>
+                    {condition}
+                  </option>
+                ))}
+              </select>
+            </Col>
+          </Row>
+
           {selectedProductType === 'Clothes' && (
             <>
-              <Row>
-                <Col>
-                  <FormLabel>
-                    Color{' '}
-                    <OverlayTrigger
-                      placement="right"
-                      overlay={<Tooltip id="color-tooltip">Choose the most dominant color of your product</Tooltip>}
-                    >
-                      <span style={{ fontSize: '18px', cursor: 'pointer' }}>?</span>
-                    </OverlayTrigger>
-                  </FormLabel>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div
-                      style={{
-                        width: '30px',
-                        height: '30px',
-                        borderRadius: '50%',
-                        backgroundColor: color,
-                        marginRight: '10px',
-                      }}
-                    />
-                    <Button onClick={() => setShowColorPicker(true)}>Choose Color</Button>
-                  </div>
-                  {showColorPicker && (
-                    <div>
-                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Button variant="danger" onClick={handleCloseColorPicker}>
-                          X
-                        </Button>
-                      </div>
-                      <CompactPicker color={color} onChange={handleColorChange} />
-                    </div>
-                  )}
-                </Col>
-              </Row>
-
-              <Row>
-                <Col>
-                  <FormLabel>Brand</FormLabel>
-                  <FormControl
-                    type="text"
-                    placeholder="Enter brand"
-                    value={brand}
-                    onChange={(event) => setBrand(event.target.value)}
-                  />
-                </Col>
-              </Row>
-
-              <Row>
-                <Col>
-                  <FormLabel>Material</FormLabel>
-                  <FormControl
-                    type="text"
-                    placeholder="Enter material"
-                    value={material}
-                    onChange={(event) => setMaterial(event.target.value)}
-                  />
-                </Col>
-              </Row>
-
-              <Row>
-                <Col>
-                  <FormLabel>Condition</FormLabel>
-                  <select
-                    name="productCondition"
-                    value={selectedCondition}
-                    onChange={(event) => setSelectedCondition(event.target.value)}
-                  >
-                    <option value="">Select Condition</option>
-                    {conditions.map((condition) => (
-                      <option key={condition} value={condition}>
-                        {condition}
-                      </option>
-                    ))}
-                  </select>
-                </Col>
-              </Row>
-
               <Row>
                 <Col>
                   <FormLabel>Size</FormLabel>
@@ -257,19 +257,17 @@ const ProductAdd = () => {
           )}
 
           {selectedProductType === 'Shoes' && (
-            <>
-              <Row>
-                <Col>
-                  <FormLabel>Size Number</FormLabel>
-                  <FormControl
-                    type="number"
-                    placeholder="Enter size number"
-                    value={sizeNumber}
-                    onChange={(event) => setSizeNumber(event.target.value)}
-                  />
-                </Col>
-              </Row>
-            </>
+            <Row>
+              <Col>
+                <FormLabel>Size Number</FormLabel>
+                <FormControl
+                  type="number"
+                  placeholder="Enter size number"
+                  value={sizeNumber}
+                  onChange={(event) => setSizeNumber(event.target.value)}
+                />
+              </Col>
+            </Row>
           )}
 
           <Row>
