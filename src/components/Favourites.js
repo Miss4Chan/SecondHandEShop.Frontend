@@ -6,9 +6,7 @@ import { GetFavourites, DeleteFromFavourites } from '../services/favourites';
 const Favourites = () => {
   const dispatch = useDispatch();
   const favourites = useSelector(state => state.productsSlice.favourites);
-  console.log(favourites)
   const email = useSelector((state) => state.authenticationSlice.email);
-  console.log(email)
 
   useEffect(()=>{
       GetFavourites(dispatch, email);

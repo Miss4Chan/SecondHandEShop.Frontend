@@ -63,8 +63,6 @@ export const productsSlice = createSlice({
         },
         addToCart: (state, action) => {
             const updatedTotalPrice = state.totalPrice + action.payload.productPrice;
-            console.log("action.payload.productPrice")
-            console.log(action.payload.productPrice)
             return {...state, cart: [action.payload,...state.cart], totalPrice: updatedTotalPrice};
         },
         addToFavourites: (state, action) => {
@@ -72,8 +70,6 @@ export const productsSlice = createSlice({
         },
         setShoppingCart: (state, action) => {
             const products = action.payload.productsInShoppingCart.map(p => p.product);
-            console.log("Action payload")
-            console.log (action.payload)
             return {...state, cart: [...products], totalPrice: action.payload.totalPrice};
         },
         deleteFromShoppingCart : (state, action) => {

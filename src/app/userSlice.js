@@ -20,7 +20,6 @@ const userSlice = createSlice({
       return{...state, myOrders: [...action.payload]};
     },
     newOrder: (state, action) => {
-      console.log(action.payload.data);
       return {...state, myOrders: [action.payload.data, ...state.myOrders]} }
   }
 });

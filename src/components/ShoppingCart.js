@@ -13,7 +13,6 @@ const ShoppingCart = () => {
 
   useEffect(() => {
     GetShoppingCart(dispatch, email);
-    console.log("fetch from backend");
   }, [dispatch, email]);
 
   const [showModal, setShowModal] = useState(false);
@@ -23,10 +22,7 @@ const ShoppingCart = () => {
   };
 
   const confirmOrder = () => {
-    console.log("confirm order");
     OrderNow(dispatch, email);
-    console.log(email);
-    console.log("confirm order 2");
     setShowModal(false);
     navigate('/narachki');
   };

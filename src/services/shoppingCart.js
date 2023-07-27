@@ -15,13 +15,7 @@ export const GetShoppingCart = async (dispatch, email) => {
     try {
         //api call
         const {data} = await axiosInstance.get('',{ params: { email } });
-        console.log("data")
-        console.log(data)
-       // const products = data.productsInShoppingCart.map(p => p.product);
-        //dispatch(setShoppingCart(products));
         dispatch(setShoppingCart(data));
-     //   dispatch(setTotalPrice(data.totalPrice));
-
     } catch {
         dispatch(setShoppingCartError());
     }
@@ -38,10 +32,7 @@ export const DeleteFromShoppingCart = async (dispatch, email, product) => {
 
 export const OrderNow = async (dispatch, email) => {
     try {
-        console.log("ORDER NOW")
         const order = await axiosInstance.get(`\Order?email=${email}`);
-        console.log("order from backend")
-        console.log(order);
         dispatch(clearCart());
         dispatch(newOrder(order));
 

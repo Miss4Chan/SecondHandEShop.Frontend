@@ -14,12 +14,16 @@ axiosInstance.interceptors.request.use((config) => {
 });
 
 //dispatch - action that triggers state change
-export const GetProducts = async (dispatch) => {
+export const GetProducts = async (dispatch, searchTerm, colorFilter, sizeFilter, conditionFilter, sortOrder) => {
     try {
         //api call
-        const {data} = await axiosInstance.get();
+        if (colorFilter.startsWith("#")) {
+            colorFilter = encodeURIComponent(colorFilter);
+        }
+        const { data } = await axiosInstance.get(`?searchTerm=${searchTerm}&colorFilter=${colorFilter}&sizeFilter=${sizeFilter}&conditionFilter=${conditionFilter}&sortByPrice=${sortOrder}`);
         dispatch(setProducts(data));
     } catch {
+        console.log("ERROR")
         dispatch(setProductsError());
     }
 }

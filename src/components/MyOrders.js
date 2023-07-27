@@ -11,8 +11,6 @@ export default () => {
   const myOrders = useSelector((state) => state.userSlice.myOrders);
   const email = useSelector((state) => state.authenticationSlice.email);
 
-  console.log(myOrders);
-
   useEffect(() => {
     GetMyOrders(dispatch, email);
   }, []);
@@ -59,7 +57,6 @@ const OrderDetails = ({ order }) => {
 
     AddComment(dispatch, commentData, rating)
       .then((addedComment) => {
-        console.log('Comment added:', addedComment);
         setShowCommentPopup(false); 
       })
       .catch((error) => {

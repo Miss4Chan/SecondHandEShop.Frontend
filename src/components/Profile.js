@@ -9,7 +9,6 @@ const Profile = () => {
   const { username } = useParams();
   const dispatch = useDispatch();
   const myProfile = useSelector((state) => state.userSlice.profile); 
-  console.log(myProfile)
 
   useEffect(() => {
     const fetchProfile = async () => {

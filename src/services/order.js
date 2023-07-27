@@ -13,11 +13,9 @@ axiosInstance.interceptors.request.use((config) => {
 export const GetMyOrders = async (dispatch, email) => {
     try {
         const {data} = await axiosInstance.get('/myOrders',{ params: { email } });
-        console.log("data in service from backend")
-        console.log(data)
         dispatch(setMyOrders(data));
 
     } catch {
-        console.log("Error so my orders");
+        console.log("Error my orders");
     }
 }
