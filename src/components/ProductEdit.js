@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Form, Row, Col, FormControl, FormLabel } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { GetProductSubcategories, GetProductSizes, GetProductConditions } from '../services/products';
+import { GetProductSubcategories, GetProductSizes, GetProductConditions, GetProductSex } from '../services/products';
 import { CompactPicker } from 'react-color';
 
 const ProductEdit = ({ product, onSave, onCancel }) => {
@@ -9,6 +9,7 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
   const sizes = useSelector((state) => state.productsSlice.productSizes);
   const subcategories = useSelector((state) => state.productsSlice.productSubcategories);
   const conditions = useSelector((state) => state.productsSlice.productConditions);
+  const sex = useSelector((state) => state.productsSlice.productSex);
   const [showColorPicker, setShowColorPicker] = useState(false);
   const dispatch = useDispatch();
 
@@ -16,6 +17,9 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
     const { name, value } = e.target;
     setEditedProduct({ ...editedProduct, [name]: value });
   };
+
+  console.log("edited product")
+  console.log(editedProduct)
 
   useEffect(() => {
     const fetchProductConditions = async () => {
@@ -42,9 +46,19 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
       }
     };
 
+    
+    const fetchProductSex = async () => {
+      try {
+        GetProductSex(dispatch);
+      } catch (error) {
+        console.error('Error fetching product Sex:', error);
+      }
+    };
+
     fetchProductSubcategories();
     fetchProductSizes();
     fetchProductConditions();
+    fetchProductSex();
   }, [dispatch]);
 
   const handleColorChange = (selectedColor) => {
@@ -80,6 +94,42 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
               <Form.Control type="text" name="productType" value={editedProduct.productType} disabled />
             </Col>
           </Row>
+
+          <Row>
+                <Col>
+                  <FormLabel>Product Condition</FormLabel>
+                  <Form.Select
+                    name="productCondition"
+                    value={editedProduct.productCondition}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select Product Condition</option>
+                    {conditions.map((condition) => (
+                      <option key={condition} value={condition}>
+                        {condition}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+                  <FormLabel>Product Sex</FormLabel>
+                  <Form.Select
+                    name="productSex"
+                    value={editedProduct.productSex}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select Sex</option>
+                    {sex.map((sex) => (
+                      <option key={sex} value={sex}>
+                        {sex}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Col>
+              </Row>
 
           <Row>
             <Col>
@@ -164,16 +214,19 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
           )}
 
           <Row>
-            <Col>
-              <FormLabel>Product Price</FormLabel>
-              <FormControl
-                type="number"
-                name="productPrice"
-                value={editedProduct.productPrice}
-                onChange={handleInputChange}
-              />
-            </Col>
-          </Row>
+        <Col>
+          <FormLabel>Price (MKD)</FormLabel>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <FormControl
+              type="number"
+              name="productPrice"
+              value={editedProduct.productPrice}
+              onChange={handleInputChange}
+            />
+            <span style={{ marginLeft: '5px' }}>MKD</span>
+          </div>
+        </Col>
+      </Row>
         </Form>
       </Modal.Body>
 

@@ -1,7 +1,7 @@
 import { setProducts,setProductSubcategories, deleteProduct, 
     editProduct,setProductSizes, newProduct, newProductError, 
     setProductsError, editProductError,setMyProducts,
-    deleteProductError, addToCart, addToCartError, setProductTypes, addToFavourites ,setProductConditions } from '../app/productsSlice';
+    deleteProductError, addToCart, addToCartError, setProductTypes, addToFavourites ,setProductConditions, setProductSex } from '../app/productsSlice';
 import axios from 'axios';
 
 const axiosInstance = axios.create({
@@ -14,13 +14,16 @@ axiosInstance.interceptors.request.use((config) => {
 });
 
 //dispatch - action that triggers state change
-export const GetProducts = async (dispatch, searchTerm, colorFilter, sizeFilter, conditionFilter, sortOrder) => {
+export const GetProducts = async (dispatch, type, sex, subcategory, searchTerm, colorFilter, sizeFilter, conditionFilter, sortByPrice, sortByUserRating,shoeNumberRange) => {
     try {
         //api call
         if (colorFilter.startsWith("#")) {
             colorFilter = encodeURIComponent(colorFilter);
         }
-        const { data } = await axiosInstance.get(`?searchTerm=${searchTerm}&colorFilter=${colorFilter}&sizeFilter=${sizeFilter}&conditionFilter=${conditionFilter}&sortByPrice=${sortOrder}`);
+        console.log(sortByUserRating);
+        console.log(sortByPrice);
+        console.log(conditionFilter);
+        const { data } = await axiosInstance.get(`?type=${type}&sex=${sex}&subcategory=${subcategory}&searchTerm=${searchTerm}&colorFilter=${colorFilter}&sizeFilter=${sizeFilter}&conditionFilter=${conditionFilter}&sortByPrice=${sortByPrice}&sortByUserRating=${sortByUserRating}&shoeNumberRange=${shoeNumberRange}`);
         dispatch(setProducts(data));
     } catch {
         console.log("ERROR")
@@ -47,6 +50,17 @@ export const GetProductTypes = async (dispatch) => {
         console.log("Error product types")
     }
 }
+
+export const GetProductSex = async (dispatch) => {
+    try {
+        //api call
+        const {data} = await axiosInstance.get("/productSex");
+        dispatch(setProductSex(data));
+    } catch {
+        console.log("Error product sex")
+    }
+}
+
 
 export const GetProductSizes = async (dispatch) => {
     try {
@@ -125,4 +139,5 @@ export const AddToFavourites = async (dispatch, product, email) => {
         console.log("error adding to faves");
     }
 }
+
 

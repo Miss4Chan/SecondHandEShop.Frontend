@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Form, Row, Col, Button, FormControl, FormLabel, Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { GetProductSubcategories, GetProductSizes, GetProductTypes, GetProductConditions, NewProduct } from '../services/products';
+import { GetProductSubcategories, GetProductSizes, GetProductTypes, GetProductConditions, NewProduct, GetProductSex } from '../services/products';
 import * as React from 'react';
 import { CompactPicker } from 'react-color';
 
@@ -12,6 +12,7 @@ const ProductAdd = () => {
   const [selectedProductType, setSelectedProductType] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedSubcategory, setSelectedSubcategory] = useState('');
+  const [selectedSex, setSelectedSex] = useState('');
   const [price, setPrice] = useState(0);
   const [brand, setBrand] = useState('');
   const [material, setMaterial] = useState('');
@@ -25,6 +26,7 @@ const ProductAdd = () => {
   const sizes = useSelector((state) => state.productsSlice.productSizes);
   const subcategories = useSelector((state) => state.productsSlice.productSubcategories);
   const conditions = useSelector((state) => state.productsSlice.productConditions);
+  const sex = useSelector((state) => state.productsSlice.productSex);
 
   useEffect(() => {
     const fetchProductTypes = async () => {
@@ -59,10 +61,19 @@ const ProductAdd = () => {
       }
     };
 
+    const fetchProductSex = async () => {
+      try {
+        GetProductSex(dispatch);
+      } catch (error) {
+        console.error('Error fetching product Sex:', error);
+      }
+    };
+
     fetchProductTypes();
     fetchProductSubcategories();
     fetchProductSizes();
     fetchProductConditions();
+    fetchProductSex();
   }, [dispatch]);
 
   const handleFormSubmit = (event) => {
@@ -78,6 +89,7 @@ const ProductAdd = () => {
       productBrand: brand,
       productMaterial: material,
       productCondition: selectedCondition,
+      productSex : selectedSex
     });
 
     setShowPopup(false);
@@ -138,6 +150,23 @@ const ProductAdd = () => {
           <Modal.Title>{selectedProductType}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+        <Row>
+            <Col>
+              <FormLabel>Sex</FormLabel>
+              <select
+                name="productSex"
+                value={selectedSex}
+                onChange={(event) => setSelectedSex(event.target.value)}
+              >
+                <option value="">Select Sex</option>
+                {sex.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+            </Col>
+          </Row>
           <Row>
             <Col>
               <FormLabel>
@@ -283,16 +312,19 @@ const ProductAdd = () => {
           </Row>
 
           <Row>
-            <Col>
-              <FormLabel>Price</FormLabel>
-              <FormControl
-                type="number"
-                placeholder="Enter price"
-                value={price}
-                onChange={(event) => setPrice(event.target.value)}
-              />
-            </Col>
-          </Row>
+        <Col>
+          <FormLabel>Price (MKD)</FormLabel>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <FormControl
+              type="number"
+              placeholder="Enter price"
+              value={price}
+              onChange={(event) => setPrice(event.target.value)}
+            />
+            <span style={{ marginLeft: '5px' }}>MKD</span>
+          </div>
+        </Col>
+      </Row>
         </Modal.Body>
 
         <Modal.Footer>

@@ -5,6 +5,8 @@ import { Row, Col, Button, Form, FormControl } from 'react-bootstrap';
 import * as React from "react"
 import { NavLink } from 'react-router-dom';
 import { CompactPicker } from 'react-color';
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
 
 export default () => {
   const dispatch = useDispatch();
@@ -12,14 +14,21 @@ export default () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sizeFilter, setSizeFilter] = useState('');
   const [conditionFilter, setConditionFilter] = useState('');
-  const [sortOrder, setSortOrder] = useState('');
+  const [sortByPrice, setSortByPrice] = useState('');
+  const [sortByUserRating, setSortByUserRating] = useState('');
   const sizes = useSelector((state) => state.productsSlice.productSizes);
   const conditions = useSelector((state) => state.productsSlice.productConditions);
   const [selectedColor, setSelectedColor] = useState('');
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const selectedType = useSelector(state => state.productsSlice.selectedType);
+  const selectedSex = useSelector(state => state.productsSlice.selectedSex);
+  const selectedSubcategory = useSelector(state => state.productsSlice.selectedSubcategory);
+  const isClothesType = selectedType === 'Clothes';
+  const isShoesType = selectedType === 'Shoes';
+  const [shoeNumberRange, setShoeNumberRange] = useState('');
 
   useEffect(() => {
-    GetProducts(dispatch, searchTerm, selectedColor, sizeFilter, conditionFilter, sortOrder);
+    GetProducts(dispatch, selectedType, selectedSex, selectedSubcategory, searchTerm, selectedColor, sizeFilter, conditionFilter, sortByPrice, sortByUserRating, shoeNumberRange);
 
     const fetchProductSizes = async () => {
       try {
@@ -39,7 +48,7 @@ export default () => {
 
     fetchProductSizes();
     fetchProductConditions();
-  }, [dispatch]);
+  }, [dispatch, selectedType, selectedSex, selectedSubcategory]);
 
   const handleColorChange = (selectedColor) => {
     setSelectedColor(selectedColor.hex);
@@ -47,6 +56,18 @@ export default () => {
 
   const handleCloseColorPicker = () => {
     setShowColorPicker(false);
+  };
+
+  const handleRemoveFilters = () => {
+    // Reset all the filter states to their initial values
+    setSearchTerm('');
+    setSizeFilter('');
+    setConditionFilter('');
+    setSortByPrice('');
+    setSortByUserRating('');
+    setSelectedColor('');
+    setShowColorPicker(false);
+    GetProducts(dispatch, selectedType, selectedSex, selectedSubcategory);
   };
 
   return (
@@ -86,20 +107,37 @@ export default () => {
               </div>
             )}
           </Col>
-          <Col>
-            <FormControl
-              as="select"
-              value={sizeFilter}
-              onChange={(event) => setSizeFilter(event.target.value)}
-            >
-              <option value="">All Sizes</option>
-              {sizes.map(size => (
-                <option key={size} value={size}>
-                  {size}
-                </option>
-              ))}
-            </FormControl>
+          {isClothesType && (
+            <Col>
+              <FormControl
+                as="select"
+                value={sizeFilter}
+                onChange={(event) => setSizeFilter(event.target.value)}
+              >
+                <option value="">All Sizes</option>
+                {sizes.map(size => (
+                  <option key={size} value={size}>
+                    {size}
+                  </option>
+                ))}
+              </FormControl>
+            </Col>
+          )}
+          {isShoesType && (
+           <Col>
+            {/* Slider for shoe numbers */}
+            <div style={{ padding: '10px 0' }}>
+              <span>Shoe Number Range: {shoeNumberRange[0]} - {shoeNumberRange[1]}</span>
+              <Slider
+                range
+                min={15}
+                max={55}
+                value={shoeNumberRange}
+                onChange={setShoeNumberRange}
+              />
+            </div>
           </Col>
+           )}
           <Col>
             <FormControl
               as="select"
@@ -117,8 +155,8 @@ export default () => {
           <Col>
             <FormControl
               as="select"
-              value={sortOrder}
-              onChange={(event) => setSortOrder(event.target.value)}
+              value={sortByPrice}
+              onChange={(event) => setSortByPrice(event.target.value)}
             >
               <option value="">Sort By Price</option>
               <option value="asc">Ascending</option>
@@ -126,8 +164,22 @@ export default () => {
             </FormControl>
           </Col>
           <Col>
-            <Button onClick={() => GetProducts(dispatch, searchTerm, selectedColor, sizeFilter, conditionFilter, sortOrder)}>Apply Filters</Button>
+            <FormControl
+              as="select"
+              value={sortByUserRating}
+              onChange={(event) => setSortByUserRating(event.target.value)}
+            >
+              <option value="">Sort By User Rating</option>
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </FormControl>
           </Col>
+          <Col>
+            <Button onClick={() => GetProducts(dispatch, selectedType, selectedSex, selectedSubcategory, searchTerm, selectedColor, sizeFilter, conditionFilter, sortByPrice, sortByUserRating, shoeNumberRange)}>Apply Filters</Button>
+          </Col>
+          <Col>
+          <Button onClick={handleRemoveFilters}>Remove Filters</Button>
+        </Col>
         </Row>
       </Form>
 
@@ -145,18 +197,23 @@ const ListRow = ({ product }) => {
   const dispatch = useDispatch();
   const email = useSelector((state) => state.authenticationSlice.email);
   const profileLink = email === product.email ? `/myProfile` : `/profile/${product.username}`;
+  const selectedType = useSelector(state => state.productsSlice.selectedType);
+  const isClothesType = selectedType === 'Clothes';
+  const isShoesType = selectedType === 'Shoes';
 
   return (
     <div>
       <Row>
-        <Col>{product.id}</Col>
         <Col>{product.productName}</Col>
         <Col>{product.productType}</Col>
-        <Col>{product.productSubcategory}</Col>
-        <Col>{product.productPrice}</Col>
-        <Col>{product.productSize}</Col>
+        {isClothesType && <Col>{product.productSubcategory}</Col>}
+        <Col>{product.productPrice} MKD</Col>
+        {isClothesType && <Col>{product.productSize}</Col>}
+        {isShoesType && <Col>{product.productSizeNumber}</Col>}
         <Col>{product.productColor}</Col>
         <Col>{product.productCondition}</Col>
+        <Col>{product.productSex}</Col>
+        <Col>{product.userRating}</Col>
         <Col><Button onClick={() => AddToCart(dispatch, product, email)}>Add to Cart</Button></Col>
         <Col><Button onClick={() => AddToFavourites(dispatch, product, email)}>Add to Favourites</Button></Col>
         <NavLink to={profileLink}>{product.username}</NavLink>

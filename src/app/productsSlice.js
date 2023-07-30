@@ -23,12 +23,20 @@ export const productsSlice = createSlice({
         productSizes:[],
         productSubcategories:[],
         productConditions :[],
-        totalPrice: 0
+        productSex : [],
+        totalPrice: 0,
+        selectedType: '',
+        selectedSex: '',
+        selectedSubcategory: '',
     },
     reducers: {
         setProductTypes:(state,action) => 
         {
             return {...state, productTypes: [...action.payload]};
+        },
+        setProductSex:(state,action) => 
+        {
+            return {...state, productSex: [...action.payload]};
         },
         setProductSizes:(state,action)=>
         {
@@ -88,12 +96,20 @@ export const productsSlice = createSlice({
             state.cart = [];
             state.totalPrice = 0;
         },
-
+        setSelectedFilters: (state, action) => {
+            console.log(action.payload);
+            return {
+              ...state,
+              selectedType: action.payload.type,
+              selectedSex: action.payload.sex,
+              selectedSubcategory: action.payload.subcategory,
+            };
+        },
     }
 });
 
 export const { setProducts, newProduct, editProduct,
-     deleteProduct, addToCart, setShoppingCart,setProductSizes,
+     deleteProduct, addToCart, setShoppingCart,setProductSizes, setProductSex, setSelectedFilters,
       deleteFromShoppingCart, setProductTypes,setProductSubcategories, setMyProducts, setFavourites, deleteFromFavourites, addToFavourites, clearCart, setProductConditions } = productsSlice.actions;
 
 export default productsSlice.reducer;

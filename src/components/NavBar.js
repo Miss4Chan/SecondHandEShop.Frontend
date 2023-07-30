@@ -3,12 +3,14 @@ import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../app/authenticationSlice';
 import React from 'react';
+import SidebarMenu from './SidebarMenu';
 
 const Navbar = () => {
     const { isLoggedIn } = useSelector(state => state.authenticationSlice);
     const dispatch = useDispatch();
 
     return <Nav className='navbar' style={{ backgroundColor: '#e4fff2' }}>
+        <SidebarMenu />
         <h1 style={{ fontFamily: 'Brush Script MT, cursive' }}>Second Hand EShop</h1>
         {isLoggedIn
             ?
