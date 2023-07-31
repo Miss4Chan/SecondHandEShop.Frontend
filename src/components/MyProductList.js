@@ -36,6 +36,7 @@ const ListRow = ({ product }) =>
       ) : (
         <Row>
           <Col>{product.id}</Col>
+          <Col><img src={product.productImage}/></Col>
           <Col>{product.productName}</Col>
           <Col>{product.productType}</Col>
           <Col>{product.productSubcategory}</Col>

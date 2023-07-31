@@ -7,6 +7,7 @@ import { CompactPicker } from 'react-color';
 
 const ProductAdd = () => {
   const [name, setName] = useState('');
+  const [image,setImage] = useState('');
   const [color, setColor] = useState('#ffffff');
   const [sizeNumber, setSizeNumber] = useState(0);
   const [selectedProductType, setSelectedProductType] = useState('');
@@ -89,11 +90,13 @@ const ProductAdd = () => {
       productBrand: brand,
       productMaterial: material,
       productCondition: selectedCondition,
-      productSex : selectedSex
+      productSex : selectedSex,
+      productImage : image
     });
 
     setShowPopup(false);
     setName('');
+    setImage('');
     setColor('#ffffff');
     setSizeNumber(0);
     setSelectedProductType('');
@@ -307,6 +310,18 @@ const ProductAdd = () => {
                 placeholder="Enter name"
                 value={name}
                 onChange={(event) => setName(event.target.value)}
+              />
+            </Col>
+          </Row>
+
+          <Row>
+            <Col>
+              <FormLabel>Image</FormLabel>
+              <FormControl
+                type="text"
+                placeholder="Enter link to image"
+                value={image}
+                onChange={(event) => setImage(event.target.value)}
               />
             </Col>
           </Row>

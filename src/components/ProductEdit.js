@@ -87,6 +87,17 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
               />
             </Col>
           </Row>
+          <Row>
+            <Col>
+              <FormLabel>Product Image</FormLabel>
+              <FormControl
+                type="text"
+                name="productImage"
+                value={editedProduct.productImage}
+                onChange={handleInputChange}
+              />
+            </Col>
+          </Row>
 
           <Row>
             <Col>
