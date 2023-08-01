@@ -14,6 +14,7 @@ import MyProfile from './components/MyProfile';
 import Profile from './components/Profile';
 import Favourites from './components/Favourites';
 import MyOrders from './components/MyOrders';
+import Footer from './components/Footer';
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.authenticationSlice.isLoggedIn);
@@ -26,29 +27,27 @@ const App = () => {
       dispatch(userAuthenticated({ token: token, email: email }));
     }
   }, [dispatch]);
+
   return (
     <Router>
-      <Navbar/>
+      <Navbar />
       <ToastContainer />
-      <Routes>
-        <Route path="/" element={isLoggedIn ? <ProductList /> : <SignInPage />} />
-        <Route
-          path="/signup"
-          element={!isLoggedIn ? <SignUpPage /> : <Navigate to="/" />} 
-        />
-        <Route
-          path="/signin"
-          element={!isLoggedIn ? <SignInPage /> : <Navigate to="/" />} 
-        />
-         <Route path="/cart" element={isLoggedIn ? <ShoppingCart /> : <SignInPage />} />
-         <Route path="/faves" element={isLoggedIn ? <Favourites /> : <SignInPage />}/>
-         <Route path="/add" element={isLoggedIn ? <ProductAdd /> : <SignInPage />}/>
-         <Route path="/myProducts" element={isLoggedIn ? <MyProductsPage /> : <SignInPage />}/>
-         <Route path="/myProfile" element={isLoggedIn ? <MyProfile /> : <SignInPage />}/>
-         <Route path="/profile/:username" element={<Profile />} />
-         <Route path="/narachki" element={<MyOrders />} />
-        <Route path="*" element={<h2>Page not found!</h2>} />
-      </Routes>
+      <div>
+        <Routes>
+          <Route path="/" element={isLoggedIn ? <ProductList /> : <SignInPage />} />
+          <Route path="/signup" element={!isLoggedIn ? <SignUpPage /> : <Navigate to="/" />} />
+          <Route path="/signin" element={!isLoggedIn ? <SignInPage /> : <Navigate to="/" />} />
+          <Route path="/cart" element={isLoggedIn ? <ShoppingCart /> : <SignInPage />} />
+          <Route path="/faves" element={isLoggedIn ? <Favourites /> : <SignInPage />} />
+          <Route path="/add" element={isLoggedIn ? <ProductAdd /> : <SignInPage />} />
+          <Route path="/myProducts" element={isLoggedIn ? <MyProductsPage /> : <SignInPage />} />
+          <Route path="/myProfile" element={isLoggedIn ? <MyProfile /> : <SignInPage />} />
+          <Route path="/profile/:username" element={<Profile />} />
+          <Route path="/narachki" element={<MyOrders />} />
+          <Route path="*" element={<h2>Page not found!</h2>} />
+        </Routes>
+        <Footer />
+      </div>
     </Router>
   );
 };

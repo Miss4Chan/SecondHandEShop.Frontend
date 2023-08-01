@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Navbar, Nav } from 'react-bootstrap';
+import { Nav } from 'react-bootstrap';
 import { setSelectedFilters } from '../app/productsSlice';
 import { useNavigate } from 'react-router-dom';
+import { BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'; 
+import { NavLink } from 'react-router-dom';
 
 const SidebarMenu = () => {
   const [isNavOpen, setNavOpen] = useState(false);
+  const [isBuyDropdownOpen, setBuyDropdownOpen] = useState(false);
   const [isFemaleSubmenuOpen, setFemaleSubmenuOpen] = useState(false);
   const [isMaleSubmenuOpen, setMaleSubmenuOpen] = useState(false);
   const [isFemaleClothesOpen, setFemaleClothesOpen] = useState(false);
@@ -15,61 +18,81 @@ const SidebarMenu = () => {
 
   const toggleNav = () => {
     setNavOpen(!isNavOpen);
-    // When toggling the main menu, close the submenus if they are open
-    if (isFemaleSubmenuOpen) {
-      setFemaleSubmenuOpen(false);
-    }
-    if (isMaleSubmenuOpen) {
-      setMaleSubmenuOpen(false);
-    }
+    setBuyDropdownOpen(false);
+    setFemaleSubmenuOpen(false);
+    setMaleSubmenuOpen(false);
+    setFemaleClothesOpen(false);
+    setMaleClothesOpen(false);
+  };
+
+  const toggleBuyDropdown = () => {
+    setBuyDropdownOpen(!isBuyDropdownOpen);
+    setFemaleSubmenuOpen(false);
+    setMaleSubmenuOpen(false);
+    setFemaleClothesOpen(false);
+    setMaleClothesOpen(false);
   };
 
   const toggleFemaleSubmenu = () => {
     setFemaleSubmenuOpen(!isFemaleSubmenuOpen);
-    // If the Female submenu is open, close the Male submenu
-    if (isMaleSubmenuOpen && !isFemaleSubmenuOpen) {
-      setMaleSubmenuOpen(false);
-    }
+    setMaleSubmenuOpen(false);
+    setFemaleClothesOpen(false);
+    setMaleClothesOpen(false);
   };
 
   const toggleMaleSubmenu = () => {
     setMaleSubmenuOpen(!isMaleSubmenuOpen);
-    // If the Male submenu is open, close the Female submenu
-    if (isFemaleSubmenuOpen && !isMaleSubmenuOpen) {
-      setFemaleSubmenuOpen(false);
-    }
+    setFemaleSubmenuOpen(false);
+    setFemaleClothesOpen(false);
+    setMaleClothesOpen(false);
   };
 
   const toggleFemaleClothes = () => {
     setFemaleClothesOpen(!isFemaleClothesOpen);
+    setMaleClothesOpen(false);
   };
 
   const toggleMaleClothes = () => {
     setMaleClothesOpen(!isMaleClothesOpen);
+    setFemaleClothesOpen(false);
   };
 
   const handleFilterChange = (type, sex, subcategory) => {
     setNavOpen(false);
+    setBuyDropdownOpen(false);
     setFemaleSubmenuOpen(false);
     setMaleSubmenuOpen(false);
+    setFemaleClothesOpen(false);
+    setMaleClothesOpen(false);
 
     dispatch(setSelectedFilters({ type, sex, subcategory }));
     navigate('/');
   };
 
+  const closeSideMenu = () => {
+    setNavOpen(false);
+    setBuyDropdownOpen(false);
+    setFemaleSubmenuOpen(false);
+    setMaleSubmenuOpen(false);
+    setFemaleClothesOpen(false);
+    setMaleClothesOpen(false);
+  };
+
+
   const styles = `
     /* Sidebar Menu */
     .sidebar-menu {
       position: relative;
-      width: 240px; /* Set your desired width */
+      font-family: Arial, sans-serif; /* Set the font family */
     }
     
     .sidebar-toggle {
       cursor: pointer;
       font-size: 24px;
       padding: 10px;
-      background-color: #f8f9fa; /* Set the background color of the toggle */
-      border-bottom: 1px solid #dee2e6; /* Set the border color */
+      background-color: transparent; /* Set the background color of the toggle to be transparent */
+      border-bottom: ${isNavOpen ? 'none' : '1px solid black'}; /* Set the border color when menu is closed */
+      color: ${isNavOpen ? 'inherit' : '#000000'}; /* Set the font color when menu is closed */
     }
     
     .sidebar-toggle.open {
@@ -77,58 +100,117 @@ const SidebarMenu = () => {
     }
     
     .sidenav {
-      position: absolute;
-      top: 50px; /* Adjust this value based on your design */
-      left: 0;
-      width: 240px; /* Set your desired width */
-      background-color: #f8f9fa; /* Set the background color of the sidebar */
-      border: 1px solid #dee2e6; /* Set the border color */
-      transition: transform 0.3s ease-in-out;
-      transform: translateX(-100%);
+      height: 100%;
+      width: 250px;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: ${isNavOpen ? '0' : '-250px'}; /* Slide from the left when open, hide when closed */
+      background-color: #F3D395; /* Set the background color of the sidebar to be orange */
+      overflow-x: hidden;
+      transition: left 0.5s;
+      padding-top: 60px;
+      border: 2.5px solid black; /* Add a black outline */
+    }
+
+    .sidenav .rewear-logo {
+      color: ${isNavOpen ? '#000000' : 'inherit'}; /* Set the font color of the ReWear logo when menu is closed */
+    }
+
+    /* Remove the black line below ReWear */
+    .sidenav .rewear-logo:before {
+      content: none;
     }
     
-    .sidenav.open {
-      transform: translateX(0);
+    .sidenav a {
+      padding: 8px 8px 8px 32px;
+      text-decoration: none;
+      font-size: 25px;
+      color: #818181;
+      display: block;
+      transition: 0.3s;
+      cursor: pointer;
     }
+    
+    .sidenav a, .dropdown-btn {
+      padding: 6px 8px 6px 16px;
+      text-decoration: none;
+      font-size: 20px;
+      color: #000000;
+      display: block;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      outline: none;
+    }
+  
+    .sidenav .closebtn {
+      position: absolute;
+      top: 5px;
+      right: 10px; /* Move the close button to the top right corner */
+      font-size: 36px;
+      font-weight: bold; /* Make the "X" button bolder */
+      cursor: pointer;
+    }
+
+    /* Change cursor to a hand when hovering over the links and X button */
+    .sidenav a:hover,
+    .sidenav .closebtn:hover {
+      cursor: pointer;
+    }
+
+    /* Style for the dropdown icon */
+    .dropdown-icon {
+      cursor: pointer;
+    }
+    
   `;
 
   return (
     <div className="sidebar-menu">
       <style>{styles}</style>
       <span className={`sidebar-toggle ${isNavOpen ? 'open' : ''}`} onClick={toggleNav}>
-        &#9776; ReWear
+        &#9776; <span className="rewear-logo">ReWear</span>
       </span>
-      <Navbar collapseOnSelect className={`sidenav ${isNavOpen ? 'open' : ''}`}>
+      <div className={`sidenav ${isNavOpen ? 'open' : ''}`}>
+        <div className="closebtn" onClick={closeSideMenu}>
+          &times;
+        </div>
         <Nav className="flex-column">
-          <Nav.Link href="#" style={{ color: '#000000' }}>
-            Home
-          </Nav.Link>
-          <Nav.Link href="#" style={{ color: '#000000' }}>
+          <NavLink variant='link' to='/' >Home</NavLink>
+          <Nav.Link href="#" style={{ color: '#000000' }}> 
             About Us
           </Nav.Link>
-          <Nav.Link href="#" style={{ color: '#000000' }}>
-            Buy
+          <Nav.Link href="#" style={{ color: '#000000' }} onClick={toggleBuyDropdown}>
+            Buy{' '}
+            {isNavOpen && (isBuyDropdownOpen ? <BsCaretUpFill /> : <BsCaretDownFill />)}
           </Nav.Link>
-          {/* Female Submenu */}
-          <Nav.Link
-            href="#"
-            style={{ color: '#000000', paddingLeft: '20px' }}
-            onClick={toggleFemaleSubmenu}
-          >
-            Female
-          </Nav.Link>
-          {isFemaleSubmenuOpen && (
+          {isBuyDropdownOpen && isNavOpen && (
             <>
+              {/* Female Submenu */}
               <Nav.Link
                 href="#"
-                style={{ color: '#000000', paddingLeft: '40px' }}
-                onClick={toggleFemaleClothes}
+                style={{ color: '#000000', paddingLeft: '20px' }}
+                onClick={toggleFemaleSubmenu}
               >
-                Clothes
+                Female
+                {isNavOpen && (isFemaleSubmenuOpen ? <BsCaretUpFill /> : <BsCaretDownFill />)}
               </Nav.Link>
-              {isFemaleClothesOpen && (
+              {isFemaleSubmenuOpen && isNavOpen && (
                 <>
-                  <Nav.Link href="#" 
+                  {/* Female Clothes Submenu */}
+                  <Nav.Link
+                    href="#"
+                    style={{ color: '#000000', paddingLeft: '40px' }}
+                    onClick={toggleFemaleClothes}
+                  >
+                    Clothes
+                    {isFemaleClothesOpen ? <BsCaretUpFill /> : <BsCaretDownFill />}
+                  </Nav.Link>
+                  {isFemaleClothesOpen && isNavOpen && (
+                    <>
+                       <Nav.Link href="#" 
                   style={{ color: '#000000', paddingLeft: '60px' }}
                   onClick={() => handleFilterChange('Clothes', 'Female', '')}>
                     All
@@ -167,39 +249,40 @@ const SidebarMenu = () => {
                    onClick={() => handleFilterChange('Clothes', 'Female', 'Skirts/Shorts')}>
                     Skirts/Shorts
                   </Nav.Link>
+                    </>
+                  )}
+                  {/* End of Female Clothes Submenu */}
+                  <Nav.Link href="#" style={{ color: '#000000', paddingLeft: '40px' }} onClick={() => handleFilterChange('Accessories', 'Female', '')}>
+                    Accessories
+                  </Nav.Link>
+                  <Nav.Link href="#" style={{ color: '#000000', paddingLeft: '40px' }} onClick={() => handleFilterChange('Shoes', 'Female', '')}>
+                    Shoes
+                  </Nav.Link>
                 </>
               )}
-              <Nav.Link href="#" style={{ color: '#000000', paddingLeft: '40px' }}
-              onClick={() => handleFilterChange('Accessories', 'Female', '')}>
-                Accessories
-              </Nav.Link>
-              <Nav.Link href="#" style={{ color: '#000000', paddingLeft: '40px' }}
-               onClick={() => handleFilterChange('Shoes', 'Female', '')}>
-                Shoes
-              </Nav.Link>
-            </>
-          )}
-          {/* End of Female Submenu */}
-          {/* Male Submenu */}
-          <Nav.Link
-            href="#"
-            style={{ color: '#000000', paddingLeft: '20px' }}
-            onClick={toggleMaleSubmenu}
-          >
-            Male
-          </Nav.Link>
-          {isMaleSubmenuOpen && (
-            <>
+
+              {/* Male Submenu */}
               <Nav.Link
                 href="#"
-                style={{ color: '#000000', paddingLeft: '40px' }}
-                onClick={toggleMaleClothes}
+                style={{ color: '#000000', paddingLeft: '20px' }}
+                onClick={toggleMaleSubmenu}
               >
-                Clothes
+                Male
+                {isNavOpen && (isMaleSubmenuOpen ? <BsCaretUpFill /> : <BsCaretDownFill />)}
               </Nav.Link>
-              {isMaleClothesOpen && (
-                <>  
-                  <Nav.Link href="#" 
+              {isMaleSubmenuOpen && isNavOpen && (
+                <>
+                  <Nav.Link
+                    href="#"
+                    style={{ color: '#000000', paddingLeft: '40px' }}
+                    onClick={toggleMaleClothes}
+                  >
+                    Clothes
+                    {isMaleClothesOpen ? <BsCaretUpFill /> : <BsCaretDownFill />}
+                  </Nav.Link>
+                  {isMaleClothesOpen && isNavOpen && (
+                    <>
+                 <Nav.Link href="#" 
                   style={{ color: '#000000', paddingLeft: '60px' }}
                   onClick={() => handleFilterChange('Clothes', 'Male', '')}>
                     All
@@ -244,9 +327,11 @@ const SidebarMenu = () => {
                onClick={() => handleFilterChange('Shoes', 'Male', '')}>
                 Shoes
               </Nav.Link>
+                </>
+              )}
             </>
           )}
-          {/* End of Male Submenu */}
+          {/* End of Buy Dropdown */}
           <Nav.Link href="#" style={{ color: '#000000' }}>
             Sell
           </Nav.Link>
@@ -257,7 +342,7 @@ const SidebarMenu = () => {
             Contact Us
           </Nav.Link>
         </Nav>
-      </Navbar>
+      </div>
     </div>
   );
 };
