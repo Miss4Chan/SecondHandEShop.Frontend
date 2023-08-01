@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Nav } from 'react-bootstrap';
 import { setSelectedFilters } from '../app/productsSlice';
 import { useNavigate } from 'react-router-dom';
-import { BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs'; 
-import { NavLink } from 'react-router-dom';
+import { BsCaretDownFill, BsCaretUpFill } from 'react-icons/bs';
+import { NavLink, useLocation } from 'react-router-dom';
+
 
 const SidebarMenu = () => {
   const [isNavOpen, setNavOpen] = useState(false);
@@ -15,6 +16,7 @@ const SidebarMenu = () => {
   const [isMaleClothesOpen, setMaleClothesOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation(); 
 
   const toggleNav = () => {
     setNavOpen(!isNavOpen);
@@ -78,50 +80,52 @@ const SidebarMenu = () => {
     setMaleClothesOpen(false);
   };
 
+  useEffect(() => {
+    closeSideMenu();
+  }, [location]);
 
   const styles = `
-    /* Sidebar Menu */
     .sidebar-menu {
       position: relative;
-      font-family: Arial, sans-serif; /* Set the font family */
+      font-family: Arial, sans-serif;
     }
-    
+
     .sidebar-toggle {
       cursor: pointer;
       font-size: 24px;
       padding: 10px;
-      background-color: transparent; /* Set the background color of the toggle to be transparent */
-      border-bottom: ${isNavOpen ? 'none' : '1px solid black'}; /* Set the border color when menu is closed */
-      color: ${isNavOpen ? 'inherit' : '#000000'}; /* Set the font color when menu is closed */
+      background-color: transparent; 
+      color: ${isNavOpen ? 'inherit' : '#000000'}; 
+      font-weight: bold; 
     }
-    
+
     .sidebar-toggle.open {
       border-bottom: none;
     }
-    
+
     .sidenav {
       height: 100%;
       width: 250px;
       position: fixed;
-      z-index: 1;
       top: 0;
-      left: ${isNavOpen ? '0' : '-250px'}; /* Slide from the left when open, hide when closed */
-      background-color: #F3D395; /* Set the background color of the sidebar to be orange */
+      left: ${isNavOpen ? '0' : '-250px'}; 
+      background-color: #F3D395; 
       overflow-x: hidden;
       transition: left 0.5s;
       padding-top: 60px;
-      border: 2.5px solid black; /* Add a black outline */
+      border: 2.5px solid black;
     }
 
     .sidenav .rewear-logo {
-      color: ${isNavOpen ? '#000000' : 'inherit'}; /* Set the font color of the ReWear logo when menu is closed */
+      color: ${isNavOpen ? '#000000' : 'inherit'}; 
+      font-weight: bold;
+      text-decoration: none;
     }
 
-    /* Remove the black line below ReWear */
-    .sidenav .rewear-logo:before {
+    .sidenav:not(.open) .rewear-logo:before {
       content: none;
     }
-    
+
     .sidenav a {
       padding: 8px 8px 8px 32px;
       text-decoration: none;
@@ -131,8 +135,9 @@ const SidebarMenu = () => {
       transition: 0.3s;
       cursor: pointer;
     }
-    
-    .sidenav a, .dropdown-btn {
+
+    .sidenav a,
+    .dropdown-btn {
       padding: 6px 8px 6px 16px;
       text-decoration: none;
       font-size: 20px;
@@ -144,27 +149,24 @@ const SidebarMenu = () => {
       text-align: left;
       outline: none;
     }
-  
+
     .sidenav .closebtn {
       position: absolute;
       top: 5px;
-      right: 10px; /* Move the close button to the top right corner */
+      right: 10px; 
       font-size: 36px;
-      font-weight: bold; /* Make the "X" button bolder */
+      font-weight: bold; 
       cursor: pointer;
     }
 
-    /* Change cursor to a hand when hovering over the links and X button */
     .sidenav a:hover,
     .sidenav .closebtn:hover {
       cursor: pointer;
     }
 
-    /* Style for the dropdown icon */
     .dropdown-icon {
       cursor: pointer;
     }
-    
   `;
 
   return (
@@ -179,7 +181,7 @@ const SidebarMenu = () => {
         </div>
         <Nav className="flex-column">
           <NavLink variant='link' to='/' >Home</NavLink>
-          <Nav.Link href="#" style={{ color: '#000000' }}> 
+          <Nav.Link href="#" style={{ color: '#000000' }}>
             About Us
           </Nav.Link>
           <Nav.Link href="#" style={{ color: '#000000' }} onClick={toggleBuyDropdown}>
@@ -210,17 +212,19 @@ const SidebarMenu = () => {
                   </Nav.Link>
                   {isFemaleClothesOpen && isNavOpen && (
                     <>
-                       <Nav.Link href="#" 
-                  style={{ color: '#000000', paddingLeft: '60px' }}
-                  onClick={() => handleFilterChange('Clothes', 'Female', '')}>
-                    All
-                  </Nav.Link>
-                  <Nav.Link href="#" 
-                  style={{ color: '#000000', paddingLeft: '60px' }}
-                  onClick={() => handleFilterChange('Clothes', 'Female', 'TShirts/Tops')}>
-                    TShirts/Tops
-                  </Nav.Link>
-                  <Nav.Link href="#" style={{ color: '#000000', paddingLeft: '60px' }}
+                      <Nav.Link href="#" 
+                        style={{ color: '#000000', paddingLeft: '60px' }}
+                        onClick={() => handleFilterChange('Clothes', 'Female', '')}
+                      >
+                        All
+                      </Nav.Link>
+                      <Nav.Link href="#" 
+                        style={{ color: '#000000', paddingLeft: '60px' }}
+                        onClick={() => handleFilterChange('Clothes', 'Female', 'TShirts/Tops')}
+                      >
+                        TShirts/Tops
+                      </Nav.Link>
+                      <Nav.Link href="#" style={{ color: '#000000', paddingLeft: '60px' }}
                    onClick={() => handleFilterChange('Clothes', 'Female', 'Blouses/Shirts')}
                   >
                     Blouses/Shirts
@@ -260,9 +264,7 @@ const SidebarMenu = () => {
                   </Nav.Link>
                 </>
               )}
-
-              {/* Male Submenu */}
-              <Nav.Link
+  <Nav.Link
                 href="#"
                 style={{ color: '#000000', paddingLeft: '20px' }}
                 onClick={toggleMaleSubmenu}
@@ -331,7 +333,6 @@ const SidebarMenu = () => {
               )}
             </>
           )}
-          {/* End of Buy Dropdown */}
           <Nav.Link href="#" style={{ color: '#000000' }}>
             Sell
           </Nav.Link>

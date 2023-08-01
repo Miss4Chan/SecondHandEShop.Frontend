@@ -15,6 +15,7 @@ import Profile from './components/Profile';
 import Favourites from './components/Favourites';
 import MyOrders from './components/MyOrders';
 import Footer from './components/Footer';
+import './App.css';
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.authenticationSlice.isLoggedIn);

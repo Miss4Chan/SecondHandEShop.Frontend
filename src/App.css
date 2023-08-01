@@ -38,13 +38,16 @@
   }
 }
 
+body {
+  background-image: url('https://w0.peakpx.com/wallpaper/297/232/HD-wallpaper-vector-hand-drawn-flowers-and-leaves-background-hand-drawn-floral.jpg');
+  background-size: cover;
+}
+
+/* The side bar needs to go over the footer */
+.sidenav {
+  z-index: 2;
+}
+
 .footer {
-  background-color: #C2A4C8;
-  color: white;
-  text-align: center;
-  padding: 20px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+  z-index: 1;
 }
