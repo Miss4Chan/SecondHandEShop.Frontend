@@ -85,36 +85,37 @@ const SidebarMenu = () => {
   }, [location]);
 
   const styles = `
-    .sidebar-menu {
-      position: relative;
-      font-family: Arial, sans-serif;
-    }
+  .sidebar-menu {
+    position: relative;
+    font-family: Arial, sans-serif;
+  }
 
-    .sidebar-toggle {
-      cursor: pointer;
-      font-size: 24px;
-      padding: 10px;
-      background-color: transparent; 
-      color: ${isNavOpen ? 'inherit' : '#000000'}; 
-      font-weight: bold; 
-    }
+  .sidebar-toggle {
+    cursor: pointer;
+    font-size: 24px;
+    padding: 10px;
+    background-color: transparent;
+    color: ${isNavOpen ? 'inherit' : '#000000'};
+    font-weight: bold;
+  }
 
-    .sidebar-toggle.open {
-      border-bottom: none;
-    }
+  .sidebar-toggle.open {
+    border-bottom: none;
+  }
 
-    .sidenav {
-      height: 100%;
-      width: 250px;
-      position: fixed;
-      top: 0;
-      left: ${isNavOpen ? '0' : '-250px'}; 
-      background-color: #F3D395; 
-      overflow-x: hidden;
-      transition: left 0.5s;
-      padding-top: 60px;
-      border: 2.5px solid black;
-    }
+  .sidenav {
+    height: 100%;
+    width: 300px; 
+    position: fixed;
+    top: 0;
+    left: ${isNavOpen ? '0' : '-400px'};
+    background-color: #F3D395;
+    overflow-x: hidden;
+    transition: left 0.5s;
+    padding-top: 60px;
+    border: 2.5px solid black;
+    z-index: 2;
+  }
 
     .sidenav .rewear-logo {
       color: ${isNavOpen ? '#000000' : 'inherit'}; 
@@ -167,6 +168,9 @@ const SidebarMenu = () => {
     .dropdown-icon {
       cursor: pointer;
     }
+    .sidenav.open {
+      z-index: 3; }
+      
   `;
 
   return (

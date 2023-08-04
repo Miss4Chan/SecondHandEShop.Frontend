@@ -16,6 +16,7 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedProduct({ ...editedProduct, [name]: value });
+    console.log(editedProduct)
   };
 
   console.log("edited product")
