@@ -16,6 +16,8 @@ import Favourites from './components/Favourites';
 import MyOrders from './components/MyOrders';
 import Footer from './components/Footer';
 import './App.css';
+import HomePage from './components/HomePage';
+import AboutUs from './components/AboutUs';
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.authenticationSlice.isLoggedIn);
@@ -46,6 +48,8 @@ const App = () => {
           <Route path="/profile/:username" element={<Profile />} />
           <Route path="/narachki" element={<MyOrders />} />
           <Route path="*" element={<h2>Page not found!</h2>} />
+          <Route path= "/home" element={<HomePage/>}/>
+          <Route path="/aboutus" element={<AboutUs/>}/>
         </Routes>
         <Footer />
       </div>
