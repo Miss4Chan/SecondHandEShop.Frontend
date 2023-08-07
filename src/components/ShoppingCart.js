@@ -25,7 +25,7 @@ const ShoppingCart = () => {
   const confirmOrder = () => {
     OrderNow(dispatch, email);
     setShowModal(false);
-    navigate('/narachki');
+    navigate('/myOrders');
   };
 
   const cancelOrder = () => {

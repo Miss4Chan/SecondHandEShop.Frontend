@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Button, Modal, Form } from 'react-bootstrap';
-import axios from 'axios';
 import * as React from 'react';
 import { GetMyOrders } from '../services/order';
 import { AddComment } from '../services/comments';

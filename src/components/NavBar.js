@@ -53,7 +53,8 @@ const Navbar = () => {
                 <NavLink to="/myProfile" style={{ color: 'black', display: 'block', fontSize: '18px', textDecoration: 'none', fontWeight: 'bold' }}>
                   My profile
                 </NavLink>
-                <Button variant='link' href='/signin' onClick={() => { dispatch(logout()) }} style={{ color: 'black', fontSize: '18px', textDecoration: 'none', fontWeight: 'bold' }}>
+                <Button variant='link' href='/signin' onClick={() => { dispatch(logout()) }} style={{ color: 'black', fontSize: '18px', textDecoration: 'none', fontWeight: 'bold', backgroundColor: '#C2A4C8',
+                borderColor: '#C2A4C8', margintop: '0vh', padding: '0vh'}}>
                   Log out
                 </Button>
               </div>

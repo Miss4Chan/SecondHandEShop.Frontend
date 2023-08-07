@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 const HomePage = () => {
   const styles = `
@@ -41,7 +42,7 @@ const HomePage = () => {
         <div className="card">
           <div className="card-body">
             <h5 className="card-title">Be fashion-forward and eco-friendly with ReWear - shop second-hand and give a new lease of life to fashion gems that would have otherwise ended up in landfills. Let's create a better future for fashion, one purchase at a time!</h5>
-            <a href="#" className="btn">Learn More</a>
+            <NavLink variant='link' to="/aboutus" className='btn'> Learn more </NavLink>
           </div>
         </div>
       </div>

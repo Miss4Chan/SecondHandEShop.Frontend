@@ -46,7 +46,7 @@ const App = () => {
           <Route path="/myProducts" element={isLoggedIn ? <MyProductsPage /> : <SignInPage />} />
           <Route path="/myProfile" element={isLoggedIn ? <MyProfile /> : <SignInPage />} />
           <Route path="/profile/:username" element={<Profile />} />
-          <Route path="/narachki" element={<MyOrders />} />
+          <Route path="/myOrders" element={<MyOrders />} />
           <Route path="*" element={<h2>Page not found!</h2>} />
           <Route path= "/home" element={<HomePage/>}/>
           <Route path="/aboutus" element={<AboutUs/>}/>

@@ -184,10 +184,10 @@ const SidebarMenu = () => {
           &times;
         </div>
         <Nav className="flex-column">
-          <NavLink variant='link' to='/' >Home</NavLink>
-          <Nav.Link href="#" style={{ color: '#000000' }}>
+          <NavLink variant='link' to='/home' >Home</NavLink>
+          <NavLink variant='link' to='/aboutus' style={{ color: '#000000' }}>
             About Us
-          </Nav.Link>
+          </NavLink>
           <Nav.Link href="#" style={{ color: '#000000' }} onClick={toggleBuyDropdown}>
             Buy{' '}
             {isNavOpen && (isBuyDropdownOpen ? <BsCaretUpFill /> : <BsCaretDownFill />)}
@@ -342,9 +342,6 @@ const SidebarMenu = () => {
           </Nav.Link>
           <Nav.Link href="#" style={{ color: '#000000' }}>
             Rent
-          </Nav.Link>
-          <Nav.Link href="#" style={{ color: '#000000' }}>
-            Contact Us
           </Nav.Link>
         </Nav>
       </div>
