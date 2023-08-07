@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { GetProducts, GetProductConditions, GetProductSizes } from '../services/products';
+import { GetProducts, GetProductConditions, GetProductSizes,AddToCart, AddToFavourites } from '../services/products';
 import { Row, Col, Button, FormControl } from 'react-bootstrap';
 import { CompactPicker } from 'react-color';
 import { setSelectedFilters } from '../app/productsSlice';
@@ -29,6 +29,7 @@ export default () => {
   const isShoesType = selectedType === 'Shoes';
   const [shoeNumberRange, setShoeNumberRange] = useState('');
   const navigate = useNavigate();
+
 
  
   useEffect(() => {
@@ -406,6 +407,9 @@ img {
 
 const ListRow = ({ product }) => {
 
+  const email = useSelector((state) => state.authenticationSlice.email);
+  const dispatch = useDispatch();
+
   const renderStars = (rating) => {
     const filledStars = '★'.repeat(Math.floor(rating));
     const emptyStars = '☆'.repeat(5 - Math.floor(rating));
@@ -473,6 +477,8 @@ const ListRow = ({ product }) => {
              <div className="btn btn-dark">
                   View more
             </div>
+            <Col><Button onClick={() => AddToCart(dispatch, product, email)}>Add to Cart</Button></Col>
+            <Col><Button onClick={() => AddToFavourites(dispatch, product, email)}>Add to Cart</Button></Col>
             </div>
           </div>
         </div>

@@ -86,7 +86,8 @@ export const productsSlice = createSlice({
             return {...state, cart :[...cart], totalPrice: updatedTotalPrice};
         },
         setFavourites: (state, action) => {
-            return {...state, favourites: [...action.payload]};
+            const products = action.payload.map(p => p.product);
+            return {...state, favourites: [...products]};
         },
         deleteFromFavourites : (state, action) => {
             const favourites = state.favourites.filter(f => f.id!== action.payload.id); 

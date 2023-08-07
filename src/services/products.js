@@ -103,6 +103,8 @@ export const NewProduct = async (dispatch, product) => {
 export const EditProduct = async (dispatch, product) => {
     try {
         // api call
+        console.log("service")
+        console.log(product)
         await axiosInstance.put('',product);
         dispatch(editProduct(product));
     } catch {

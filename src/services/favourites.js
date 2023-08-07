@@ -14,8 +14,9 @@ export const GetFavourites = async (dispatch, email) => {
     try {
         //api call
         const {data} = await axiosInstance.get('',{ params: { email } });
-        const products = data.productsInFavourites.map(p => p.product);
-        dispatch(setFavourites(products));
+        console.log("service")
+        console.log(data)
+        dispatch(setFavourites(data));
 
     } catch {
         console.log("Error")
