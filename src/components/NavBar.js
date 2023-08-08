@@ -44,7 +44,7 @@ const Navbar = () => {
                   backgroundColor: '#C2A4C8',
                   top: '100%',
                   left: '-100px', // Adjust the left value to move the submenu to the left of the shopping cart icon
-                  width: '150px', // Adjust the width as needed
+                  width: '140px', // Adjust the width as needed
                   padding: '10px',
                   borderRadius: '5px',
                   zIndex: '2', // Set a higher zIndex to make the submenu go over the content

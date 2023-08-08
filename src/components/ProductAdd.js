@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { GetProductSubcategories, GetProductSizes, GetProductTypes, GetProductConditions, NewProduct, GetProductSex } from '../services/products';
 import * as React from 'react';
 import { CompactPicker } from 'react-color';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faShirt,faSocks,faGem,} from '@fortawesome/free-solid-svg-icons';
 
 const ProductAdd = () => {
   const [name, setName] = useState('');
@@ -124,44 +126,120 @@ const ProductAdd = () => {
     setShowColorPicker(false);
   };
 
+  const [selectedIcon, setSelectedIcon] = useState('');
+
+  
+  const productTypeIcons = {
+    Clothes:faShirt ,
+    Shoes: faSocks,
+    Accessories: faGem
+    // Add more product types and icons as needed
+  };
+
+  const highlightClass = `
+  .product-type-icon.highlight {
+    border: 7px solid #000000;
+    margin: 500px; /* Add margin here to create space around the highlighted icon */
+  }
+`;
+
+  
   return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '70vh', // Set the minimum height to fill the viewport
+      }}
+    >
     <Form>
       <Row>
         <Col>
-          <FormLabel>Type</FormLabel>
-          {types ? (
-            <select
-              name="productType"
-              value={selectedProductType}
-              onChange={(event) => setSelectedProductType(event.target.value)}
-            >
-              <option value="">Select Type</option>
-              {types.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <p>Loading product types...</p>
-          )}
-        </Col>
-      </Row>
+        <FormLabel style={{ marginBottom: '60px', fontSize: '30px', fontWeight: 'bold' }}>Select the Type of Product You Would Like to Add</FormLabel>
+          <div className="product-type-icons" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '20px' }}>
+          {Object.keys(productTypeIcons).map((type) => (
+        <FontAwesomeIcon
+      key={type}
+      icon={productTypeIcons[type]}
+      size="8x" 
+      className={`product-type-icon ${selectedProductType === type ? 'highlight' : ''}`}
+      onClick={() => setSelectedProductType(type)}
+      style={{
+        cursor: 'pointer',
+        margin: '0 40px',
+        marginBottom: '40px' 
+      }}
+    />
+  ))}
+  <style>{highlightClass}</style>
+</div>
+              </Col>
+            </Row>
 
-      <Modal show={showPopup} onHide={handleCancelClick}>
-        <Modal.Header closeButton>
+
+            {selectedProductType && (
+            <Modal show={showPopup} onHide={handleCancelClick}>
+                <Modal.Header closeButton>
           <Modal.Title>{selectedProductType}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <Row>
+
+        <Row>
             <Col>
-              <FormLabel>Sex</FormLabel>
+              <FormLabel>Name</FormLabel>
+              <FormControl
+                type="text"
+                placeholder="Enter name"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+              />
+            </Col>
+          </Row>
+
+          <Row>
+            <Col>
+              <FormLabel>Image</FormLabel>
+              <FormControl
+                type="text"
+                placeholder="Enter link to image"
+                value={image}
+                onChange={(event) => setImage(event.target.value)}
+              />
+            </Col>
+          </Row>
+              <Row>
+                  <Col>
+                    <FormLabel>Brand</FormLabel>
+                    <FormControl
+                      type="text"
+                      placeholder="Enter brand"
+                      value={brand}
+                      onChange={(event) => setBrand(event.target.value)}
+                    />
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col>
+                    <FormLabel>Material</FormLabel>
+                    <FormControl
+                      type="text"
+                      placeholder="Enter material"
+                      value={material}
+                      onChange={(event) => setMaterial(event.target.value)}
+                    />
+                  </Col>
+                </Row>
+            <Col>
+              
               <select
                 name="productSex"
                 value={selectedSex}
                 onChange={(event) => setSelectedSex(event.target.value)}
               >
-                <option value="">Select Sex</option>
+                <option value="">Gender</option>
                 {sex.map((s) => (
                   <option key={s} value={s}>
                     {s}
@@ -173,12 +251,12 @@ const ProductAdd = () => {
           <Row>
             <Col>
               <FormLabel>
-                Color{' '}
+               
                 <OverlayTrigger
                   placement="right"
                   overlay={<Tooltip id="color-tooltip">Choose the most dominant color of your product</Tooltip>}
                 >
-                  <span style={{ fontSize: '18px', cursor: 'pointer' }}>?</span>
+                  <span style={{ fontSize: '18px', cursor: 'pointer' }}></span>
                 </OverlayTrigger>
               </FormLabel>
               <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -206,29 +284,7 @@ const ProductAdd = () => {
             </Col>
           </Row>
 
-          <Row>
-            <Col>
-              <FormLabel>Brand</FormLabel>
-              <FormControl
-                type="text"
-                placeholder="Enter brand"
-                value={brand}
-                onChange={(event) => setBrand(event.target.value)}
-              />
-            </Col>
-          </Row>
-
-          <Row>
-            <Col>
-              <FormLabel>Material</FormLabel>
-              <FormControl
-                type="text"
-                placeholder="Enter material"
-                value={material}
-                onChange={(event) => setMaterial(event.target.value)}
-              />
-            </Col>
-          </Row>
+          
 
           <Row>
             <Col>
@@ -302,44 +358,22 @@ const ProductAdd = () => {
             </Row>
           )}
 
-          <Row>
-            <Col>
-              <FormLabel>Name</FormLabel>
-              <FormControl
-                type="text"
-                placeholder="Enter name"
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-              />
-            </Col>
-          </Row>
+          
 
-          <Row>
-            <Col>
-              <FormLabel>Image</FormLabel>
+        <Row>
+          <Col>
+            <FormLabel>Price (MKD)</FormLabel>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
               <FormControl
-                type="text"
-                placeholder="Enter link to image"
-                value={image}
-                onChange={(event) => setImage(event.target.value)}
+                type="number"
+                placeholder="Enter price"
+                value={price}
+                onChange={(event) => setPrice(event.target.value)}
               />
-            </Col>
-          </Row>
-
-          <Row>
-        <Col>
-          <FormLabel>Price (MKD)</FormLabel>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <FormControl
-              type="number"
-              placeholder="Enter price"
-              value={price}
-              onChange={(event) => setPrice(event.target.value)}
-            />
-            <span style={{ marginLeft: '5px' }}>MKD</span>
-          </div>
-        </Col>
-      </Row>
+              <span style={{ marginLeft: '5px' }}>MKD</span>
+            </div>
+          </Col>
+        </Row>
         </Modal.Body>
 
         <Modal.Footer>
@@ -350,25 +384,30 @@ const ProductAdd = () => {
             Add
           </Button>
         </Modal.Footer>
-      </Modal>
+            </Modal>
+            )}
 
-      <Row>
-        <Col>
-          <div>
-            <Button
-              variant="primary"
-              onClick={() => {
-                if (selectedProductType) {
-                  setShowPopup(true);
-                }
-              }}
-            >
-              Add Product
-            </Button>
-          </div>
-        </Col>
-      </Row>
+     
+<Row>
+  <Col>
+    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+      <Button
+        onClick={() => {
+          if (selectedProductType) {
+            setShowPopup(true);
+          }
+        }}
+        size="lg"
+        style={{ backgroundColor: 'black', fontSize: '20px',fontWeight: 'bold', padding: '15px 30px' }} // Adjust the values as needed
+      >
+        Add Product
+      </Button>
+    </div>
+  </Col>
+</Row>
+
     </Form>
+    </div>
   );
 };
 
