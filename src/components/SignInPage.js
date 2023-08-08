@@ -24,7 +24,7 @@ const SignInPage = () => {
                 <FormControl placeholder='Password' type='password'
                    onChange={event => setPassword(event.target.value)} />
             </InputGroup>
-            <Button type='submit' variant='primary' style={{ margin: 'auto', display: 'block', width: '10rem' }}>Sign In</Button>
+            <Button type='submit' variant='dark' style={{ margin: 'auto', display: 'block', width: '10rem' }}  className='btn'>Sign In</Button>
         </Form>
     </div>
 };

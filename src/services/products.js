@@ -25,6 +25,7 @@ export const GetProducts = async (dispatch, type, sex, subcategory, searchTerm, 
         console.log(conditionFilter);
         const { data } = await axiosInstance.get(`?type=${type}&sex=${sex}&subcategory=${subcategory}&searchTerm=${searchTerm}&colorFilter=${colorFilter}&sizeFilter=${sizeFilter}&conditionFilter=${conditionFilter}&sortByPrice=${sortByPrice}&sortByUserRating=${sortByUserRating}&shoeNumberRange=${shoeNumberRange}`);
         dispatch(setProducts(data));
+        return data;
     } catch {
         console.log("ERROR")
         dispatch(setProductsError());

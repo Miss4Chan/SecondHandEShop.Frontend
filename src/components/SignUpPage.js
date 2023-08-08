@@ -55,7 +55,7 @@ const SignUpPage = () => {
                 <FormControl placeholder='Confirm Password' type='password'
                     onChange={event => setConfirmPassword(event.target.value)} />
             </InputGroup>
-            <Button type='submit' variant='success'
+            <Button type='submit' variant='dark'
                 style={{ margin: 'auto', display: 'block', width: '10rem' }}
                 disabled={password !== confirmPassword || password.length <= 0}>Sign Up</Button>
         </Form>

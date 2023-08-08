@@ -6,13 +6,14 @@ import { CompactPicker } from 'react-color';
 import { setSelectedFilters } from '../app/productsSlice';
 import { useNavigate } from 'react-router-dom';
 import { Nav } from 'react-bootstrap';
+import ReactPaginate from 'react-paginate';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import { current } from '@reduxjs/toolkit';
 
 export default () => {
   const dispatch = useDispatch();
   const products = useSelector(state => state.productsSlice.products);
-  console.log(products)
   const [searchTerm, setSearchTerm] = useState('');
   const [sizeFilter, setSizeFilter] = useState('');
   const [conditionFilter, setConditionFilter] = useState('');
@@ -28,12 +29,16 @@ export default () => {
   const isClothesType = selectedType === 'Clothes';
   const isShoesType = selectedType === 'Shoes';
   const [shoeNumberRange, setShoeNumberRange] = useState('');
+  const [itemOffset, setItemOffset] = useState(0);
+  const itemsPerPage = 3; //change this later to 9
+  const [pageCount, setPageCount] = useState(0);
+  const [currentItems, setCurrentItems] = useState([]);
+
   const navigate = useNavigate();
 
 
  
   useEffect(() => {
-    GetProducts(dispatch, selectedType, selectedSex, selectedSubcategory, searchTerm, selectedColor, sizeFilter, conditionFilter, sortByPrice, sortByUserRating, shoeNumberRange);
 
     const fetchProductSizes = async () => {
       try {
@@ -53,7 +58,10 @@ export default () => {
 
     fetchProductSizes();
     fetchProductConditions();
+    fetchProducts();
+
   }, [dispatch, selectedType, selectedSex, selectedSubcategory, sortByPrice, sortByUserRating, searchTerm]);
+
 
   const handleColorChange = (selectedColor) => {
     setSelectedColor(selectedColor.hex);
@@ -81,6 +89,28 @@ export default () => {
     dispatch(setSelectedFilters({ type, sex, subcategory }));
     navigate('/');
   };
+
+  const handlePageClick = (event) => {
+    const newOffset = event.selected * itemsPerPage;
+    setItemOffset(newOffset);
+    setCurrentItems(products.slice(newOffset, newOffset + itemsPerPage));
+  };
+
+  const fetchProducts = async () => {
+    try {
+      const data = await GetProducts(dispatch, selectedType, selectedSex, selectedSubcategory, searchTerm, selectedColor, sizeFilter, conditionFilter, sortByPrice, sortByUserRating, shoeNumberRange);
+      console.log("dat in fetch products")
+      console.log(data)
+      setPageCount(Math.ceil(data.length / itemsPerPage));
+      console.log("setCurrentItems")
+      setCurrentItems(data.slice(itemOffset, itemOffset + itemsPerPage));
+      console.log(currentItems)
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+
+
 
   const styles = `
 
@@ -163,14 +193,66 @@ img {
   color: white !important;
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+}
+
+/* Styles for individual page item */
+.page-item {
+  margin: 0 5px;
+}
+
+/* Styles for page links */
+.page-link {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Styles for active page */
+.page-item.active .page-link {
+  background-color: white;
+  color: black;
+}
+
+/* Styles for disabled page */
+.page-item.disabled .page-link {
+  color: gray;
+  pointer-events: none;
+}
+
+/* Styles for previous and next links */
+.page-item.previous .page-link,
+.page-item.next .page-link {
+  background-color: black;
+  color: white;
+}
+
+/* Styles for previous and next icons */
+.page-item.previous .page-link::before,
+.page-item.next .page-link::before {
+  content: "\\2039"; /* Unicode for left-pointing arrow (‹) and right-pointing arrow (›) */
+  font-size: 14px;
+}
+
+.page-item.next .page-link::before {
+  content: "\\203A";
+}
 
 `;
 
   return (
     <div>
        <style>{styles}</style>
-      <div class="container d-flex justify-content-center mt-4"> {/* Added mt-4 for top margin */}
-  <nav aria-label="breadcrumb " class="first  d-md-flex">
+      <div class="container d-flex justify-content-center mt-4"> 
+   <nav aria-label="breadcrumb " class="first  d-md-flex">
     <ol class="breadcrumb indigo lighten-6 first-1 shadow-lg mb-5">
         <li class="breadcrumb-item">
         <Nav.Link href="#" 
@@ -374,7 +456,7 @@ img {
           </Row>
           <Row>
           <Col>
-            <Button onClick={() => GetProducts(dispatch, selectedType, selectedSex, selectedSubcategory, searchTerm, selectedColor, sizeFilter, conditionFilter, sortByPrice, sortByUserRating, shoeNumberRange)}>Apply Filters</Button>
+            <Button onClick={() => fetchProducts()}>Apply Filters</Button>
           </Col>
           </Row>
           <Row>
@@ -388,8 +470,8 @@ img {
 
 <Col md={9}>
 {/* Product Listing */}
-      <Row>
-        {products.map(p => (
+        <Row>
+        {currentItems.map(p => (
           <Col key={p.id} sm={4} style={{ marginBottom: '2rem' }}>
             <ListRow product={p} />
           </Col>
@@ -398,8 +480,30 @@ img {
 </Col>
 </Row>
     </div>
+    <Row>
+          <Col md={12}>
+            <ReactPaginate 
+              pageCount={pageCount}
+              pageRangeDisplayed={5}
+              marginPagesDisplayed={2}
+              onPageChange={handlePageClick}
+              containerClassName="pagination justify-content-center"
+              pageClassName="page-item"
+              pageLinkClassName="page-link"
+              activeClassName="active"
+              previousClassName="page-item"
+              nextClassName="page-item"
+              previousLinkClassName="page-link"
+              nextLinkClassName="page-link"
+              breakClassName="page-item disabled"
+              breakLinkClassName="page-link"
+              disabledClassName="disabled"
+            />
+          </Col>
+        </Row>
+    </div>   
     </div>
-    </div>
+
   );
 };
 
