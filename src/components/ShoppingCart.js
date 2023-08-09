@@ -4,6 +4,7 @@ import {  Button, Modal } from 'react-bootstrap';
 import { GetShoppingCart, DeleteFromShoppingCart, OrderNow } from '../services/shoppingCart';
 import { useNavigate } from 'react-router-dom';
 import { FaTrash,  FaArrowLeft } from 'react-icons/fa';
+import { GetMyProfile } from '../services/user';
 
 const ShoppingCart = () => {
   const dispatch = useDispatch();
@@ -11,45 +12,52 @@ const ShoppingCart = () => {
   const cartItems = useSelector(state => state.productsSlice.cart);
   const totalPrice = useSelector(state => state.productsSlice.totalPrice);
   const email = useSelector((state) => state.authenticationSlice.email);
+  const [selectedShippingOption, setSelectedShippingOption] = useState('REGULAR');
+  const myProfile = useSelector((state) => state.userSlice.myProfile)
+  const defaultAddress = useSelector((state) => state.userSlice.myProfile.address);
+  const defaultPhone = useSelector((state) => state.userSlice.myProfile.phone);
+  const [useDefaultAddress, setUseDefaultAddress] = useState(true);
+  const [newAddress, setNewAddress] = useState('');
+  const [useDefaultPhone, setUseDefaultPhone] = useState(true);
+  const [newPhone, setNewPhone] = useState('');
+  const [step, setStep] = useState(1);
+
 
   useEffect(() => {
     GetShoppingCart(dispatch, email);
+    GetMyProfile(dispatch);
   }, [dispatch, email]);
 
-  const [showModal, setShowModal] = useState(false);
-
-  const handleOrderNow = () => {
-    setShowModal(true);
-  };
 
   const confirmOrder = () => {
-    OrderNow(dispatch, email);
-    setShowModal(false);
+    OrderNow(dispatch, email, selectedShippingOption, useDefaultAddress ? defaultAddress : newAddress, useDefaultPhone ? defaultPhone : newPhone );
     navigate('/myOrders');
   };
 
-  const cancelOrder = () => {
-    setShowModal(false);
+  const handleNextStep = () => {
+    setStep(step + 1);
   };
 
-  const [step, setStep] = useState(1); // Tracks the current step of the process
-
-  const handleOrderClick = () => {
-    setStep(2); // Move to step 2: Enter Address
+  const handlePreviousStep = () => {
+    setStep(step - 1);
   };
 
-  const handleAddressSubmit = () => {
-    setStep(3); // Move to step 3: Preview Order
+
+  const getStepCircleClassName = (circleIndex) => {
+    console.log(circleIndex)
+    console.log(step)
+    if (circleIndex + 1 === step) {
+      console.log("active circle")
+      return 'step-circle active';
+    } else if (circleIndex + 1 < step) {
+      console.log("completed")
+      return 'step-circle completed';
+    } else {
+      console.log("step circle")
+      return 'step-circle';
+    }
   };
 
-  const handlePreviewSubmit = () => {
-    setStep(4); // Move to step 4: Confirm Order
-  };
-
-  const handleConfirmOrder = () => {
-    // Implement the logic to place the order
-    setStep(5); // Move to step 5: Order Placed
-  };
 
   const styles = `
   body{
@@ -181,72 +189,391 @@ a:hover{
     background-repeat: no-repeat;
     background-position-x: 95%;
     background-position-y: center;
-}`;
+}
+
+/* Step 2 and Step 3 */
+.preview-order-step,
+.address-phone-step,
+.confirm-order {
+  /* ... (other styles) */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 100px auto;
+  padding: 20px;
+  width: 80%; /* Adjust the width as needed */
+  max-width: 800px; /* Optional: Use max-width for larger screens */
+  text-align: center; /* Center the content */
+  background-color: #f8f9fa; /* Add background color */
+  border-radius: 10px; /* Add border radius */
+  box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19); /* Add box shadow */
+}
+
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.default-option {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-label {
+  margin-right: 10px;
+}
+
+.custom-address,
+.custom-phone {
+  margin-top: 20px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 5px 15px; /* Adjust padding to make buttons narrower */
+  border-radius: 30px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.btn.previous {
+  background-color: #ccc;
+  border-color: #ccc;
+  color: #000;
+}
+
+.btn.previous:hover {
+  background-color: #eee;
+  border-color: #eee;
+}
+
+.btn.next {
+  background-color: #000;
+  border-color: #000;
+  color: white;
+}
+
+.btn.next:hover {
+  background-color: #333;
+  border-color: #333;
+}
+
+/* Step 3 specific styles */
+.order-items {
+  width: 100%;
+  margin: 20px 0;
+}
+
+.order-items,
+.delivery-info,
+.total-info,
+.user-info {
+  width: 100%;
+  margin: 10px 0;
+  padding: 20px; /* Add padding to content */
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.btn.previous {
+  background-color: #ccc;
+  border-color: #ccc;
+  color: #000;
+}
+
+.btn.previous:hover {
+  background-color: #eee;
+  border-color: #eee;
+}
+
+.btn.next {
+  background-color: #000;
+  border-color: #000;
+  color: white;
+}
+
+.btn.next:hover {
+  background-color: #333;
+  border-color: #333;
+}
+
+.narrow-button {
+  width: 150px;
+  margin-right: 50px;
+  margin-left: 50px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Center the content vertically */
+  width: 100%;
+  margin-top: 20px;
+}
+
+.steps-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Center the circles vertically */
+  margin-top: 20px;
+}
+
+.step-circle {
+  width: 50px;
+  height: 50px;
+  margin: 10px 0;
+  background-color: white;
+  color: black;
+  border-radius: 50%;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.step-circle.active {
+  background-color: #C2A4C8;
+}
+
+.step-circle.completed {
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+}
+`;
 
   return (
-    <div class="card">
-      <style>{styles}</style>
-            <div class="row">
-                <div class="col-md-8 cart">
-                    <div class="title">
-                        <div class="row">
-                            <div class="col"><h4><b>Shopping Cart</b></h4></div>
-                            <div class="col align-self-center text-right text-muted">{cartItems.length} items</div>
-                        </div>
-                    </div>    
+<div className="d-flex">
+{cartItems.length !==0 && (
+<div className="flex-shrink-0 p-3 bg-light" style={{ width: '150px', position: 'relative' }}>
+    <h5 className="title text-center"><b>Steps</b></h5>
+    <div className="steps-container">
+      {Array.from({ length: 4 }, (_, index) => (
+        <div
+          key={index}
+          className={getStepCircleClassName(index)}
+          onClick={() => setStep(index + 1)}
+        >
+          {index + 1}
+        </div>
+      ))}
+    </div>
+  </div>
+)}
 
-                    {cartItems.length === 0 ? (
-        <h5><b>Your shopping cart is empty</b></h5>
-      ) : (
-        <>
-          {cartItems.map((product) => (
-                     <div class="row border-top border-bottom">
-                        <div class="row main align-items-center">
-                            <div class="col-2"><img src={product.productImage}/></div>
-                            <div class="col">
-                                <div class="row text-muted">{product.productName}</div>
-                            </div>
-                            <div class="col">{product.productPrice} MKD</div>
-                    <div class="col" onClick={() => DeleteFromShoppingCart(dispatch, email, product)} style={{ cursor: 'pointer'}}>
-                      <FaTrash className="trash-icon" />
-                    </div>
-                    <div class="col">
-                   <Button style={{margin:'0'}}>View product</Button>
-                    </div>
-                        </div>
-                    </div>           
-          ))}
-          
-        </>
-        
-      )}
-
-          <div className="btn back-to-shop col-3">
-            <FaArrowLeft /> Back To Shopping
-          </div>
-
-          
-          
+    <div className="flex-grow-1 p-3">
+    <style>{styles}</style>
+    
+    {step === 1 && (
+      <>
+        <div className="card">
+          <div className="row">
+            <div className="col-md-8 cart">
+              <div className="title">
+                <div className="row">
+                  <div className="col"><h4><b>Shopping Cart</b></h4></div>
+                  <div className="col align-self-center text-right text-muted">{cartItems.length} items</div>
                 </div>
-          {cartItems.length !== 0 && (
-            <>
-             <div className="col-md-4 summary">
-              <div><h5><b>Summary</b></h5></div><hr /><div className="row">
+              </div>
+  
+              {cartItems.length === 0 ? (
+                <h5><b>Your shopping cart is empty</b></h5>
+              ) : (
+                <>
+                  {cartItems.map((product) => (
+                    <div className="row border-top border-bottom" key={product.productId}>
+                      <div className="row main align-items-center">
+                        <div className="col-2"><img src={product.productImage} alt={product.productName} /></div>
+                        <div className="col">
+                          <div className="row text-muted">{product.productName}</div>
+                        </div>
+                        <div className="col">{product.productPrice} MKD</div>
+                        <div className="col" onClick={() => DeleteFromShoppingCart(dispatch, email, product)} style={{ cursor: 'pointer' }}>
+                          <FaTrash className="trash-icon" />
+                        </div>
+                        <div className="col">
+                          <Button style={{ margin: '0' }}>View product</Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}    
+                </>
+              )}
+  
+              <div className="btn back-to-shop col-3">
+                <FaArrowLeft /> Back To Shopping
+              </div>
+            </div>
+  
+        {cartItems.length !== 0 && (
+          <div className="col-md-4 summary">
+            <div><h5><b>Summary</b></h5></div>
+            <hr />
+            <div className="row">
               <div className="col" style={{ paddingLeft: '0' }}>ITEMS {cartItems.length}</div>
               <div className="col text-right">{totalPrice} MKD</div>
-            </div><form>
-                <p>SHIPPING</p>
-                <select><option className="text-muted">Standard-Delivery- &euro;5.00</option></select>
-                <p>COUPON CODE</p>
-                <input id="code" placeholder="Enter your code" />
-              </form><div className="row" style={{ borderTop: '1px solid rgba(0,0,0,.1)', padding: '2vh 0' }}>
-                <div className="col">TOTAL PRICE</div>
-                <div className="col text-right">{totalPrice} MKD</div>
-              </div><button className="btn">ORDER</button></div> </>
-          )}
             </div>
+            <form>
+              <p>SHIPPING</p>
+              <select value={selectedShippingOption} onChange={(e) => setSelectedShippingOption(e.target.value)}>
+                <option value="REGULAR">Regular-Delivery - 150 MKD</option>
+                <option value="FAST">Fast-Delivery - 250 MKD</option>
+              </select>
+              <p>COUPON CODE</p>
+              <input id="code" placeholder="Enter your code" />
+            </form>
+            <div className="row" style={{ borderTop: '1px solid rgba(0,0,0,.1)', padding: '2vh 0' }}>
+              <div className="col">TOTAL PRICE</div>
+              <div className="col text-right">{totalPrice} MKD</div>
             </div>
+            <button className="btn" onClick={() => setStep(2)}>Next</button>
+          </div>
+        )}
+        </div>
+        </div>
+      </>
+    )}
+
+
+{step === 2 && (
+ <div className="address-phone-step">
+ <h5 className="title"><b>Address and Phone for the Order</b></h5>
+ <div className="content">
+   <div className="default-option">
+     <label className="checkbox-label">
+       Use Default Address: {defaultAddress}
+       <input
+         type="checkbox"
+         checked={useDefaultAddress}
+         onChange={() => setUseDefaultAddress(!useDefaultAddress)}
+       />
+     </label>
+   </div>
+   {!useDefaultAddress && (
+     <div className="custom-address">
+       <label className="input-label">New Address:</label>
+       <input
+         type="text"
+         placeholder="Enter additional address for this order"
+         value={newAddress}
+         onChange={(e) => setNewAddress(e.target.value)}
+       />
+     </div>
+   )}
+   <div className="default-option">
+     <label className="checkbox-label">
+       Use Default Phone: {defaultPhone}
+       <input
+         type="checkbox"
+         checked={useDefaultPhone}
+         onChange={() => setUseDefaultPhone(!useDefaultPhone)}
+       />
+     </label>
+   </div>
+  {!useDefaultPhone && (
+     <div className="custom-phone">
+       <label className="input-label">New Phone:</label>
+       <input
+         type="text"
+         placeholder="Enter additional phone for this order"
+         value={newAddress}
+         onChange={(e) => setNewPhone(e.target.value)}
+       />
+     </div>
+   )}
+   {/* Similar structure for phone */}
+ </div>
+ <div className="button-container">
+   <button className="btn previous narrow-button" onClick={() => handlePreviousStep()}>Previous</button>
+   <button className="btn next narrow-button" onClick={() => handleNextStep()}>Next</button>
+ </div>
+</div>
+
+)}
+
+
+
+{/* Step 3: Preview Order */}
+{step === 3 && (
+  <div className="preview-order-step">
+    <h5 className="title"><b>Preview Order</b></h5>
+    <div className="order-items">
+      {cartItems.map((product, index) => (
+        <div key={index} className="row border-top border-bottom">
+          <div className="row main align-items-center">
+            <div className="col-2"><img src={product.productImage} alt={product.productName} /></div>
+            <div className="col">
+              <div className="row text-muted">{product.productName}</div>
+            </div>
+            <div className="col">{product.productPrice} MKD</div>
+          </div>
+        </div>
+      ))}
+    </div>
+    <div className="delivery-info">
+      <div className="row border-top border-bottom">
+        Delivery : {selectedShippingOption === 'REGULAR' ? 'Regular Delivery' : 'Fast Delivery'} - {selectedShippingOption === 'REGULAR' ? '150' : '250'} MKD
+      </div>
+    </div>
+    <div className="total-info">
+      <div className="row border-top border-bottom">
+        Total Price: {totalPrice + (selectedShippingOption === 'REGULAR' ? 150 : 250)} MKD
+      </div>
+    </div>
+    <div className="user-info">
+      <div className="row border-top border-bottom text-left">
+        <p>User name: {myProfile.name}</p>
+        <p>Delivery address: {useDefaultAddress ? defaultAddress : newAddress}</p>  
+        <p>Phone number: {useDefaultPhone ? defaultPhone : newPhone}</p>
+      </div>
+    </div>
+    <div className="button-container">
+      <button className="btn previous narrow-button" onClick={() => handlePreviousStep()}>Previous</button>
+      <button className="btn next narrow-button" onClick={() => setStep(4)}>Order</button>
+    </div>
+  </div>
+)}
+
+{step === 4 && (
+  <div class='confirm-order'>
+     <h5 className="title"><b>Confirm Order</b></h5>
+     <b>  Are you sure you want to place the order?</b>
+  <div className="button-container">
+  <button className="btn previous narrow-button" onClick={() => setStep(1)}>Cancel</button>
+  <button className="btn next narrow-button" onClick={() => confirmOrder()}>Confirm</button>
+  </div>
+  </div>
+)}
+
+   </div>
+   </div>
   );
 }
+
 
 export default ShoppingCart;
