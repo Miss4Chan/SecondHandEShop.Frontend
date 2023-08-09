@@ -1,5 +1,5 @@
 import React, {useState } from 'react';
-import { Form, Button, InputGroup, FormControl } from 'react-bootstrap';
+import { Form, Button, InputGroup, FormControl, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { SignUp } from '../services/authentication';
 import { useDispatch } from 'react-redux';
 
@@ -35,10 +35,16 @@ const SignUpPage = () => {
                 <FormControl placeholder='Surname'
                     onChange={event => setSurname(event.target.value)} />
             </InputGroup>
+            <OverlayTrigger
+                    placement="right"
+                    overlay={<Tooltip id="color-tooltip">Example for the phone input: (389) 70 123 456</Tooltip>}
+                >
             <InputGroup className='mb-3'>
                 <FormControl placeholder='Phone'
                     onChange={event => setPhone(event.target.value)} />
             </InputGroup>
+                </OverlayTrigger>
+
             <InputGroup className='mb-3'>
                 <FormControl placeholder='Address'
                     onChange={event => setAddress(event.target.value)} />

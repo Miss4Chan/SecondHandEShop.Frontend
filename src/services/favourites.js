@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setFavourites, deleteFromFavourites } from '../app/productsSlice';
+import { setFavourites, deleteFromFavourites, deleteFromFavouritesError } from '../app/productsSlice';
 
 const axiosInstance = axios.create({
     baseURL: `${process.env.REACT_APP_BASE_URL}/Favourites`,
@@ -14,8 +14,6 @@ export const GetFavourites = async (dispatch, email) => {
     try {
         //api call
         const {data} = await axiosInstance.get('',{ params: { email } });
-        console.log("service")
-        console.log(data)
         dispatch(setFavourites(data));
 
     } catch {
@@ -28,6 +26,6 @@ export const DeleteFromFavourites = async (dispatch, email, product) => {
         await axiosInstance.delete(`?email=${email}&product=${product.id}`)
         dispatch(deleteFromFavourites(product));
     } catch {
-        console.log("Error!")
+        dispatch(deleteFromFavouritesError())
     }
 }

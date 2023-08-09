@@ -5,6 +5,7 @@ import { GetShoppingCart, DeleteFromShoppingCart, OrderNow } from '../services/s
 import { useNavigate } from 'react-router-dom';
 import { FaTrash,  FaArrowLeft } from 'react-icons/fa';
 import { GetMyProfile } from '../services/user';
+import { NavLink } from 'react-router-dom';
 
 const ShoppingCart = () => {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ const ShoppingCart = () => {
   const [useDefaultPhone, setUseDefaultPhone] = useState(true);
   const [newPhone, setNewPhone] = useState('');
   const [step, setStep] = useState(1);
-
+  const [itemToDelete, setItemToDelete] = useState(null);
 
   useEffect(() => {
     GetShoppingCart(dispatch, email);
@@ -42,18 +43,21 @@ const ShoppingCart = () => {
     setStep(step - 1);
   };
 
+  const handleDeleteConfirmation = (product) => {
+    setItemToDelete(product);
+  };
+
+  const handleDelete = (product) => {
+    DeleteFromShoppingCart(dispatch, email, product);
+    setItemToDelete(null);
+  };
 
   const getStepCircleClassName = (circleIndex) => {
-    console.log(circleIndex)
-    console.log(step)
     if (circleIndex + 1 === step) {
-      console.log("active circle")
       return 'step-circle active';
     } else if (circleIndex + 1 < step) {
-      console.log("completed")
       return 'step-circle completed';
     } else {
-      console.log("step circle")
       return 'step-circle';
     }
   };
@@ -161,7 +165,6 @@ input:focus::-webkit-input-placeholder
     color: white;
     width: 100%;
     font-size: 0.7rem;
-    margin-top: 4vh;
     padding: 1vh;
     border-radius: 0;
 }
@@ -236,12 +239,6 @@ a:hover{
   margin-top: 20px;
 }
 
-.button-container {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 20px;
-}
 
 .btn {
   padding: 5px 15px; /* Adjust padding to make buttons narrower */
@@ -413,9 +410,13 @@ a:hover{
                           <div className="row text-muted">{product.productName}</div>
                         </div>
                         <div className="col">{product.productPrice} MKD</div>
-                        <div className="col" onClick={() => DeleteFromShoppingCart(dispatch, email, product)} style={{ cursor: 'pointer' }}>
-                          <FaTrash className="trash-icon" />
-                        </div>
+                        <div
+                      className="col"
+                      onClick={() => handleDeleteConfirmation(product)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <FaTrash className="trash-icon" />
+                    </div>
                         <div className="col">
                           <Button style={{ margin: '0' }}>View product</Button>
                         </div>
@@ -425,9 +426,9 @@ a:hover{
                 </>
               )}
   
-              <div className="btn back-to-shop col-3">
-                <FaArrowLeft /> Back To Shopping
-              </div>
+        <div className='btn back-to-shop col-4'>
+          <NavLink variant='link' to="/" style={{color: 'white', textDecoration: 'none', display: 'block'}}><FaArrowLeft/> Back to shopping</NavLink>
+          </div>
             </div>
   
         {cartItems.length !== 0 && (
@@ -571,6 +572,23 @@ a:hover{
 )}
 
    </div>
+         {/* Delete Confirmation Modal */}
+         <Modal show={!!itemToDelete} onHide={() => setItemToDelete(null)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete <b>{itemToDelete?.productName}</b> from shopping cart?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setItemToDelete(null)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={() => handleDelete(itemToDelete)}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
    </div>
   );
 }

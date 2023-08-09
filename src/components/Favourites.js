@@ -1,20 +1,29 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Col, Row, Button } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { GetFavourites, DeleteFromFavourites } from '../services/favourites';
 import { AddToCart } from '../services/products';
 import { FaTrash,  FaArrowLeft } from 'react-icons/fa';
+import { NavLink } from 'react-router-dom';
 
 const Favourites = () => {
   const dispatch = useDispatch();
   const favourites = useSelector(state => state.productsSlice.favourites);
   const email = useSelector((state) => state.authenticationSlice.email);
-
-  console.log(favourites)
+  const [itemToDelete, setItemToDelete] = useState(null);
 
   useEffect(()=>{
       GetFavourites(dispatch, email);
   }, [dispatch, email]);
+
+  const handleDeleteConfirmation = (product) => {
+    setItemToDelete(product);
+  };
+
+  const handleDelete = (product) => {
+    DeleteFromFavourites(dispatch, email, product);
+    setItemToDelete(null);
+  };
 
   const styles = `
   body{
@@ -96,6 +105,14 @@ input:focus::-webkit-input-placeholder
 .btn:hover{
     color: white;
 }
+
+.btn {
+    padding: 5px 15px; /* Adjust padding to make buttons narrower */
+    border-radius: 30px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
 `;
 
   return (
@@ -122,7 +139,11 @@ input:focus::-webkit-input-placeholder
                                 <div class="row text-muted">{product.productName}</div>
                             </div>
                             <div class="col">{product.productPrice} MKD</div>
-                    <div class="col" onClick={() => DeleteFromFavourites(dispatch, email, product)} style={{ cursor: 'pointer'}}>
+                    <div
+                      className="col"
+                      onClick={() => handleDeleteConfirmation(product)}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <FaTrash className="trash-icon" />
                     </div>
                     <div class="col" onClick={() => AddToCart(dispatch, product, email)} style={{ cursor: 'pointer'}}>
@@ -139,14 +160,30 @@ input:focus::-webkit-input-placeholder
         
       )}
 
-          <div className="btn back-to-shop col-3">
-            <FaArrowLeft /> Back To Shopping
+        <div className='btn back-to-shop col-2'>
+          <NavLink variant='link' to="/" style={{color: 'white', textDecoration: 'none', display: 'block'}}><FaArrowLeft/> Back to shopping</NavLink>
           </div>
 
-          
-          
             </div>
             </div>
+
+             {/* Delete Confirmation Modal */}
+      <Modal show={!!itemToDelete} onHide={() => setItemToDelete(null)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete <b>{itemToDelete?.productName}</b> from favorites?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setItemToDelete(null)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={() => handleDelete(itemToDelete)}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
             </div>
   );
 }

@@ -85,9 +85,12 @@ const SidebarMenu = () => {
   }, [location]);
 
   const styles = `
+
   .sidebar-menu {
     position: relative;
     font-family: Arial, sans-serif;
+    font-size: 0.8rem;
+    font-weight: bold;
   }
 
   .sidebar-toggle {

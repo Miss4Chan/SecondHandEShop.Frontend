@@ -1,5 +1,5 @@
 import { logout, userAuthenticated, userAuthenticatedError} from '../app/authenticationSlice';
-import { newProduct, editProduct, clearCart, setProductsError, deleteProduct, setProductTypesError,newProductError, deleteProductError, editProductError, addToCart, deleteFromShoppingCart, deleteFromShoppingCartError, addToCartError,  setShoppingCartError, setProductTypes, addToFavourites, addToFavouritesError, deleteFromFavourites, deleteFromFavouritesError} from '../app/productsSlice';
+import { newProduct, editProduct, clearCart, setProductsError, deleteProduct, newProductError, deleteProductError, editProductError, addToCart, deleteFromShoppingCart, deleteFromShoppingCartError, addToCartError,  setShoppingCartError, addToFavourites, addToFavouritesError, deleteFromFavourites, deleteFromFavouritesError} from '../app/productsSlice';
 import { toast } from 'react-toastify';
 
 // function in function
@@ -37,13 +37,13 @@ const ToastMiddleware = () => next => action => {
             toast.error('Error loading cart');
             break;
         case deleteFromShoppingCartError.type:
-            toast.error('Error deleting from shopping cart');
+            toast.error('Error deleting product from shopping cart');
             break;
         case addToCartError.type:
-            toast.error('Error adding to cart')
+            toast.error('Error adding product to cart')
             break;
         case userAuthenticated.type:
-            toast.success("User successfully authenticated");
+            toast.success("User authenticated successfully");
             break;
         case logout.type:
             toast.success("Logged out");
@@ -51,23 +51,17 @@ const ToastMiddleware = () => next => action => {
         case userAuthenticatedError.type:
             toast.error("User authentication failed");
             break;     
-        case setProductTypesError.type:
-            toast.error("Set product types error");
-            break;  
-        case setProductTypes.type:
-            toast.success("Set product types successfully");
-            break;
         case addToFavourites.type:
-            toast.success("Added to favourites successfully");
+            toast.success("Product added to favourites successfully");
             break;
         case addToFavouritesError.type:
-            toast.error("Added to favourites error");
+            toast.error("Product adding to favourites failed");
             break;
        case deleteFromFavourites.type:
-            toast.success("Deleted from favourites successfully");
+            toast.success("Product deleted from favourites successfully");
             break;
         case deleteFromFavouritesError.type:
-            toast.error("Deleted from favourites error");
+            toast.error("Product deleted from favourites error");
             break;             
         case clearCart.type:
             toast.success("Ordered successfully");

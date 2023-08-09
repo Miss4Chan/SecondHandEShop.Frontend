@@ -54,7 +54,7 @@ const Navbar = () => {
                   My profile
                 </NavLink>
                 <Button variant='link' href='/signin' onClick={() => { dispatch(logout()) }} style={{ color: 'black', fontSize: '18px', textDecoration: 'none', fontWeight: 'bold', backgroundColor: '#C2A4C8',
-                borderColor: '#C2A4C8', margintop: '0vh', padding: '0vh'}}>
+                borderColor: '#C2A4C8', margintop: '0', padding: '0px'}}>
                   Log out
                 </Button>
               </div>

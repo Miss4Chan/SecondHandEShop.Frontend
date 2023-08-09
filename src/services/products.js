@@ -1,7 +1,7 @@
 import { setProducts,setProductSubcategories, deleteProduct, 
     editProduct,setProductSizes, newProduct, newProductError, 
     setProductsError, editProductError,setMyProducts,
-    deleteProductError, addToCart, addToCartError, setProductTypes, addToFavourites ,setProductConditions, setProductSex } from '../app/productsSlice';
+    deleteProductError, addToCart, addToCartError, setProductTypes, addToFavourites ,setProductConditions, setProductSex, addToFavouritesError } from '../app/productsSlice';
 import axios from 'axios';
 
 const axiosInstance = axios.create({
@@ -20,14 +20,10 @@ export const GetProducts = async (dispatch, type, sex, subcategory, searchTerm, 
         if (colorFilter.startsWith("#")) {
             colorFilter = encodeURIComponent(colorFilter);
         }
-        console.log(sortByUserRating);
-        console.log(sortByPrice);
-        console.log(conditionFilter);
         const { data } = await axiosInstance.get(`?type=${type}&sex=${sex}&subcategory=${subcategory}&searchTerm=${searchTerm}&colorFilter=${colorFilter}&sizeFilter=${sizeFilter}&conditionFilter=${conditionFilter}&sortByPrice=${sortByPrice}&sortByUserRating=${sortByUserRating}&shoeNumberRange=${shoeNumberRange}`);
         dispatch(setProducts(data));
         return data;
     } catch {
-        console.log("ERROR")
         dispatch(setProductsError());
     }
 }
@@ -104,8 +100,6 @@ export const NewProduct = async (dispatch, product) => {
 export const EditProduct = async (dispatch, product) => {
     try {
         // api call
-        console.log("service")
-        console.log(product)
         await axiosInstance.put('',product);
         dispatch(editProduct(product));
     } catch {
@@ -139,7 +133,7 @@ export const AddToFavourites = async (dispatch, product, email) => {
         await axiosInstance.post('/AddToFavourites', {product, email});
         dispatch(addToFavourites(product));
     } catch {
-        console.log("error adding to faves");
+        dispatch(addToFavouritesError())
     }
 }
 

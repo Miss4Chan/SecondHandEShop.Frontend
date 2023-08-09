@@ -35,7 +35,7 @@ const App = () => {
     <Router>
       <Navbar />
       <ToastContainer />
-      <div>
+      <div className="appContent">
         <Routes>
           <Route path="/" element={isLoggedIn ? <ProductList /> : <SignInPage />} />
           <Route path="/signup" element={!isLoggedIn ? <SignUpPage /> : <Navigate to="/" />} />
@@ -51,8 +51,8 @@ const App = () => {
           <Route path= "/home" element={<HomePage/>}/>
           <Route path="/aboutus" element={<AboutUs/>}/>
         </Routes>
+        </div>
         <Footer />
-      </div>
     </Router>
   );
 };

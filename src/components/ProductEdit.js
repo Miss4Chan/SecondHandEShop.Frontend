@@ -16,11 +16,7 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedProduct({ ...editedProduct, [name]: value });
-    console.log(editedProduct)
   };
-
-  console.log("edited product")
-  console.log(editedProduct)
 
   useEffect(() => {
     const fetchProductConditions = async () => {
@@ -88,6 +84,19 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
               />
             </Col>
           </Row>
+
+          <Row>
+            <Col>
+              <FormLabel>Product Description</FormLabel>
+              <FormControl
+                type="text"
+                name="productDescription"
+                value={editedProduct.productDescription}
+                onChange={handleInputChange}
+              />
+            </Col>
+          </Row>
+
           <Row>
             <Col>
               <FormLabel>Product Image</FormLabel>

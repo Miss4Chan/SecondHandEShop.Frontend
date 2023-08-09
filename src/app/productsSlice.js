@@ -9,8 +9,6 @@ export const addToFavouritesError = createAction('addToFavouritesError');
 export const setShoppingCartError = createAction('setShoppingCartError');
 export const deleteFromShoppingCartError = createAction('deleteFromShoppingCartError');
 export const deleteFromFavouritesError = createAction('deleteFromFavouritesCartError');
-export const setProductTypesError = createAction('setProductTypesError');
-export const setProductSizesError = createAction('setProductSizesError');
 
 export const productsSlice = createSlice({
     name: 'products',
@@ -98,7 +96,6 @@ export const productsSlice = createSlice({
             state.totalPrice = 0;
         },
         setSelectedFilters: (state, action) => {
-            console.log(action.payload);
             return {
               ...state,
               selectedType: action.payload.type,

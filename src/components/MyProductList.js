@@ -26,7 +26,7 @@ const ListRow = ({ product }) =>
     const dispatch = useDispatch();
 
     const handleSave = (editedProduct) => {
-        EditProduct(dispatch, { id: editedProduct.id, productColor: editedProduct.productColor, productSizeNumber: editedProduct.productSizeNumber, productName: editedProduct.productName, productPrice: editedProduct.productPrice, productType: editedProduct.productType, productSubcategory: editedProduct.productSubcategory, productSize: editedProduct.productSize, productDescription: editedProduct.productDescription, productMeasurements: editedProduct.productMeasurements, productImage: editedProduct.productImage, productMaterial: editedProduct.productMaterial, productBrand: editedProduct.productBrand, productCondition: editedProduct.productCondition, productSex: editedProduct.productSex  });
+        EditProduct(dispatch, { id: editedProduct.id, productColor: editedProduct.productColor, productSizeNumber: editedProduct.productSizeNumber, productName: editedProduct.productName, productPrice: editedProduct.productPrice, productType: editedProduct.productType, productSubcategory: editedProduct.productSubcategory, productSize: editedProduct.productSize, productDescription: editedProduct.productDescription, productMeasurements: editedProduct.productMeasurements, productImage: editedProduct.productImage, productMaterial: editedProduct.productMaterial, productBrand: editedProduct.productBrand, productCondition: editedProduct.productCondition, productSex: editedProduct.productSex, productDescription: editedProduct.productDescription  });
         setIsEditing(false);
       };
     return (

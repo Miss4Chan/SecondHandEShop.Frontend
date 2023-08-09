@@ -10,6 +10,7 @@ import {faShirt,faSocks,faGem,} from '@fortawesome/free-solid-svg-icons';
 const ProductAdd = () => {
   const [name, setName] = useState('');
   const [image,setImage] = useState('');
+  const [description, setDescription] = useState('');
   const [color, setColor] = useState('#ffffff');
   const [sizeNumber, setSizeNumber] = useState(0);
   const [selectedProductType, setSelectedProductType] = useState('');
@@ -93,7 +94,8 @@ const ProductAdd = () => {
       productMaterial: material,
       productCondition: selectedCondition,
       productSex : selectedSex,
-      productImage : image
+      productImage : image,
+      productDescription: description
     });
 
     setShowPopup(false);
@@ -108,6 +110,7 @@ const ProductAdd = () => {
     setBrand('');
     setMaterial('');
     setSelectedCondition('');
+    setDescription('');
   };
 
   const handleCancelClick = () => {
@@ -194,6 +197,18 @@ const ProductAdd = () => {
                 placeholder="Enter name"
                 value={name}
                 onChange={(event) => setName(event.target.value)}
+              />
+            </Col>
+          </Row>
+
+          <Row>
+            <Col>
+              <FormLabel>Description</FormLabel>
+              <FormControl
+                type="text"
+                placeholder="Enter description"
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
               />
             </Col>
           </Row>
