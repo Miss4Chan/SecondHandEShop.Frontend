@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Modal, Form, Row, Col, FormControl, FormLabel } from 'react-bootstrap';
+import { Button, Modal, Form, Row, Col, FormControl, FormLabel, OverlayTrigger, Tooltip  } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { GetProductSubcategories, GetProductSizes, GetProductConditions, GetProductSex } from '../services/products';
 import { CompactPicker } from 'react-color';
@@ -66,14 +66,46 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
     setShowColorPicker(false);
   };
 
+  const styles = `
+
+.input-field {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.input-field label {
+  flex: 1;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.input-field input,
+.input-field select {
+  flex: 2;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+`;
+
   return (
     <Modal show={true} onHide={onCancel}>
+      <style>{styles}</style>
       <Modal.Header closeButton>
         <Modal.Title>Edit Product</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Row>
+        <Row className="input-field">
+            <Col>
+              <FormLabel>Product Type</FormLabel>
+              <Form.Control type="text" name="productType" value={editedProduct.productType} disabled />
+            </Col>
+          </Row>
+
+          <Row className="input-field">
             <Col>
               <FormLabel>Product Name</FormLabel>
               <FormControl
@@ -85,7 +117,7 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
             </Col>
           </Row>
 
-          <Row>
+          <Row className="input-field">
             <Col>
               <FormLabel>Product Description</FormLabel>
               <FormControl
@@ -97,44 +129,7 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
             </Col>
           </Row>
 
-          <Row>
-            <Col>
-              <FormLabel>Product Image</FormLabel>
-              <FormControl
-                type="text"
-                name="productImage"
-                value={editedProduct.productImage}
-                onChange={handleInputChange}
-              />
-            </Col>
-          </Row>
-
-          <Row>
-            <Col>
-              <FormLabel>Product Type</FormLabel>
-              <Form.Control type="text" name="productType" value={editedProduct.productType} disabled />
-            </Col>
-          </Row>
-
-          <Row>
-                <Col>
-                  <FormLabel>Product Condition</FormLabel>
-                  <Form.Select
-                    name="productCondition"
-                    value={editedProduct.productCondition}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">Select Product Condition</option>
-                    {conditions.map((condition) => (
-                      <option key={condition} value={condition}>
-                        {condition}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </Col>
-              </Row>
-
-              <Row>
+          <Row className="input-field">
                 <Col>
                   <FormLabel>Product Sex</FormLabel>
                   <Form.Select
@@ -152,9 +147,46 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
                 </Col>
               </Row>
 
-          <Row>
+              <Row className="input-field">
+                <Col>
+                  <FormLabel>Product Condition</FormLabel>
+                  <Form.Select
+                    name="productCondition"
+                    value={editedProduct.productCondition}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select Product Condition</option>
+                    {conditions.map((condition) => (
+                      <option key={condition} value={condition}>
+                        {condition}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Col>
+              </Row>
+
+          <Row className="input-field">
             <Col>
-              <FormLabel>Color</FormLabel>
+              <FormLabel>Product Brand</FormLabel>
+              <FormControl
+                type="text"
+                name="productImage"
+                value={editedProduct.productBrand}
+                onChange={handleInputChange}
+              />
+            </Col>
+          </Row>
+
+          <Row className="input-field">
+            <Col>
+              <FormLabel>Color
+              <OverlayTrigger
+                 placement="right"
+                 overlay={<Tooltip id="color-tooltip">Choose the most dominant color of your product</Tooltip>}
+               >
+                 <span style={{ fontSize: '18px', cursor: 'pointer', marginLeft: '10px' }}>?</span>
+               </OverlayTrigger>
+              </FormLabel>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <div
                   style={{
@@ -163,9 +195,10 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
                     borderRadius: '50%',
                     backgroundColor: editedProduct.productColor,
                     marginRight: '10px',
+                    border: '1px solid black',
                   }}
                 />
-                <Button onClick={() => setShowColorPicker(true)}>Choose Color</Button>
+                <Button variant="dark" onClick={() => setShowColorPicker(true)}>Product Color</Button>
               </div>
               {showColorPicker && (
                 <div>
@@ -180,9 +213,23 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
             </Col>
           </Row>
 
+
+          <Row className="input-field">
+            <Col>
+              <FormLabel>Product Image</FormLabel>
+              <FormControl
+                type="text"
+                name="productImage"
+                value={editedProduct.productImage}
+                onChange={handleInputChange}
+              />
+            </Col>
+          </Row>
+
           {editedProduct.productType === 'Clothes' && (
             <>
-              <Row>
+              
+          <Row className="input-field">
                 <Col>
                   <FormLabel>Product Size</FormLabel>
                   <Form.Select
@@ -200,7 +247,8 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
                 </Col>
               </Row>
 
-              <Row>
+              
+          <Row className="input-field">
                 <Col>
                   <FormLabel>Product Subcategory</FormLabel>
                   <Form.Select
@@ -221,7 +269,8 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
           )}
 
           {editedProduct.productType === 'Shoes' && (
-            <Row>
+            
+          <Row className="input-field">
               <Col>
                 <FormLabel>Size number</FormLabel>
                 <FormControl
@@ -234,7 +283,39 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
             </Row>
           )}
 
-          <Row>
+          
+        <Row className="input-field">
+            <Col>
+              <FormLabel>Product Measurements
+              <OverlayTrigger
+                 placement="right"
+                 overlay={<Tooltip id="color-tooltip">Enter detailed measurements for the product in cm</Tooltip>}
+               >
+                 <span style={{ fontSize: '18px', cursor: 'pointer', marginLeft: '10px' }}>?</span>
+               </OverlayTrigger>
+              </FormLabel>
+              <FormControl
+                type="text"
+                name="productMeasurements"
+                value={editedProduct.productMeasurements}
+                onChange={handleInputChange}
+              />
+            </Col>
+          </Row>
+
+          <Row className="input-field">
+            <Col>
+              <FormLabel>Product Material</FormLabel>
+              <FormControl
+                type="text"
+                name="productMaterial"
+                value={editedProduct.productMaterial}
+                onChange={handleInputChange}
+              />
+            </Col>
+          </Row>
+       
+        <Row className="input-field">
         <Col>
           <FormLabel>Price (MKD)</FormLabel>
           <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -244,7 +325,6 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
               value={editedProduct.productPrice}
               onChange={handleInputChange}
             />
-            <span style={{ marginLeft: '5px' }}>MKD</span>
           </div>
         </Col>
       </Row>
@@ -255,7 +335,7 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
         <Button variant="secondary" onClick={onCancel}>
           Cancel
         </Button>
-        <Button variant="primary" onClick={() => onSave(editedProduct)}>
+        <Button variant="dark" onClick={() => onSave(editedProduct)}>
           Save
         </Button>
       </Modal.Footer>

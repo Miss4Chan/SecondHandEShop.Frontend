@@ -232,44 +232,6 @@ a:hover{
   margin-top: 20px;
 }
 
-.button-container {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 20px;
-}
-
-
-.btn {
-  padding: 5px 15px; /* Adjust padding to make buttons narrower */
-  border-radius: 30px;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.btn.previous {
-  background-color: #ccc;
-  border-color: #ccc;
-  color: #000;
-}
-
-.btn.previous:hover {
-  background-color: #eee;
-  border-color: #eee;
-}
-
-.btn.next {
-  background-color: #000;
-  border-color: #000;
-  color: white;
-}
-
-.btn.next:hover {
-  background-color: #333;
-  border-color: #333;
-}
-
 /* Step 3 specific styles */
 .order-items {
   width: 100%;
