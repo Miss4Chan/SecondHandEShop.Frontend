@@ -12,6 +12,8 @@ const SignUpPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [city, setCity] = useState('');
+    const [postalCode, setPostalCode] = useState('');
     const dispatch = useDispatch();
 
     return <div style={{ width: '30rem', margin: 'auto', paddingTop: '8px' }}>
@@ -19,20 +21,20 @@ const SignUpPage = () => {
             onSubmit={event => {
                 event.preventDefault();
                 if (password === confirmPassword) {
-                    SignUp(dispatch, { username, name, surname, phone, address, email, password });
+                    SignUp(dispatch, { username, name, surname, phone, address, email, password, city, postalCode});
                 }
             }}>
             <h4 style={{ textAlign: 'center' }}>Create an account</h4>
             <InputGroup className='mb-3'>
-                <FormControl placeholder='Username'
+                <FormControl placeholder='Enter Username'
                     onChange={event => setUsername(event.target.value)} />
             </InputGroup>
             <InputGroup className='mb-3'>
-                <FormControl placeholder='Name'
+                <FormControl placeholder='Enter Name'
                     onChange={event => setName(event.target.value)} />
             </InputGroup>
             <InputGroup className='mb-3'>
-                <FormControl placeholder='Surname'
+                <FormControl placeholder='Enter Surname'
                     onChange={event => setSurname(event.target.value)} />
             </InputGroup>
             <OverlayTrigger
@@ -40,21 +42,29 @@ const SignUpPage = () => {
                     overlay={<Tooltip id="color-tooltip">Example for the phone input: (389) 70 123 456</Tooltip>}
                 >
             <InputGroup className='mb-3'>
-                <FormControl placeholder='Phone'
+                <FormControl placeholder='Enter Phone'
                     onChange={event => setPhone(event.target.value)} />
             </InputGroup>
                 </OverlayTrigger>
 
             <InputGroup className='mb-3'>
-                <FormControl placeholder='Address'
+                <FormControl placeholder='Enter Address'
                     onChange={event => setAddress(event.target.value)} />
             </InputGroup>
             <InputGroup className='mb-3'>
-                <FormControl placeholder='Email'
+                <FormControl placeholder='Enter City'
+                    onChange={event => setCity(event.target.value)} />
+            </InputGroup>
+            <InputGroup className='mb-3'>
+                <FormControl placeholder='Enter Postal Code'
+                    onChange={event => setPostalCode(event.target.value)} />
+            </InputGroup>
+            <InputGroup className='mb-3'>
+                <FormControl placeholder='Enter Email'
                     onChange={event => setEmail(event.target.value)} />
             </InputGroup>
             <InputGroup className='mb-3'>
-                <FormControl placeholder='Password' type='password'
+                <FormControl placeholder='Enter Password' type='password'
                     onChange={event => setPassword(event.target.value)} />
             </InputGroup>
             <InputGroup className='mb-3'>

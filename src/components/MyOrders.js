@@ -10,15 +10,23 @@ export default () => {
   const myOrders = useSelector((state) => state.userSlice.myOrders);
   const email = useSelector((state) => state.authenticationSlice.email);
 
+  console.log(myOrders)
+
   useEffect(() => {
     GetMyOrders(dispatch, email);
   }, []);
 
-  return myOrders.map((o) => (
-    <div key={o.id} style={{ marginBottom: '2rem' }}>
+  return (
+<div style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+  <h4 style={{ marginBottom: '20px', marginLeft: '20px' }}><b>My Orders</b></h4>
+  {myOrders.map((o) => (
+    <div key={o.id} style={{ marginBottom: '2rem', width: '60%' }}>
       <OrderDetails order={o} />
     </div>
-  ));
+  ))}
+</div>
+
+  );
 };
 
 const OrderDetails = ({ order }) => {
@@ -79,31 +87,75 @@ const OrderDetails = ({ order }) => {
     return stars;
   };
 
-  return (
-    <div>
-      {order && (
-        <div>
-          <h2>Id: {order.id}</h2>
-        </div>
-      )}
-      {order && order.productsInOrder && order.productsInOrder.length > 0 ? (
-        order.productsInOrder.map((item) => (
-          <Row key={item.product.id} style={{ marginBottom: '2rem' }}>
-            <Col>{item.product.productName}</Col>
-            <Col>{item.product.productPrice}</Col>
-            <Col>
-              <Button
-                variant="primary"
+  return ( 
+  <div style={{ backgroundColor: '#C2A4C8', borderRadius: "30px", padding: '20px' }}>
+    {order && order.productsInOrder && order.productsInOrder.length > 0 && (
+      <div>
+      <h5 style={{textAlign: 'center'}}>Order Id: {order.id}</h5>
+      <hr/>
+      <p>Date: {order.formattedDate} {order.formattedTime}</p>
+      <table style={{ width: '100%' }}>
+        <thead>
+          <th></th>
+          <th className='text-center'>Product Name</th>
+          <th className='text-center'>Product Price</th>
+          <th></th>
+        </thead>
+        <tbody>
+          {order.productsInOrder.map((item, index) => (
+            <tr key={index}>
+              <td>
+                <div className="d-flex mb-3">
+                  <div className="flex-shrink-0">
+                    <img
+                      src={item.product.productImage}
+                      alt="Product Image"
+                      className="img-fluid"
+                      style={{ width: '7rem', margin: '20px' }}
+                    />
+                  </div>
+                </div>
+              </td>
+              <td className='text-center'>    
+                        {item.product.productName}
+            </td>
+              <td className="text-end">${item.product.productPrice}</td>
+              <td className="text-end"> <Button
+                variant="dark"
                 onClick={() => handleOpenCommentPopup(item.product.id)}
               >
-                Leave a Comment
-              </Button>
-            </Col>
-          </Row>
-        ))
-      ) : (
-        <p>Error loading the order</p>
-      )}
+                Leave Review
+              </Button></td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan="3">Subtotal</td>
+            <td className="text-end">{order.subtotal} MKD</td>
+          </tr>
+          <tr>
+            <td colSpan="3">Shipping</td>
+            <td className="text-end">  {order.deliveryType === 0 ? 'REGULAR DELIVERY (150 MKD)' : 'FAST DELIVERY (250 MKD)'}</td>
+          </tr>
+          <tr>
+            <td colSpan="3">Discount (Code: )</td>
+            <td className="text-danger text-end">-0.00 MKD</td>
+          </tr>
+          <tr className="fw-bold">
+            <td colSpan="3">TOTAL</td>
+            <td className="text-end">{order.total} MKD</td>
+          </tr>
+        </tfoot>
+      </table>
+      <hr/>
+      <p><h6><b>User: {order.user.name} {order.user.surname}</b></h6></p>
+        <p>Delivery address: {order.deliveryAddress} </p>  
+        <p>City: {order.deliveryCity}</p>
+        <p>Postal Code: {order.deliveryPostalCode} </p>
+        <p>Phone number: {order.deliveryPhone}</p>
+      </div>
+    )}
 
       <Modal
         show={showCommentPopup && selectedProduct !== null}
@@ -134,7 +186,7 @@ const OrderDetails = ({ order }) => {
           <Button variant="secondary" onClick={() => setShowCommentPopup(false)}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleCommentSubmit}>
+          <Button variant="dark" onClick={handleCommentSubmit}>
             Submit Comment
           </Button>
         </Modal.Footer>

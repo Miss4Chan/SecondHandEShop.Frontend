@@ -340,12 +340,15 @@ const SidebarMenu = () => {
               )}
             </>
           )}
-          <Nav.Link href="#" style={{ color: '#000000' }}>
+          <NavLink variant='link' to='/add' style={{ color: '#000000' }}>
             Sell
-          </Nav.Link>
-          <Nav.Link href="#" style={{ color: '#000000' }}>
+          </NavLink>
+          <NavLink variant='link' to='/notImplemented' style={{ color: '#000000' }}>
             Rent
-          </Nav.Link>
+          </NavLink>
+          <NavLink variant='link' to='/notImplemented' style={{ color: '#000000' }}>
+            Donate
+          </NavLink>
         </Nav>
       </div>
     </div>

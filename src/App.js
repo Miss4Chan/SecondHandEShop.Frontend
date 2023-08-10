@@ -18,6 +18,7 @@ import Footer from './components/Footer';
 import './App.css';
 import HomePage from './components/HomePage';
 import AboutUs from './components/AboutUs';
+import NotImplemented from './components/NotImplemented';
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.authenticationSlice.isLoggedIn);
@@ -47,9 +48,10 @@ const App = () => {
           <Route path="/myProfile" element={isLoggedIn ? <MyProfile /> : <SignInPage />} />
           <Route path="/profile/:username" element={<Profile />} />
           <Route path="/myOrders" element={<MyOrders />} />
-          <Route path="*" element={<h2>Page not found!</h2>} />
           <Route path= "/home" element={<HomePage/>}/>
           <Route path="/aboutus" element={<AboutUs/>}/>
+          <Route path="/notImplemented" element={<NotImplemented />} />
+          <Route path="*" element={<h2>Page not found!</h2>} />
         </Routes>
         </div>
         <Footer />

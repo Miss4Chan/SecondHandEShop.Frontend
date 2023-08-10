@@ -43,8 +43,8 @@ const Navbar = () => {
                   position: 'absolute',
                   backgroundColor: '#C2A4C8',
                   top: '100%',
-                  left: '-100px', // Adjust the left value to move the submenu to the left of the shopping cart icon
-                  width: '140px', // Adjust the width as needed
+                  left: '-120px', // Adjust the left value to move the submenu to the left of the shopping cart icon
+                  width: '160px', // Adjust the width as needed
                   padding: '10px',
                   borderRadius: '5px',
                   zIndex: '2', // Set a higher zIndex to make the submenu go over the content
@@ -53,6 +53,15 @@ const Navbar = () => {
                 <NavLink to="/myProfile" style={{ color: 'black', display: 'block', fontSize: '18px', textDecoration: 'none', fontWeight: 'bold' }}>
                   My profile
                 </NavLink>
+                <hr/>
+                <NavLink to="/myProducts" style={{ color: 'black', display: 'block', fontSize: '18px', textDecoration: 'none', fontWeight: 'bold' }}>
+                  My products
+                </NavLink>
+                <hr/>
+                <NavLink to="/myOrders" style={{ color: 'black', display: 'block', fontSize: '18px', textDecoration: 'none', fontWeight: 'bold' }}>
+                  My orders
+                </NavLink>
+                <hr/>
                 <Button variant='link' href='/signin' onClick={() => { dispatch(logout()) }} style={{ color: 'black', fontSize: '18px', textDecoration: 'none', fontWeight: 'bold', backgroundColor: '#C2A4C8',
                 borderColor: '#C2A4C8', margintop: '0', padding: '0px'}}>
                   Log out

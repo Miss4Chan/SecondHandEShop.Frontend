@@ -30,9 +30,9 @@ export const DeleteFromShoppingCart = async (dispatch, email, product) => {
     }
 }
 
-export const OrderNow = async (dispatch, email, deliveryType, deliveryAddress, deliveryPhone) => {
+export const OrderNow = async (dispatch, email, deliveryType, deliveryAddress, deliveryPhone, deliveryCity, deliveryPostalCode) => {
     try {
-        const order = await axiosInstance.get(`\Order?email=${email}&deliveryType=${deliveryType}&deliveryAddress=${deliveryAddress}&deliveryPhone=${deliveryPhone}`);
+        const order = await axiosInstance.get(`\Order?email=${email}&deliveryType=${deliveryType}&deliveryAddress=${deliveryAddress}&deliveryPhone=${deliveryPhone}&deliveryCity=${deliveryCity}&deliveryPostalCode=${deliveryPostalCode}`);
         dispatch(clearCart());
         dispatch(newOrder(order));
 

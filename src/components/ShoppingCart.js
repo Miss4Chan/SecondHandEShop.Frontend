@@ -15,12 +15,19 @@ const ShoppingCart = () => {
   const email = useSelector((state) => state.authenticationSlice.email);
   const [selectedShippingOption, setSelectedShippingOption] = useState('REGULAR');
   const myProfile = useSelector((state) => state.userSlice.myProfile)
+  console.log(myProfile)
   const defaultAddress = useSelector((state) => state.userSlice.myProfile.address);
   const defaultPhone = useSelector((state) => state.userSlice.myProfile.phone);
+  const defaultCity = useSelector((state) => state.userSlice.myProfile.city);
+  const defaultPostalCode = useSelector((state) => state.userSlice.myProfile.postalCode);
   const [useDefaultAddress, setUseDefaultAddress] = useState(true);
   const [newAddress, setNewAddress] = useState('');
   const [useDefaultPhone, setUseDefaultPhone] = useState(true);
   const [newPhone, setNewPhone] = useState('');
+  const [useDefaultCity, setUseDefaultCity] = useState(true);
+  const [newCity, setNewCity] = useState('');
+  const [useDefaultPostalCode, setUseDefaultPostalCode] = useState(true);
+  const [newPostalCode, setNewPostalCode] = useState('');
   const [step, setStep] = useState(1);
   const [itemToDelete, setItemToDelete] = useState(null);
 
@@ -31,7 +38,7 @@ const ShoppingCart = () => {
 
 
   const confirmOrder = () => {
-    OrderNow(dispatch, email, selectedShippingOption, useDefaultAddress ? defaultAddress : newAddress, useDefaultPhone ? defaultPhone : newPhone );
+    OrderNow(dispatch, email, selectedShippingOption, useDefaultAddress ? defaultAddress : newAddress, useDefaultPhone ? defaultPhone : newPhone, useDefaultCity ? defaultCity : newCity, useDefaultPostalCode ? defaultPostalCode : newPostalCode);
     navigate('/myOrders');
   };
 
@@ -228,7 +235,9 @@ a:hover{
 }
 
 .custom-address,
-.custom-phone {
+.custom-phone,
+.custom-city,
+.custom-postal-code {
   margin-top: 20px;
 }
 
@@ -412,7 +421,7 @@ a:hover{
             </form>
             <div className="row" style={{ borderTop: '1px solid rgba(0,0,0,.1)', padding: '2vh 0' }}>
               <div className="col">TOTAL PRICE</div>
-              <div className="col text-right">{totalPrice} MKD</div>
+              <div className="col text-right">{totalPrice + (selectedShippingOption === 'REGULAR' ? 150 : 250)} MKD</div>
             </div>
             <button className="btn" onClick={() => setStep(2)}>Next</button>
           </div>
@@ -448,6 +457,52 @@ a:hover{
        />
      </div>
    )}
+    <div className="default-option">
+     <label className="checkbox-label">
+       Use Default City: {defaultCity}
+       <input
+         type="checkbox"
+         checked={useDefaultCity}
+         onChange={() => setUseDefaultCity(!useDefaultCity)}
+       />
+     </label>
+   </div>
+  {!useDefaultCity && (
+     <div className="custom-city">
+       <label className="input-label">New City:</label>
+       <input
+         type="text"
+         placeholder="Enter additional city for this order"
+         value={newCity}
+         onChange={(e) => setNewCity(e.target.value)}
+       />
+     </div>
+   )}
+    <div className="default-option">
+     <label className="checkbox-label">
+       Use Default Postal Code: {defaultPostalCode}
+       <input
+         type="checkbox"
+         checked={useDefaultPostalCode}
+         onChange={() => setUseDefaultPostalCode(!useDefaultPostalCode)}
+       />
+     </label>
+   </div>
+  {!useDefaultPostalCode && (
+     <div className="custom-postal-code">
+       <label className="input-label">New Postal Code:</label>
+       <input
+         type="text"
+         placeholder="Enter additional postal code for this order"
+         value={newPostalCode}
+         onChange={(e) => setNewPostalCode(e.target.value)}
+       />
+     </div>
+   )}
+
+
+
+
    <div className="default-option">
      <label className="checkbox-label">
        Use Default Phone: {defaultPhone}
@@ -464,7 +519,7 @@ a:hover{
        <input
          type="text"
          placeholder="Enter additional phone for this order"
-         value={newAddress}
+         value={newPhone}
          onChange={(e) => setNewPhone(e.target.value)}
        />
      </div>
@@ -510,8 +565,10 @@ a:hover{
     </div>
     <div className="user-info">
       <div className="row border-top border-bottom text-left">
-        <p>User name: {myProfile.name}</p>
+        <p>User: {myProfile.name} {myProfile.surname}</p>
         <p>Delivery address: {useDefaultAddress ? defaultAddress : newAddress}</p>  
+        <p>City:  {useDefaultCity ? defaultCity : newCity}</p>
+        <p>Postal Code:  {useDefaultPostalCode ? defaultPostalCode : newPostalCode}</p>
         <p>Phone number: {useDefaultPhone ? defaultPhone : newPhone}</p>
       </div>
     </div>

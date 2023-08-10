@@ -3,12 +3,11 @@ import React from 'react';
 const AboutUs = () => {
   const styles = `
 
-    .content {
+    .content-container {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      
+      min-height: 100vh;
     }
 
     .card {
@@ -46,9 +45,9 @@ const AboutUs = () => {
   return (
     <div>
       <style>{styles}</style>
-      <div className="content">
-        <div className="card">
-          <div className="card-body">
+      <div className="content-container">
+      <div className="card">
+        <div className="card-body">
             <h2 className="card-title">About Us</h2>
             <p className="card-text">
               At ReWear, we believe that fashion can be both trendy and sustainable.
