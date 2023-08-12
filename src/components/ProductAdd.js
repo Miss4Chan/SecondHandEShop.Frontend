@@ -96,7 +96,6 @@ const ProductAdd = () => {
       name,
       selectedSex,
       selectedCondition,
-      price,
       image
     };
 
@@ -106,6 +105,8 @@ const ProductAdd = () => {
       mandatoryFields.selectedSize = selectedSize;
       mandatoryFields.selectedSubcategory = selectedSubcategory;
     }
+
+    mandatoryFields.price = price;
 
     const newErrors = {};
     Object.keys(mandatoryFields).forEach((field) => {
@@ -155,11 +156,19 @@ const ProductAdd = () => {
   };
 
   const handleCancelClick = () => {
+    setName('');
+    setImage('');
+    setColor('#ffffff');
+    setSizeNumber(0);
     setSelectedProductType('');
     setSelectedSize('');
     setSelectedSubcategory('');
+    setPrice(0);
+    setBrand('');
+    setMaterial('');
     setSelectedCondition('');
-    setShowPopup(false);
+    setDescription('');
+    setMeasurements('');
   };
 
   const handleColorChange = (selectedColor) => {
@@ -169,9 +178,10 @@ const ProductAdd = () => {
   const handleCloseColorPicker = () => {
     setShowColorPicker(false);
   };
-
-  const [selectedIcon, setSelectedIcon] = useState('');
-
+ 
+  const clearErrors = () => {
+    setErrors({});
+  };
   
   const productTypeIcons = {
     Clothes:faShirt ,
@@ -242,12 +252,16 @@ const styles = `
       icon={productTypeIcons[type]}
       size="8x" 
       className={`product-type-icon ${selectedProductType === type ? 'highlight' : ''}`}
-      onClick={() => setSelectedProductType(type)}
+      onClick={() => {
+        clearErrors();
+        handleCancelClick();
+        setSelectedProductType(type)}}
       style={{
         cursor: 'pointer',
         margin: '0 40px',
         marginBottom: '40px' 
       }}
+      disabled={!selectedProductType} 
     />
   ))}
   <style>{highlightClass}</style>
@@ -265,7 +279,14 @@ const styles = `
    
         <Row className="input-field">
             <Col>
-              <FormLabel>Product Name</FormLabel>
+              <FormLabel>Product Name
+              <OverlayTrigger
+                    placement="right"
+                    overlay={<Tooltip><span>Required field</span></Tooltip>}
+                >
+                 <span style={{ fontSize: '18px', cursor: 'pointer', marginLeft: '10px', color: 'red' }}>*</span>
+                </OverlayTrigger>
+              </FormLabel>
               <FormControl
                 type="text"
                 placeholder="Enter product name"
@@ -290,7 +311,14 @@ const styles = `
 
         <Row className="input-field">
             <Col>
-            <FormLabel>Product Sex</FormLabel>
+            <FormLabel>Product Sex
+            <OverlayTrigger
+                    placement="right"
+                    overlay={<Tooltip><span>Required field</span></Tooltip>}
+                >
+                 <span style={{ fontSize: '18px', cursor: 'pointer', marginLeft: '10px', color: 'red' }}>*</span>
+                </OverlayTrigger>
+            </FormLabel>
               <select
                 name="productSex"
                 value={selectedSex}
@@ -309,7 +337,14 @@ const styles = `
 
           <Row className="input-field">
             <Col>
-              <FormLabel>Product Condition</FormLabel>
+              <FormLabel>Product Condition
+              <OverlayTrigger
+                    placement="right"
+                    overlay={<Tooltip><span>Required field</span></Tooltip>}
+                >
+                 <span style={{ fontSize: '18px', cursor: 'pointer', marginLeft: '10px', color: 'red' }}>*</span>
+                </OverlayTrigger>
+              </FormLabel>
               <select
                 name="productCondition"
                 value={selectedCondition}
@@ -377,7 +412,14 @@ const styles = `
 
           <Row className="input-field">
             <Col>
-              <FormLabel>Product Image</FormLabel>
+              <FormLabel>Product Image 
+              <OverlayTrigger
+                    placement="right"
+                    overlay={<Tooltip><span>Required field</span></Tooltip>}
+                >
+                 <span style={{ fontSize: '18px', cursor: 'pointer', marginLeft: '10px', color: 'red' }}>*</span>
+                </OverlayTrigger>
+              </FormLabel>
               <FormControl
                 type="text"
                 placeholder="Enter link to product image"
@@ -392,7 +434,14 @@ const styles = `
             <>
               <Row className="input-field">
                 <Col>
-                  <FormLabel>Product Size</FormLabel>
+                  <FormLabel>Product Size
+                  <OverlayTrigger
+                    placement="right"
+                    overlay={<Tooltip><span>Required field</span></Tooltip>}
+                >
+                 <span style={{ fontSize: '18px', cursor: 'pointer', marginLeft: '10px', color: 'red' }}>*</span>
+                </OverlayTrigger>
+                  </FormLabel>
                   <select
                     name="productSize"
                     value={selectedSize}
@@ -411,7 +460,14 @@ const styles = `
 
               <Row className="input-field">
                 <Col>
-                  <FormLabel>Product Subcategory</FormLabel>
+                  <FormLabel>Product Subcategory
+                  <OverlayTrigger
+                    placement="right"
+                    overlay={<Tooltip><span>Required field</span></Tooltip>}
+                >
+                 <span style={{ fontSize: '18px', cursor: 'pointer', marginLeft: '10px', color: 'red' }}>*</span>
+                </OverlayTrigger>
+                  </FormLabel>
                   <select
                     name="productSubcategories"
                     value={selectedSubcategory}
@@ -433,7 +489,14 @@ const styles = `
           {selectedProductType === 'Shoes' && (
             <Row className="input-field">
               <Col>
-                <FormLabel>Product Size Number</FormLabel>
+                <FormLabel>Product Size Number
+                <OverlayTrigger
+                    placement="right"
+                    overlay={<Tooltip><span>Required field</span></Tooltip>}
+                >
+                 <span style={{ fontSize: '18px', cursor: 'pointer', marginLeft: '10px', color: 'red' }}>*</span>
+                </OverlayTrigger>
+                </FormLabel>
                 <FormControl
                   type="number"
                   placeholder="Enter product size number"
@@ -451,7 +514,7 @@ const styles = `
                     <FormLabel>Product Measurements
                     <OverlayTrigger
                  placement="right"
-                 overlay={<Tooltip id="color-tooltip">Enter detailed measurements for the product in cm</Tooltip>}
+                 overlay={<Tooltip>Enter detailed measurements for the product in cm</Tooltip>}
                >
                  <span style={{ fontSize: '18px', cursor: 'pointer', marginLeft: '10px' }}>?</span>
                </OverlayTrigger>
@@ -479,7 +542,14 @@ const styles = `
           
                 <Row className="input-field">
           <Col>
-            <FormLabel>Product Price (MKD)</FormLabel>
+            <FormLabel>Product Price (MKD) 
+            <OverlayTrigger
+                    placement="right"
+                    overlay={<Tooltip><span>Required field</span></Tooltip>}
+                >
+                 <span style={{ fontSize: '18px', cursor: 'pointer', marginLeft: '10px', color: 'red' }}>*</span>
+                </OverlayTrigger>
+            </FormLabel>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <FormControl
                 type="number"
@@ -525,7 +595,18 @@ const styles = `
           }
         }}
         size="lg"
-        style={{ backgroundColor: 'black', fontSize: '20px',fontWeight: 'bold', padding: '15px 30px' }} // Adjust the values as needed
+        style={{      backgroundColor: 'black',
+        fontSize: '20px',
+        fontWeight: 'bold',
+        padding: '15px 30px',
+        color: 'white',
+        border: 'none',
+        outline: 'none',
+        cursor: selectedProductType ? 'pointer' : 'not-allowed',
+        // Customize style for disabled button
+        opacity: selectedProductType ? 1 : 0.6, // Adjust opacity for disabled state
+        filter: selectedProductType ? 'none' : 'grayscale(100%)', // Apply grayscale filter for disabled state
+      }}
       >
         Add Product
       </Button>

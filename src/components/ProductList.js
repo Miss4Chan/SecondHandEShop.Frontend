@@ -9,7 +9,6 @@ import { Nav } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import { current } from '@reduxjs/toolkit';
 
 export default () => {
   const dispatch = useDispatch();
@@ -28,7 +27,7 @@ export default () => {
   const selectedSubcategory = useSelector(state => state.productsSlice.selectedSubcategory);
   const isClothesType = selectedType === 'Clothes';
   const isShoesType = selectedType === 'Shoes';
-  const [shoeNumberRange, setShoeNumberRange] = useState('');
+  const [shoeNumberRange, setShoeNumberRange] = useState([22,45]);
   const [itemOffset, setItemOffset] = useState(0);
   const itemsPerPage = 3; //change this later to 9
   const [pageCount, setPageCount] = useState(0);
@@ -470,9 +469,9 @@ img {
 
 <Col md={9}>
 {/* Product Listing */}
-        <Row>
+        <Row style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', margin: '10px' }}>
         {currentItems.map(p => (
-          <Col key={p.id} sm={4} style={{ marginBottom: '2rem' }}>
+          <Col key={p.id} sm={4}>
             <ListRow product={p} />
           </Col>
         ))}
@@ -535,11 +534,22 @@ const ListRow = ({ product }) => {
     flex-direction: row;
   }
 
-  .card-img {
+  .card-img-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
     border-top-right-radius: 0;
     border-bottom-left-radius: calc(0.25rem - 1px);
-    opacity: 1;
-}
+  }
+
+  .card-img {
+    width: auto;
+    height: 100%;
+    object-fit: cover;
+  }
 
  .content .card .card-title {
     color: black;
@@ -547,7 +557,7 @@ const ListRow = ({ product }) => {
   }
 
   .stars {
-    font-size: 32px; 
+    font-size: 26px; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -558,10 +568,10 @@ const ListRow = ({ product }) => {
   return (
     <div className="col">
     <style>{styles}</style>
-    <div className="card mb-3" style={{ maxWidth: '540px', backgroundColor: '#C2A4C8' }}>
+    <div className="card mb-3" style={{ maxWidth: '540px', backgroundColor: '#C2A4C8', margin: '10px' }}>
       <div className="row no-gutters">
-        <div className="col-md-4">
-          <div className="d-flex align-items-center" style={{ padding:'20px' }}>
+        <div className="col-md-5">
+          <div className="card-img-container" style={{ paddingLeft:'15px', paddingTop:'3px', paddingBottom: '3px' }}>
             <img
               src={product.productImage}
               className="card-img img-fluid"
@@ -569,19 +579,17 @@ const ListRow = ({ product }) => {
             />
           </div>
         </div>
-        <div className="col-md-8">
+        <div className="col-md-7">
           <div className="card-body">
             <h4 className="card-title text-center">{product.productName}</h4>
-            <h6 className="card-title text-right me-5">{product.productPrice} MKD</h6>
+            <h6 className="card-title text-right">{product.productPrice} MKD</h6>
             <h5 className="card-text text-center" style={{ color: '#000000' }}>
-              Seller Rating : {renderStars(product.userRating)}
+              Seller Rating {renderStars(product.userRating)}
             </h5>
             <div className='text-center'>
              <div className="btn btn-dark">
                   View more
             </div>
-            <Col><Button onClick={() => AddToCart(dispatch, product, email)}>Add to Cart</Button></Col>
-            <Col><Button onClick={() => AddToFavourites(dispatch, product, email)}>Add to Cart</Button></Col>
             </div>
           </div>
         </div>

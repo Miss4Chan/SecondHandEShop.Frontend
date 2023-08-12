@@ -1,5 +1,5 @@
 import React, {useState } from 'react';
-import { Form, Button, InputGroup, FormControl } from 'react-bootstrap';
+import { Form, Button, FormControl, Row, FormLabel, Col } from 'react-bootstrap';
 import { SignIn } from '../services/authentication';
 import { useDispatch } from 'react-redux';
 
@@ -8,7 +8,37 @@ const SignInPage = () => {
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();
 
-    return <div style={{ width: '30rem', margin: 'auto', paddingTop: '8px' }}>
+    const styles = `
+        .input-field {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+          }
+          
+          .input-field label {
+            flex: 1;
+            font-weight: bold;
+            margin-right: 10px;
+          }
+          
+          .input-field input,
+          .input-field select {
+            flex: 2;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+          }
+        `;
+
+    return (
+    <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '70vh', 
+      }}>
+    <div style={{ width: '30rem', margin: 'auto', padding: '10px', backgroundColor: 'rgba(255, 255, 255, 0.7)', borderRadius: '30px' }}>
+        <style>{styles}</style>
         <Form
             onSubmit={event => {
                 // makes it cancelable
@@ -16,17 +46,25 @@ const SignInPage = () => {
                 SignIn(dispatch, { email, password });
             }}>
             <h4 style={{ textAlign: 'center' }}>Welcome back</h4>
-            <InputGroup className='mb-3'>
-                <FormControl placeholder='Email'
+            <Row className="input-field">
+            <Col>
+              <FormLabel>Email</FormLabel>
+                <FormControl placeholder='Enter email'
                     onChange={event => setEmail(event.target.value)} />
-            </InputGroup>
-            <InputGroup className='mb-3'>
-                <FormControl placeholder='Password' type='password'
+            </Col>
+            </Row>
+          
+            <Row className="input-field">
+            <Col>
+              <FormLabel>Password</FormLabel>
+                <FormControl placeholder='Enter password' type='password'
                    onChange={event => setPassword(event.target.value)} />
-            </InputGroup>
+            </Col>
+            </Row>
             <Button type='submit' variant='dark' style={{ margin: 'auto', display: 'block', width: '10rem' }}  className='btn'>Sign In</Button>
         </Form>
     </div>
+    </div>);
 };
 
 export default SignInPage;
