@@ -19,6 +19,7 @@ import './App.css';
 import HomePage from './components/HomePage';
 import AboutUs from './components/AboutUs';
 import NotImplemented from './components/NotImplemented';
+import ProductDetails from './components/ProductDetails';
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.authenticationSlice.isLoggedIn);
@@ -51,6 +52,7 @@ const App = () => {
           <Route path= "/home" element={<HomePage/>}/>
           <Route path="/aboutus" element={<AboutUs/>}/>
           <Route path="/notImplemented" element={<NotImplemented />} />
+          <Route path="/product/:productId" element={<ProductDetails />} />
           <Route path="*" element={<h2>Page not found!</h2>} />
         </Routes>
         </div>

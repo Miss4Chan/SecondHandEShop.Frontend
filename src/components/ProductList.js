@@ -4,7 +4,7 @@ import { GetProducts, GetProductConditions, GetProductSizes,AddToCart, AddToFavo
 import { Row, Col, Button, FormControl } from 'react-bootstrap';
 import { CompactPicker } from 'react-color';
 import { setSelectedFilters } from '../app/productsSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 import { Nav } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import Slider from 'rc-slider';
@@ -588,8 +588,8 @@ const ListRow = ({ product }) => {
             </h5>
             <div className='text-center'>
              <div className="btn btn-dark">
-                  View more
-            </div>
+               <NavLink variant='link' to={`/product/${product.id}`} style={{color: 'white', textDecoration: 'none', display: 'block'}}>View more</NavLink>
+           </div>
             </div>
           </div>
         </div>

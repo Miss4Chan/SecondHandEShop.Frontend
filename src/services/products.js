@@ -72,7 +72,15 @@ export const GetProductConditions = async (dispatch) => {
     try {
         //api call
         const {data} = await axiosInstance.get("/productConditions");
-        dispatch(setProductConditions(data));
+        const splitCamelCase = (text) => {
+            return text
+              .split(/(?=[A-Z])/)
+              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(' ');
+          };
+        
+          const displayConditions = data.map(condition => splitCamelCase(condition))
+        dispatch(setProductConditions(displayConditions));
     } catch {
         console.log("Error product Conditions")
     }
@@ -137,4 +145,13 @@ export const AddToFavourites = async (dispatch, product, email) => {
     }
 }
 
+export const GetProduct = async (productId) => {
+    try {
+      const response = await axiosInstance.get(`/${productId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching product details:', error);
+      throw error;
+    }
+  };
 
