@@ -282,7 +282,7 @@ const SignUpPage = () => {
             </Row>
         <Row>
           <Col>
-            <div className="error-container">
+            <div className="error-container  font-weight-bold">
               {Object.keys(errors).map((field) => (
                 <div key={field} className="error-message">
                   {errors[field]}

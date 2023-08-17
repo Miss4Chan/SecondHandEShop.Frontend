@@ -35,6 +35,21 @@ export default () => {
 
   const navigate = useNavigate();
 
+  
+  const handleRemoveFilters = () => {
+    // Reset all the filter states to their initial values
+    setSearchTerm('');
+    setSizeFilter('');
+    setConditionFilter('');
+    setSortByPrice('');
+    setSortByUserRating('');
+    setSelectedColor('');
+    setSelectedColor('');
+    setShowColorPicker(false);
+    setShoeNumberRange([22, 45]);
+    fetchProductsForRemoveFilters();
+
+  };
 
  
   useEffect(() => {
@@ -70,19 +85,6 @@ export default () => {
     setShowColorPicker(false);
   };
 
-  const handleRemoveFilters = () => {
-    // Reset all the filter states to their initial values
-    setSearchTerm('');
-    setSizeFilter('');
-    setConditionFilter('');
-    setSortByPrice('');
-    setSortByUserRating('');
-    setSelectedColor('');
-    setShowColorPicker(false);
-    setShoeNumberRange('');
-    GetProducts(dispatch, selectedType, selectedSex, selectedSubcategory, searchTerm, selectedColor, sizeFilter, conditionFilter, sortByPrice, sortByUserRating, shoeNumberRange);
-  };
-
   const handleBreadCrumbs = (type, sex, subcategory) => {
 
     dispatch(setSelectedFilters({ type, sex, subcategory }));
@@ -98,12 +100,19 @@ export default () => {
   const fetchProducts = async () => {
     try {
       const data = await GetProducts(dispatch, selectedType, selectedSex, selectedSubcategory, searchTerm, selectedColor, sizeFilter, conditionFilter, sortByPrice, sortByUserRating, shoeNumberRange);
-      console.log("dat in fetch products")
-      console.log(data)
       setPageCount(Math.ceil(data.length / itemsPerPage));
-      console.log("setCurrentItems")
       setCurrentItems(data.slice(itemOffset, itemOffset + itemsPerPage));
-      console.log(currentItems)
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+
+  
+  const fetchProductsForRemoveFilters = async () => {
+    try {
+      const data = await GetProducts(dispatch, selectedType, selectedSex, selectedSubcategory, '', '', '', '', '', '', [22, 45]);
+      setPageCount(Math.ceil(data.length / itemsPerPage));
+      setCurrentItems(data.slice(itemOffset, itemOffset + itemsPerPage));
     } catch (error) {
       console.error('Error fetching products:', error);
     }

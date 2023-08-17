@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { GetProfile } from '../services/user';
+import { GetProfile } from '../services/unauthorized';
 import { useParams } from 'react-router-dom';
 import { setProfile } from '../app/userSlice'; 
 import { Col, Row } from 'react-bootstrap';
@@ -52,20 +52,26 @@ const Profile = () => {
           ) : (
             <p>No comments found.</p>
           )}
+
+      <h5>{myProfile.username}`s products</h5>
+            {myProfile && myProfile.products && myProfile.products.length > 0 ? (
+              myProfile.products.map((item) => (
+                <Row key={item.id} style={{ marginBottom: '2rem' }}>
+                  <Col>{item.productName}</Col>
+                  <Col>{item.productPrice}</Col>
+                </Row>
+              ))
+            ) : (
+              <p>No products found.</p>
+            )}
+
         </div>
       )}
 
-      <h5>{myProfile.username}`s products</h5>
-      {myProfile && myProfile.products && myProfile.products.length > 0 ? (
-        myProfile.products.map((item) => (
-          <Row key={item.id} style={{ marginBottom: '2rem' }}>
-            <Col>{item.productName}</Col>
-            <Col>{item.productPrice}</Col>
-          </Row>
-        ))
-      ) : (
-        <p>No products found.</p>
-      )}
+    {!myProfile && <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', display: 'flex', flexDirection: 'column'}}>
+    <h2 className='text-center'>A user with username {username} does not exist !</h2>
+    </div>}
+
     </div>
   );
 };

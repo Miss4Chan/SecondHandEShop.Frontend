@@ -33,7 +33,7 @@ const ShoppingCart = () => {
 
   useEffect(() => {
     GetShoppingCart(dispatch, email);
-    GetMyProfile(dispatch);
+    GetMyProfile(dispatch, email);
   }, [dispatch, email]);
 
 
