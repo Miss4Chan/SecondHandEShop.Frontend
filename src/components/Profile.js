@@ -1,22 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { GetProfile } from '../services/unauthorized';
 import { useParams } from 'react-router-dom';
-import { setProfile } from '../app/userSlice'; 
+import { setProfile } from '../app/userSlice';
 import { Col, Row } from 'react-bootstrap';
 
 const Profile = () => {
   const { username } = useParams();
   const dispatch = useDispatch();
-  const myProfile = useSelector((state) => state.userSlice.profile); 
+  const myProfile = useSelector((state) => state.userSlice.profile);
+  
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const profileData = await GetProfile(dispatch, username); 
+        const profileData = await GetProfile(dispatch, username);
         dispatch(setProfile(profileData));
       } catch (error) {
         console.log("Error fetching profile", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -25,7 +29,11 @@ const Profile = () => {
 
   return (
     <div>
-      {myProfile && (
+      {loading ? (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
+          <p>Loading...</p>
+        </div>
+      ) : myProfile ? (
         <div>
           <h2>Username: {myProfile.username}</h2>
           <p>Name: {myProfile.name}</p>
@@ -66,12 +74,11 @@ const Profile = () => {
             )}
 
         </div>
+      ) : (
+        <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', display: 'flex', flexDirection: 'column' }}>
+          <h2 className='text-center'>A user with username {username} does not exist !</h2>
+        </div>
       )}
-
-    {!myProfile && <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', display: 'flex', flexDirection: 'column'}}>
-    <h2 className='text-center'>A user with username {username} does not exist !</h2>
-    </div>}
-
     </div>
   );
 };

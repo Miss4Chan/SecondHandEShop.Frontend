@@ -11,8 +11,17 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
   const conditions = useSelector((state) => state.productsSlice.productConditions);
   const sex = useSelector((state) => state.productsSlice.productSex);
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const dispatch = useDispatch();
 
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const dispatch = useDispatch();
+  const handleSave = () => {
+    setShowConfirmationModal(true);
+  };
+
+  const handleConfirmSave = () => {
+    setShowConfirmationModal(false);
+    onSave(editedProduct);
+  };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedProduct({ ...editedProduct, [name]: value });
@@ -88,16 +97,23 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
   border-radius: 5px;
 }
 
+.wider-modal .modal-dialog {
+  max-width: 70%; /* Adjust the width as needed */
+  margin-top: 100px;
+}
+
 `;
 
   return (
-    <Modal show={true} onHide={onCancel}>
+    <Modal show={true} onHide={onCancel} className="wider-modal">
       <style>{styles}</style>
       <Modal.Header closeButton>
         <Modal.Title>Edit Product</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
+          <Row>
+        <Col md={6} className="px-5 py-2">
         <Row className="input-field">
             <Col>
               <FormLabel>Product Type</FormLabel>
@@ -176,7 +192,8 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
               />
             </Col>
           </Row>
-
+          </Col>
+          <Col md={6} className="px-5 py-2">
           <Row className="input-field">
             <Col>
               <FormLabel>Color
@@ -328,6 +345,8 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
           </div>
         </Col>
       </Row>
+      </Col>
+      </Row>
         </Form>
       </Modal.Body>
 
@@ -335,11 +354,30 @@ const ProductEdit = ({ product, onSave, onCancel }) => {
         <Button variant="secondary" onClick={onCancel}>
           Cancel
         </Button>
-        <Button variant="dark" onClick={() => onSave(editedProduct)}>
+        <Button variant="dark"onClick={() => setShowConfirmationModal(true)}>
           Save
         </Button>
       </Modal.Footer>
+
+      <Modal show={showConfirmationModal} onHide={() => setShowConfirmationModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Save</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to save the changes?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowConfirmationModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="dark" onClick={handleConfirmSave}>
+            Confirm
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Modal>
+    
+    
   );
 };
 

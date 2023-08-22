@@ -39,7 +39,7 @@
 }
 
 body {
-  background-image: url('https://w0.peakpx.com/wallpaper/297/232/HD-wallpaper-vector-hand-drawn-flowers-and-leaves-background-hand-drawn-floral.jpg');
+  background-image: url('/public/background.jpg');
   background-size: cover;
 }
 

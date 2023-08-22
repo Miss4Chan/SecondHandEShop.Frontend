@@ -10,7 +10,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const [isSubMenuOpen, setSubMenuOpen] = useState(false);
   const location = useLocation(); 
-
+  const noCartItems = useSelector(state => state.productsSlice.cart.length);
   const toggleSubMenu = () => {
     setSubMenuOpen(!isSubMenuOpen);
   };
@@ -29,14 +29,31 @@ const Navbar = () => {
       <SidebarMenu />
       {isLoggedIn ? (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <NavLink to="/cart" style={{ marginLeft: '1rem', color: 'black', fontSize: '24px', textDecoration: 'none' }}>
-            <i className="fa fa-shopping-cart"></i>
-          </NavLink>
+          <NavLink to="/cart" style={{ position: 'relative', marginLeft: '1rem', color: 'black', fontSize: '24px', textDecoration: 'none' }}>
+          <i className="fa fa-shopping-cart"></i>
+          {noCartItems > 0 && (
+            <span
+              style={{
+                position: 'absolute',
+                top: '-10px',
+                right: '-10px',
+                backgroundColor: '#FF5733',
+                borderRadius: '50%',
+                padding: '4px 6px',
+                color: 'white',
+                fontSize: '12px',
+                fontWeight: 'bold',
+              }}
+            >
+              {noCartItems}
+            </span>
+          )}
+        </NavLink>
           <NavLink to="/faves" style={{ marginLeft: '1rem', color: 'black', fontSize: '24px', textDecoration: 'none' }}>
             <i className="fa fa-heart"></i>
           </NavLink>
           <div style={{ position: 'relative', marginLeft: '1rem', zIndex: '1' }}> {/* Add zIndex: '1' to the submenu container */}
-            <i className="fa fa-user" onClick={toggleSubMenu} style={{ fontSize: '24px', cursor: 'pointer', textDecoration: 'none' }}></i>
+            <i className="fa fa-user" onClick={toggleSubMenu} style={{ fontSize: '24px', cursor: 'pointer', textDecoration: 'none', color: 'black' }}></i>
             {isSubMenuOpen && (
               <div
                 style={{

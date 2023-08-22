@@ -32,6 +32,7 @@ export default () => {
   const itemsPerPage = 3; //change this later to 9
   const [pageCount, setPageCount] = useState(0);
   const [currentItems, setCurrentItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -70,9 +71,16 @@ export default () => {
       }
     };
 
-    fetchProductSizes();
-    fetchProductConditions();
-    fetchProducts();
+const fetchData = async () => {
+      try {
+        await Promise.all([fetchProductSizes(), fetchProductConditions(),   fetchProducts()]);
+        setIsLoading(false); // ako projde promise staj false
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+  
+    fetchData();
 
   }, [dispatch, selectedType, selectedSex, selectedSubcategory, sortByPrice, sortByUserRating, searchTerm]);
 
@@ -88,7 +96,7 @@ export default () => {
   const handleBreadCrumbs = (type, sex, subcategory) => {
 
     dispatch(setSelectedFilters({ type, sex, subcategory }));
-    navigate('/');
+    navigate('/products');
   };
 
   const handlePageClick = (event) => {
@@ -132,10 +140,6 @@ export default () => {
   color: #aaa !important;
   letter-spacing: 2px;
   border-radius: 5px !important;
-}
-
-.first-1 {
-    background-color: rgba(255, 255, 255, 0.7) !important;
 }
 
 a {
@@ -253,15 +257,24 @@ img {
 .page-item.next .page-link::before {
   content: "\\203A";
 }
+.main-container {
+  background-color: rgba(255, 255, 255, 0.7); /* White background with 70% opacity */
+  padding: 20px; /* Add padding for spacing */
+}
 
 `;
 
   return (
-    <div>
+    <div className="main-container">
+      {isLoading ? ( // Display loading animation when loading is true
+        <div className="loading-animation">Loading...</div>
+      ) : (
+        // Load the page when loading is false
+        <div>
        <style>{styles}</style>
-      <div class="container d-flex justify-content-center mt-4"> 
+      <div class="container d-flex justify-content-left mt-4"> 
    <nav aria-label="breadcrumb " class="first  d-md-flex">
-    <ol class="breadcrumb indigo lighten-6 first-1 shadow-lg mb-5">
+    <ol class="breadcrumb indigo mb-5">
         <li class="breadcrumb-item">
         <Nav.Link href="#" 
                       className='black-text active-2'
@@ -511,7 +524,8 @@ img {
         </Row>
     </div>   
     </div>
-
+   )}
+</div>
   );
 };
 

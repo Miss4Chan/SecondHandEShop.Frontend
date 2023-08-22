@@ -68,7 +68,7 @@ const SidebarMenu = () => {
     setMaleClothesOpen(false);
 
     dispatch(setSelectedFilters({ type, sex, subcategory }));
-    navigate('/');
+    navigate('/products');
   };
 
   const closeSideMenu = () => {

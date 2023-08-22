@@ -119,7 +119,7 @@ const OrderDetails = ({ order }) => {
               <td className='text-center'>    
                         {item.product.productName}
             </td>
-              <td className="text-end">${item.product.productPrice}</td>
+              <td className="text-end">{item.product.productPrice} MKD</td>
               <td className="text-end"> <Button
                 variant="dark"
                 onClick={() => handleOpenCommentPopup(item.product.id)}

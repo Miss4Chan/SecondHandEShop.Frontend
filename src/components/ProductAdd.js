@@ -658,7 +658,7 @@ const styles = `
             )}
 
 {showConfirmationPopup && (
-  <div className="custom-popup">
+  <div className="custom-popup wider-modal modal-dialog ">
    <Modal show={showConfirmationPopup} onHide={handleConfirmationPopupCancel}>
     <Modal.Header closeButton>
       < Modal.Title>Product Overview</Modal.Title>

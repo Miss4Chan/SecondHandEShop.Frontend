@@ -20,6 +20,7 @@ import HomePage from './components/HomePage';
 import AboutUs from './components/AboutUs';
 import NotImplemented from './components/NotImplemented';
 import ProductDetails from './components/ProductDetails';
+import Help from './components/Help';
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.authenticationSlice.isLoggedIn);
@@ -39,7 +40,7 @@ const App = () => {
       <ToastContainer />
       <div className="appContent">
         <Routes>
-          <Route path="/" element={isLoggedIn ? <ProductList /> : <SignInPage />} />
+          <Route path="/" element={ <HomePage /> } />
           <Route path="/signup" element={!isLoggedIn ? <SignUpPage /> : <Navigate to="/" />} />
           <Route path="/signin" element={!isLoggedIn ? <SignInPage /> : <Navigate to="/" />} />
           <Route path="/cart" element={isLoggedIn ? <ShoppingCart /> : <SignInPage />} />
@@ -48,9 +49,10 @@ const App = () => {
           <Route path="/myProducts" element={isLoggedIn ? <MyProductsPage /> : <SignInPage />} />
           <Route path="/myProfile" element={isLoggedIn ? <MyProfile /> : <SignInPage />} />
           <Route path="/profile/:username" element={<Profile />} />
-          <Route path="/myOrders" element={<MyOrders />} />
-          <Route path= "/home" element={<HomePage/>}/>
+          <Route path="/myOrders" element={isLoggedIn ? <MyOrders /> : <SignInPage />} />
+          <Route path= "/products" element={<ProductList/>}/>
           <Route path="/aboutus" element={<AboutUs/>}/>
+          <Route path="/help" element={<Help/>}/>
           <Route path="/notImplemented" element={<NotImplemented />} />
           <Route path="/product/:productId" element={<ProductDetails />} />
           <Route path="*" element={<h2>Page not found!</h2>} />

@@ -149,9 +149,9 @@ input:focus::-webkit-input-placeholder
                     <div class="col" onClick={() => AddToCart(dispatch, product, email)} style={{ cursor: 'pointer'}}>
                     <i className="fa fa-shopping-cart"></i>
                     </div>
-                    <div class="col">
-                   <Button>View product</Button>
-                    </div>
+                    <div className="btn btn-dark col">
+               <NavLink variant='link' to={`/product/${product.id}`} style={{color: 'white', textDecoration: 'none', display: 'block'}}>View more</NavLink>
+           </div>
                         </div>
                     </div>           
           ))}
@@ -161,7 +161,7 @@ input:focus::-webkit-input-placeholder
       )}
 
         <div className='btn back-to-shop col-2'>
-          <NavLink variant='link' to="/" style={{color: 'white', textDecoration: 'none', display: 'block'}}><FaArrowLeft/> Back to shopping</NavLink>
+          <NavLink variant='link' to="/products" style={{color: 'white', textDecoration: 'none', display: 'block'}}><FaArrowLeft/> Back to shopping</NavLink>
           </div>
 
             </div>

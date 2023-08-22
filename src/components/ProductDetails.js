@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AddToCart, GetProduct, AddToFavourites } from '../services/products';
 import { Nav, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedFilters } from '../app/productsSlice';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTruck, faTruckFast, faRotateLeft, faBox, faArrowLeft  } from '@fortawesome/free-solid-svg-icons';
-import { NavLink } from 'react-router-dom';
 
 
 const ProductDetails = () => {
@@ -17,6 +16,8 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const email = useSelector((state) => state.authenticationSlice.email);
+  const isLoggedIn = useSelector(state => state.authenticationSlice.isLoggedIn);
+  const location = useLocation();
 
 
   useEffect(() => {
@@ -39,7 +40,7 @@ const ProductDetails = () => {
   const handleBreadCrumbs = (type, sex, subcategory) => {
 
     dispatch(setSelectedFilters({ type, sex, subcategory }));
-    navigate('/');
+    navigate('/products');
   };
 
   const renderStars = (rating) => {
@@ -61,6 +62,28 @@ const ProductDetails = () => {
       .join(' ');
   };
 
+  const handleAddToFavorites = () => {
+    if (!isLoggedIn) {
+      // Redirect to signin page and store the current location
+      navigate('/signin', { state: { from: location } });
+    } else {
+      // Add item to favorites
+      AddToFavourites(dispatch, product, email);
+    }
+  };
+
+  const handleAddToCart = () => {
+    if (!isLoggedIn) {
+      // Redirect to signin page and store the current location
+      navigate('/signin', { state: { from: location } });
+    } else {
+      // Add item to cart
+      AddToCart(dispatch, product, email);
+    }
+  };
+
+
+
   const displayCondition = splitCamelCase(product.productCondition);
 
   const styles = `
@@ -74,10 +97,6 @@ const ProductDetails = () => {
   color: #aaa !important;
   letter-spacing: 2px;
   border-radius: 5px !important;
-}
-
-.first-1 {
-    background-color: rgba(255, 255, 255, 0.7) !important;
 }
 
 a {
@@ -131,14 +150,20 @@ img {
 .nav-pills .nav-link.active {
   background-color: black;
   color: white; 
-}`;
+}
+
+.main-container {
+  background-color: rgba(255, 255, 255, 0.7); /* White background with 70% opacity */
+  padding: 20px; /* Add padding for spacing */
+}`
+;
 
   return (
-    <div className="container mt-5 mb-5">
+    <div className="container mt-5 mb-5 main-container">
       <style>{styles}</style>
-  <div class="container d-flex justify-content-center mt-4"> 
+  <div class="container d-flex mt-4"> 
    <nav aria-label="breadcrumb " class="first  d-md-flex">
-    <ol class="breadcrumb indigo lighten-6 first-1 shadow-lg mb-5">
+    <ol class="breadcrumb indigo mb-5">
         <li class="breadcrumb-item">
         <Nav.Link href="#" 
                       className='black-text active-2'
@@ -226,7 +251,7 @@ img {
     </ol>
   </nav>
 </div>
-      <div className="row p-3" style={{backgroundColor: 'rgba(255, 255, 255, 0.7)'}}>
+      <div className="row p-3">
       <div className="col-md-6">
         <div className="card">
           <div className="images">
@@ -290,14 +315,14 @@ img {
             {product.productAvailablity ? (
             <>
               <div className=' my-3'>
-              <button className="btn btn-dark mr-2 px-4" onClick={() => AddToCart(dispatch, product, email)}>
+              <button className="btn btn-dark mr-2 px-4" onClick={handleAddToCart}>
                 Add to cart
               </button>
               <OverlayTrigger
                 placement="right"
                 overlay={<Tooltip><span>Add to Favourites</span></Tooltip>}
               >
-                <span onClick={() => AddToFavourites(dispatch, product, email)} style={{ cursor: 'pointer' }}>
+                <span onClick={handleAddToFavorites} style={{ cursor: 'pointer' }}>
                   <i className="fa fa-heart"></i>
                 </span>
               </OverlayTrigger>

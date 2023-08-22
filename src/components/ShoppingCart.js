@@ -69,10 +69,9 @@ const ShoppingCart = () => {
     }
   };
 
-
   const styles = `
   body{
-    min-height: 100vh;
+    min-height: 100%;
     vertical-align: middle;
     font-family: sans-serif;
     font-size: 0.8rem;
@@ -389,7 +388,10 @@ a:hover{
                       <FaTrash className="trash-icon" />
                     </div>
                         <div className="col">
-                          <Button style={{ margin: '0' }}>View product</Button>
+                      
+                        <div className="btn btn-dark">
+               <NavLink variant='link' to={`/product/${product.id}`} style={{color: 'white', textDecoration: 'none', display: 'block'}}>View more</NavLink>
+           </div>
                         </div>
                       </div>
                     </div>
@@ -398,7 +400,7 @@ a:hover{
               )}
   
         <div className='btn back-to-shop col-4'>
-          <NavLink variant='link' to="/" style={{color: 'white', textDecoration: 'none', display: 'block'}}><FaArrowLeft/> Back to shopping</NavLink>
+          <NavLink variant='link' to="/products" style={{color: 'white', textDecoration: 'none', display: 'block'}}><FaArrowLeft/> Back to shopping</NavLink>
           </div>
             </div>
   

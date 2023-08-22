@@ -18,12 +18,3 @@ export const GetMyProfile = async (dispatch) => {
         console.log("Error from get my profile service")
     }
 }
-
-export const GetProfile = async (dispatch, username) => {
-    try {
-        const { data } = await axiosInstance.get(`/${username}`);
-        return data;
-    } catch {
-        console.log("Error from get profile service")
-    }
-}

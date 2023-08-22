@@ -1,7 +1,7 @@
 import { useEffect, useState} from 'react';
 import { useDispatch , useSelector} from 'react-redux';
 import { GetMyProducts } from '../services/products';
-import { Row,Col, Button } from 'react-bootstrap';
+import { Row,Col, Button, Modal } from 'react-bootstrap';
 import * as React from "react"
 import ProductEdit from './ProductEdit';
 import { EditProduct, DeleteProduct } from '../services/products';
@@ -23,11 +23,18 @@ export default () => {
 const ListRow = ({ product }) => 
 {
     const [isEditing,setIsEditing] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const dispatch = useDispatch();
 
     const handleSave = (editedProduct) => {
         EditProduct(dispatch, { id: editedProduct.id, productColor: editedProduct.productColor, productSizeNumber: editedProduct.productSizeNumber, productName: editedProduct.productName, productPrice: editedProduct.productPrice, productType: editedProduct.productType, productSubcategory: editedProduct.productSubcategory, productSize: editedProduct.productSize, productDescription: editedProduct.productDescription, productMeasurements: editedProduct.productMeasurements, productImage: editedProduct.productImage, productMaterial: editedProduct.productMaterial, productBrand: editedProduct.productBrand, productCondition: editedProduct.productCondition, productSex: editedProduct.productSex, productDescription: editedProduct.productDescription, productMeasurements: editedProduct.productMeasurements  });
         setIsEditing(false);
+      };
+      
+
+    const handleDelete = () => {
+        DeleteProduct(dispatch, product);
+        setShowDeleteModal(false);
       };
     return (
         <div>
@@ -35,19 +42,56 @@ const ListRow = ({ product }) =>
         <ProductEdit product={product} onSave={handleSave} onCancel={() => setIsEditing(false)} />
       ) : (
         <Row>
-          <Col>{product.id}</Col>
+            {product.productAvailablity ? (
+            <>
+              <Col>{product.id}</Col>
           <Col><img src={product.productImage}/></Col>
           <Col>{product.productName}</Col>
           <Col>{product.productType}</Col>
           <Col>{product.productSubcategory}</Col>
           <Col>{product.productPrice} MKD</Col>
-          <Col>{product.username}</Col>
           <Col>
-            <Button onClick={() => setIsEditing(true)}>Edit</Button>
-          </Col>
-          <Col>
-          <Button variant="danger" onClick={() => DeleteProduct(dispatch, product)}>Delete</Button>
-          </Col>
+          <Button variant="primary" onClick={() => {
+                setIsEditing(true);
+              }}>edit</Button>
+        </Col>
+        <Col>
+          <Button variant="danger" onClick={() => setShowDeleteModal(true)}>Delete</Button>
+          <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Confirm Delete</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              Are you sure you want to delete {product.productName}?
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+                Cancel
+              </Button>
+              <Button variant="danger" onClick={() => {
+                handleDelete();
+                setShowDeleteModal(false);
+              }}>
+                Delete
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </Col>
+            </>
+
+          ) : (
+            //naprai slikata pomala
+            //izbledena slika i izbleden text
+            //namesto kopchinja staj this product has been sold
+            <Row>
+                  <Col>{product.id}</Col>
+          <Col><img src={product.productImage}/></Col>
+          <Col>{product.productName}</Col>
+          <Col>{product.productType}</Col>
+          <Col>{product.productSubcategory}</Col>
+          <Col>{product.productPrice} MKD</Col>
+            </Row>
+          )}
         </Row>
       )}
     </div>
