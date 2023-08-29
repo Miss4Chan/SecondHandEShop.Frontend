@@ -434,7 +434,7 @@ img {
                 <div className='m-3 d-flex justify-content-between'>
                <div>
                  <p className="font-weight-bold mb-0"><FontAwesomeIcon icon={faTruck} /> <b>Regular Delivery</b></p>
-                 <p className='text-secondary'>3-6 working days</p>
+                 <p className='text-secondary'>3-6 business days</p>
                  </div>
                <p className='font-weight-bold'>150 MKD</p>
                  </div>
@@ -442,7 +442,7 @@ img {
                 <div className='m-3 d-flex justify-content-between'>
                <div>
                  <p className="font-weight-bold mb-0"><FontAwesomeIcon icon={faTruckFast} /> <b>Fast Delivery</b></p>
-                 <p className='text-secondary'>1-2 working days</p>
+                 <p className='text-secondary'>1-2 business days</p>
                  </div>
                <p className='font-weight-bold'>250 MKD</p>
                  </div>

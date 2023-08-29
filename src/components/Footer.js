@@ -11,7 +11,7 @@ const Footer = () => {
           <p className="mb-0 text-dark font-weight-bold"> <i className="fas fa-envelope fa-bounce" style={{ color: '#000000' }}></i> info@rewear.com</p>
         </div>
         <div className="col-auto">
-          <img src="https://cdn-icons-png.flaticon.com/512/71/71768.png" alt="QuestionMarkIMG" style={{ width: '25px', height: '25px' }} />
+       <a href="/help"><img src="https://cdn-icons-png.flaticon.com/512/71/71768.png" alt="QuestionMarkIMG" style={{ width: '25px', height: '25px' }} /></a>
         </div>
       </div>
     </footer>

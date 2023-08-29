@@ -3,10 +3,11 @@ import { NavLink } from 'react-router-dom';
 import MyProductList from './MyProductList';
 
 const MyProductsPage = () => (
-    <div style={{ width: '60%', margin: 'auto' }}>
-        <NavLink to="/add" style={{ marginLeft: '1rem' }}>Add new product</NavLink>
-        <hr style={{ border: '1px solid grey' }} />
-        <h4>Your Products</h4>
+    <div className='row' style={{margin: 'auto', padding: '10px', backgroundColor: 'rgba(255, 255, 255, 0.7)'}}>
+       <h5 style={{textAlign: 'center'}}>My Products</h5>
+        <div className='col-3'>
+        <NavLink  style={{margin: '5px'}} className="btn btn-dark" to={`/add`}> Add New Product</NavLink>
+        </div>
         <MyProductList />
     </div>
 );

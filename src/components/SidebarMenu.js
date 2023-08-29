@@ -187,7 +187,7 @@ const SidebarMenu = () => {
           &times;
         </div>
         <Nav className="flex-column">
-          <NavLink variant='link' to='/home' >Home</NavLink>
+          <NavLink variant='link' to='/' >Home</NavLink>
           <NavLink variant='link' to='/aboutus' style={{ color: '#000000' }}>
             About Us
           </NavLink>
