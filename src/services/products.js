@@ -72,15 +72,7 @@ export const GetProductConditions = async (dispatch) => {
     try {
         //api call
         const {data} = await axiosInstance.get("/productConditions");
-        const splitCamelCase = (text) => {
-            return text
-              .split(/(?=[A-Z])/)
-              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-              .join(' ');
-          };
-        
-          const displayConditions = data.map(condition => splitCamelCase(condition))
-        dispatch(setProductConditions(displayConditions));
+        dispatch(setProductConditions(data));
     } catch {
         console.log("Error product Conditions")
     }

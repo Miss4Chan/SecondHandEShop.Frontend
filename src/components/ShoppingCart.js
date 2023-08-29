@@ -390,7 +390,7 @@ a:hover{
                         <div className="col">
                       
                         <div className="btn btn-dark">
-               <NavLink variant='link' to={`/product/${product.id}`} style={{color: 'white', textDecoration: 'none', display: 'block'}}>View more</NavLink>
+               <NavLink variant='link' to={`/product/${product.id}`} style={{color: 'white', textDecoration: 'none', display: 'block'}}>View product</NavLink>
            </div>
                         </div>
                       </div>

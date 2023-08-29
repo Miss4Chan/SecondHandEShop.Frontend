@@ -10,11 +10,9 @@ export default () => {
   const myOrders = useSelector((state) => state.userSlice.myOrders);
   const email = useSelector((state) => state.authenticationSlice.email);
 
-  console.log(myOrders)
-
   useEffect(() => {
     GetMyOrders(dispatch, email);
-  }, []);
+  }, [myOrders]);
 
   return (
 <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -91,7 +89,7 @@ const OrderDetails = ({ order }) => {
   <div style={{ backgroundColor: '#C2A4C8', borderRadius: "30px", padding: '20px' }}>
     {order && order.productsInOrder && order.productsInOrder.length > 0 && (
       <div>
-      <h5 style={{textAlign: 'center'}}>Order Id: {order.id}</h5>
+      <h5 style={{textAlign: 'center'}}>Order # {order.id}</h5>
       <hr/>
       <p>Date: {order.formattedDate} {order.formattedTime}</p>
       <table style={{ width: '100%' }}>

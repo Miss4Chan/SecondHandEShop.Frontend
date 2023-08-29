@@ -19,11 +19,9 @@ const userSlice = createSlice({
     setMyOrders : (state,action) => {
       return{...state, myOrders: [...action.payload]};
     },
-    newOrder: (state, action) => {
-      return {...state, myOrders: [action.payload.data, ...state.myOrders]} }
   }
 });
 
-export const { setMyProfile, setProfile,setMyOrders, newOrder} = userSlice.actions;
+export const { setMyProfile, setProfile,setMyOrders} = userSlice.actions;
 
 export default userSlice.reducer;

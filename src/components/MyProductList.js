@@ -15,6 +15,7 @@ const MyProducts = () => {
 
   useEffect(() => {
     GetMyProducts(dispatch);
+    console.log("getMyProductsCalled")
   }, []);
 
   return products.map(p => (
@@ -29,7 +30,7 @@ const ListRow = ({ product, dispatch }) => {
   const [itemToDelete, setItemToDelete] = useState(null);
 
   const handleSave = (editedProduct) => {
-    EditProduct(dispatch, { id: editedProduct.id, productColor: editedProduct.productColor, productSizeNumber: editedProduct.productSizeNumber, productName: editedProduct.productName, productPrice: editedProduct.productPrice, productType: editedProduct.productType, productSubcategory: editedProduct.productSubcategory, productSize: editedProduct.productSize, productDescription: editedProduct.productDescription, productMeasurements: editedProduct.productMeasurements, productImage: editedProduct.productImage, productMaterial: editedProduct.productMaterial, productBrand: editedProduct.productBrand, productCondition: editedProduct.productCondition, productSex: editedProduct.productSex, productDescription: editedProduct.productDescription, productMeasurements: editedProduct.productMeasurements  });
+    EditProduct(dispatch, { id: editedProduct.id, productColor: editedProduct.productColor, productSizeNumber: editedProduct.productSizeNumber, productName: editedProduct.productName, productPrice: editedProduct.productPrice, productType: editedProduct.productType, productSubcategory: editedProduct.productSubcategory, productSize: editedProduct.productSize, productDescription: editedProduct.productDescription, productMeasurements: editedProduct.productMeasurements, productImage: editedProduct.productImage, productMaterial: editedProduct.productMaterial, productBrand: editedProduct.productBrand, productCondition: editedProduct.productCondition, productSex: editedProduct.productSex, productDescription: editedProduct.productDescription, productMeasurements: editedProduct.productMeasurements, productAvailablity: editedProduct.productAvailablity  });
     setIsEditing(false);
   };
 

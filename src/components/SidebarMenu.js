@@ -212,6 +212,13 @@ const SidebarMenu = () => {
                   <Nav.Link
                     href="#"
                     style={{ color: '#000000', paddingLeft: '40px' }}
+                    onClick={() => handleFilterChange('', 'Female', '')}
+                  >
+                    All
+                  </Nav.Link>
+                  <Nav.Link
+                    href="#"
+                    style={{ color: '#000000', paddingLeft: '40px' }}
                     onClick={toggleFemaleClothes}
                   >
                     Clothes
@@ -281,6 +288,13 @@ const SidebarMenu = () => {
               </Nav.Link>
               {isMaleSubmenuOpen && isNavOpen && (
                 <>
+                  <Nav.Link
+                    href="#"
+                    style={{ color: '#000000', paddingLeft: '40px' }}
+                    onClick={() => handleFilterChange('', 'Male', '')}
+                  >
+                    All
+                  </Nav.Link>
                   <Nav.Link
                     href="#"
                     style={{ color: '#000000', paddingLeft: '40px' }}

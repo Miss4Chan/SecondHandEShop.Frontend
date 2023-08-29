@@ -150,7 +150,7 @@ input:focus::-webkit-input-placeholder
                     <i className="fa fa-shopping-cart"></i>
                     </div>
                     <div className="btn btn-dark col">
-               <NavLink variant='link' to={`/product/${product.id}`} style={{color: 'white', textDecoration: 'none', display: 'block'}}>View more</NavLink>
+               <NavLink variant='link' to={`/product/${product.id}`} style={{color: 'white', textDecoration: 'none', display: 'block'}}>View product</NavLink>
            </div>
                         </div>
                     </div>           

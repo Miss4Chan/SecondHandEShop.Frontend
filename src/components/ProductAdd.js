@@ -168,13 +168,14 @@ const ProductAdd = () => {
       productPrice: price,
       productBrand: brand,
       productMaterial: material,
-      productCondition: selectedCondition,
+      condition: selectedCondition,
       productSex : selectedSex,
       productImage : image,
       productDescription: description,
       productMeasurements: measurements
     });
-
+    
+    console.log(selectedCondition)
     setShowConfirmationPopup(false);
 
     handleCancelClick();
