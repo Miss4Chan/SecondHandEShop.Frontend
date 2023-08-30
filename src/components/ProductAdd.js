@@ -503,6 +503,12 @@ const styles = `
                 >
                  <span style={{ fontSize: '18px', cursor: 'pointer', marginLeft: '10px', color: 'red' }}>*</span>
                 </OverlayTrigger>
+                <OverlayTrigger
+                 placement="right"
+                 overlay={<Tooltip id="color-tooltip">The current demo accepts only links from publicly available images</Tooltip>}
+               >
+                 <span style={{ fontSize: '18px', cursor: 'pointer', marginLeft: '10px' }}>?</span>
+               </OverlayTrigger>
               </FormLabel>
               </Col>
               <Col md={6}>
